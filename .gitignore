@@ -1,3 +1,4 @@
+.DS_Store
 /build/
 /chromium/.gclient
 /chromium/.gclient_entries

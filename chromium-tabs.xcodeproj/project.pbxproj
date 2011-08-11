@@ -34,11 +34,6 @@
 		3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */; };
 		3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */; };
 		3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */; };
-		3A3ED9DF1225E32A009E2908 /* NSPasteboard+Utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6A21225CEB1009E2908 /* NSPasteboard+Utils.mm */; };
-		3A3ED9E01225E32A009E2908 /* NSScreen+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6A41225CEB1009E2908 /* NSScreen+Utils.m */; };
-		3A3ED9E11225E32A009E2908 /* NSString+Utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6A61225CEB1009E2908 /* NSString+Utils.mm */; };
-		3A3ED9E21225E32A009E2908 /* NSURL+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6A81225CEB1009E2908 /* NSURL+Utils.m */; };
-		3A3ED9E31225E32A009E2908 /* NSWorkspace+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6AA1225CEB1009E2908 /* NSWorkspace+Utils.m */; };
 		3A3ED9E51225E32A009E2908 /* GTMFadeTruncatingTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED7681225DF06009E2908 /* GTMFadeTruncatingTextFieldCell.m */; };
 		3A3ED9E81225E3C2009E2908 /* BrowserWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286F9E1222CDBE00F1BB78 /* BrowserWindow.xib */; };
 		3A3ED9E91225E3C2009E2908 /* TabContents.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286F9F1222CDBE00F1BB78 /* TabContents.xib */; };
@@ -100,11 +95,6 @@
 		3A9291A71229BEE900DA7E43 /* hover_close_button.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921EF1221AF58006D8305 /* hover_close_button.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A81229BEE900DA7E43 /* new_tab_button.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A236DD71223414F00D21E66 /* new_tab_button.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A91229BEE900DA7E43 /* fast_resize_view.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A1CF98712235CEE008A3B8C /* fast_resize_view.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291AA1229BF0100DA7E43 /* NSPasteboard+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6A11225CEB1009E2908 /* NSPasteboard+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291AB1229BF0100DA7E43 /* NSScreen+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6A31225CEB1009E2908 /* NSScreen+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291AC1229BF0100DA7E43 /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6A51225CEB1009E2908 /* NSString+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291AD1229BF0100DA7E43 /* NSURL+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6A71225CEB1009E2908 /* NSURL+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291AE1229BF0100DA7E43 /* NSWorkspace+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6A91225CEB1009E2908 /* NSWorkspace+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291AF1229BF0100DA7E43 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED74F1225DDF2009E2908 /* GTMDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B01229BF0100DA7E43 /* GTMGarbageCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED74B1225DDBE009E2908 /* GTMGarbageCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B21229BF0100DA7E43 /* GTMNSAnimation+Duration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6811225CE7A009E2908 /* GTMNSAnimation+Duration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -203,16 +193,6 @@
 		3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSColor+Luminance.m"; sourceTree = "<group>"; };
 		3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+MCAdditions.h"; path = "src/third_party/molokocacao/NSBezierPath+MCAdditions.h"; sourceTree = SOURCE_ROOT; };
 		3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MCAdditions.m"; sourceTree = "<group>"; };
-		3A3ED6A11225CEB1009E2908 /* NSPasteboard+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPasteboard+Utils.h"; sourceTree = "<group>"; };
-		3A3ED6A21225CEB1009E2908 /* NSPasteboard+Utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSPasteboard+Utils.mm"; sourceTree = "<group>"; };
-		3A3ED6A31225CEB1009E2908 /* NSScreen+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSScreen+Utils.h"; sourceTree = "<group>"; };
-		3A3ED6A41225CEB1009E2908 /* NSScreen+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSScreen+Utils.m"; sourceTree = "<group>"; };
-		3A3ED6A51225CEB1009E2908 /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
-		3A3ED6A61225CEB1009E2908 /* NSString+Utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+Utils.mm"; sourceTree = "<group>"; };
-		3A3ED6A71225CEB1009E2908 /* NSURL+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Utils.h"; sourceTree = "<group>"; };
-		3A3ED6A81225CEB1009E2908 /* NSURL+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Utils.m"; sourceTree = "<group>"; };
-		3A3ED6A91225CEB1009E2908 /* NSWorkspace+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWorkspace+Utils.h"; sourceTree = "<group>"; };
-		3A3ED6AA1225CEB1009E2908 /* NSWorkspace+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWorkspace+Utils.m"; sourceTree = "<group>"; };
 		3A3ED7071225D7A6009E2908 /* build_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = build_config.h; sourceTree = "<group>"; };
 		3A3ED74B1225DDBE009E2908 /* GTMGarbageCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMGarbageCollection.h; sourceTree = "<group>"; };
 		3A3ED74F1225DDF2009E2908 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -459,7 +439,6 @@
 		3A3ED6741225CE7A009E2908 /* third_party */ = {
 			isa = PBXGroup;
 			children = (
-				3A3ED69E1225CEB1009E2908 /* mozilla */,
 				3A3ED67F1225CE7A009E2908 /* gtm-subset */,
 				3A3ED6871225CE7A009E2908 /* molokocacao */,
 			);
@@ -488,23 +467,6 @@
 				3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */,
 			);
 			path = molokocacao;
-			sourceTree = "<group>";
-		};
-		3A3ED69E1225CEB1009E2908 /* mozilla */ = {
-			isa = PBXGroup;
-			children = (
-				3A3ED6A11225CEB1009E2908 /* NSPasteboard+Utils.h */,
-				3A3ED6A21225CEB1009E2908 /* NSPasteboard+Utils.mm */,
-				3A3ED6A31225CEB1009E2908 /* NSScreen+Utils.h */,
-				3A3ED6A41225CEB1009E2908 /* NSScreen+Utils.m */,
-				3A3ED6A51225CEB1009E2908 /* NSString+Utils.h */,
-				3A3ED6A61225CEB1009E2908 /* NSString+Utils.mm */,
-				3A3ED6A71225CEB1009E2908 /* NSURL+Utils.h */,
-				3A3ED6A81225CEB1009E2908 /* NSURL+Utils.m */,
-				3A3ED6A91225CEB1009E2908 /* NSWorkspace+Utils.h */,
-				3A3ED6AA1225CEB1009E2908 /* NSWorkspace+Utils.m */,
-			);
-			path = mozilla;
 			sourceTree = "<group>";
 		};
 		3A3EDA321225E911009E2908 /* base */ = {
@@ -605,11 +567,6 @@
 				3A9291A71229BEE900DA7E43 /* hover_close_button.h in Headers */,
 				3A9291A81229BEE900DA7E43 /* new_tab_button.h in Headers */,
 				3A9291A91229BEE900DA7E43 /* fast_resize_view.h in Headers */,
-				3A9291AA1229BF0100DA7E43 /* NSPasteboard+Utils.h in Headers */,
-				3A9291AB1229BF0100DA7E43 /* NSScreen+Utils.h in Headers */,
-				3A9291AC1229BF0100DA7E43 /* NSString+Utils.h in Headers */,
-				3A9291AD1229BF0100DA7E43 /* NSURL+Utils.h in Headers */,
-				3A9291AE1229BF0100DA7E43 /* NSWorkspace+Utils.h in Headers */,
 				3A9291AF1229BF0100DA7E43 /* GTMDefines.h in Headers */,
 				3A9291B01229BF0100DA7E43 /* GTMGarbageCollection.h in Headers */,
 				3A9291B21229BF0100DA7E43 /* GTMNSAnimation+Duration.h in Headers */,
@@ -752,11 +709,6 @@
 				3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */,
 				3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */,
 				3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */,
-				3A3ED9DF1225E32A009E2908 /* NSPasteboard+Utils.mm in Sources */,
-				3A3ED9E01225E32A009E2908 /* NSScreen+Utils.m in Sources */,
-				3A3ED9E11225E32A009E2908 /* NSString+Utils.mm in Sources */,
-				3A3ED9E21225E32A009E2908 /* NSURL+Utils.m in Sources */,
-				3A3ED9E31225E32A009E2908 /* NSWorkspace+Utils.m in Sources */,
 				3A3ED9E51225E32A009E2908 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
 				3A3EDA9E1225EF84009E2908 /* CTUtil.m in Sources */,
 				3A3EDAF51225FBFF009E2908 /* NSImage+CTAdditions.m in Sources */,

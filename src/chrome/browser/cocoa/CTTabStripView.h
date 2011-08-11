@@ -17,7 +17,7 @@
 
 @interface CTTabStripView : NSView
 
-@property(assign, nonatomic) IBOutlet NewTabButton* newTabButton;
+@property(assign, nonatomic) IBOutlet NewTabButton* addTabButton;
 @property(assign, nonatomic) BOOL dropArrowShown;
 @property(assign, nonatomic) NSPoint dropArrowPosition;
 

@@ -32,7 +32,7 @@ static bool ShouldWindowsMiniaturizeOnDoubleClick() {
     NSPoint dropArrowPosition_;
 }
 
-@synthesize newTabButton = newTabButton_;
+@synthesize addTabButton = addTabButton_;
 @synthesize dropArrowShown = dropArrowShown_;
 @synthesize dropArrowPosition = dropArrowPosition_;
 

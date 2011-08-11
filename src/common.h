@@ -17,7 +17,7 @@
 // DLOG(format[, ...]) -- log a debug message
 #if defined(__OBJC__)
   #define _LOG(prefixch, fmt, ...) \
-      NSLog((NSString*)(CFSTR("%c [%s:%d] " fmt)), prefixch, \
+      NSLog((__bridge NSString*)(CFSTR("%c [%s:%d] " fmt)), prefixch, \
             __SRC_FILENAME__, __LINE__, ##__VA_ARGS__)
 #else
   #define _LOG(prefixch, fmt, ...) \

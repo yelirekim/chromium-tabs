@@ -104,6 +104,8 @@
 		3ABF4A8812A460DA0020233C /* CTBrowserFrameView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8612A460DA0020233C /* CTBrowserFrameView.mm */; };
 		3ABF4A8B12A461630020233C /* scoped_nsautorelease_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A8C12A461630020233C /* scoped_nsautorelease_pool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8A12A461630020233C /* scoped_nsautorelease_pool.mm */; };
+		A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */; };
+		A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
 		A25493C313F414FA0027474A /* hover_button+private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493C213F414F90027474A /* hover_button+private.h */; };
 /* End PBXBuildFile section */
@@ -240,6 +242,8 @@
 		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
 		3AEE19531222DDEB009DA438 /* CTTabContents.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabContents.mm; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMFadeTruncatingTextFieldCell.h; sourceTree = "<group>"; };
+		A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMFadeTruncatingTextFieldCell.m; sourceTree = "<group>"; };
 		A25493BF13F4117D0027474A /* CTBrowser+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CTBrowser+Private.h"; sourceTree = "<group>"; };
 		A25493C213F414F90027474A /* hover_button+private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "hover_button+private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -440,6 +444,8 @@
 		3A3ED67F1225CE7A009E2908 /* gtm-subset */ = {
 			isa = PBXGroup;
 			children = (
+				A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */,
+				A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */,
 				3A3ED6811225CE7A009E2908 /* GTMNSAnimation+Duration.h */,
 				3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */,
 				3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */,
@@ -563,6 +569,7 @@
 				3ABF4A8B12A461630020233C /* scoped_nsautorelease_pool.h in Headers */,
 				A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */,
 				A25493C313F414FA0027474A /* hover_button+private.h in Headers */,
+				A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,6 +709,7 @@
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */,
 				3ABF4A8812A460DA0020233C /* CTBrowserFrameView.mm in Sources */,
 				3ABF4A8C12A461630020233C /* scoped_nsautorelease_pool.mm in Sources */,
+				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,6 @@
 
 #import <map>
 
-#import "scoped_nsobject.h"
 #import "background_gradient_view.h"
 #import "hover_close_button.h"
 

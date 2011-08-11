@@ -31,7 +31,7 @@
     NSView* cachedContentView_;  // Used during dragging for identifying which
     // view is the proper content area in the overlay
     // (weak)
-    scoped_nsobject<NSMutableSet> lockedTabs_;
+    NSMutableSet* lockedTabs_;
     BOOL closeDeferred_;  // If YES, call performClose: in removeOverlay:.
     // Difference between height of window content area and height of the
     // |tabContentArea_|. Calculated when the window is loaded from the nib and
@@ -46,7 +46,7 @@
 
 - (id)initWithWindow:(NSWindow*)window {
   if ((self = [super initWithWindow:window]) != nil) {
-    lockedTabs_.reset([[NSMutableSet alloc] initWithCapacity:10]);
+    lockedTabs_ = [[NSMutableSet alloc] initWithCapacity:10];
   }
   return self;
 }

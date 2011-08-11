@@ -4,7 +4,6 @@
 
 #pragma once
 #import <Cocoa/Cocoa.h>
-#import "scoped_nsobject.h"
 
 // Offset from the top of the window frame to the top of the window controls
 // (zoom, close, miniaturize) for a window with a tabstrip.

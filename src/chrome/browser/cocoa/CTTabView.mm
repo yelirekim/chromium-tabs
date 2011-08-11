@@ -80,7 +80,7 @@ const CGFloat kRapidCloseDist = 2.5;
     BOOL closing_;
     
     // Tracking area for close button mouseover images.
-    scoped_nsobject<NSTrackingArea> closeTrackingArea_;
+    NSTrackingArea* closeTrackingArea_;
     
     BOOL isMouseInside_;  // Is the mouse hovering over?
     tabs::AlertState alertState_;
@@ -370,7 +370,7 @@ const CGFloat kRapidCloseDist = 2.5;
   // strip and then deallocated. This will also result in *us* being
   // deallocated. Both these are bad, so we prevent this by retaining the
   // controller.
-  scoped_nsobject<CTTabController> controller([tabController_ retain]);
+  CTTabController* controller = [tabController_ retain];
 
   // Because we move views between windows, we need to handle the event loop
   // ourselves. Ideally we should use the standard event loop.
@@ -756,7 +756,7 @@ const CGFloat kRapidCloseDist = 2.5;
 
     // Draw a mouse hover gradient for the default themes.
     if (!selected && hoverAlpha > 0) {
-      scoped_nsobject<NSGradient> glow([NSGradient alloc]);
+      NSGradient* glow = [NSGradient alloc];
       [glow initWithStartingColor:[NSColor colorWithCalibratedWhite:1.0
                                       alpha:1.0 * hoverAlpha]
                       endingColor:[NSColor colorWithCalibratedWhite:1.0
@@ -787,7 +787,7 @@ const CGFloat kRapidCloseDist = 2.5;
   if (selected) {
     NSAffineTransform* highlightTransform = [NSAffineTransform transform];
     [highlightTransform translateXBy:1.0 yBy:-1.0];
-    scoped_nsobject<NSBezierPath> highlightPath([path copy]);
+    NSBezierPath* highlightPath = [path copy];
     [highlightPath transformUsingAffineTransform:highlightTransform];
     [highlightColor setStroke];
     [highlightPath setLineWidth:1.0];

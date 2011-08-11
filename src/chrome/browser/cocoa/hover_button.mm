@@ -7,7 +7,7 @@
 @implementation HoverButton {
     HoverState hoverState_;
     // Tracking area for button mouseover states.
-    scoped_nsobject<NSTrackingArea> trackingArea_;
+    NSTrackingArea* trackingArea_;
 }
 
 - (id)initWithFrame:(NSRect)frameRect {
@@ -47,7 +47,7 @@
   // it can be freed while |super mouseDown:| is in it's loop, and the
   // |checkImageState| call will crash.
   // http://crbug.com/28220
-  scoped_nsobject<HoverButton> myself([self retain]);
+  HoverButton* myself = [self retain];
 
   [super mouseDown:theEvent];
   // We need to check the image state after the mouseDown event loop finishes.
@@ -56,17 +56,19 @@
   // the button.
   // http://crbug.com/31279
   [self checkImageState];
+    
+  [myself release];
 }
 
 - (void)setTrackingEnabled:(BOOL)enabled {
   if (enabled) {
-    trackingArea_.reset(
+    [trackingArea_ release], trackingArea_ =
         [[NSTrackingArea alloc] initWithRect:[self bounds]
                                      options:NSTrackingMouseEnteredAndExited |
                                              NSTrackingActiveAlways
                                        owner:self
-                                    userInfo:nil]);
-    [self addTrackingArea:trackingArea_.get()];
+                                    userInfo:nil];
+    [self addTrackingArea:trackingArea_];
 
     // If you have a separate window that overlaps the close button, and you
     // move the mouse directly over the close button without entering another
@@ -74,9 +76,9 @@
     // tracking area was disabled when we entered.
     [self checkImageState];
   } else {
-    if (trackingArea_.get()) {
-      [self removeTrackingArea:trackingArea_.get()];
-      trackingArea_.reset(nil);
+    if (trackingArea_) {
+      [self removeTrackingArea:trackingArea_];
+      [trackingArea_ release], trackingArea_ = nil;
     }
   }
 }
@@ -87,7 +89,7 @@
 }
 
 - (void)checkImageState {
-  if (!trackingArea_.get())
+  if (!trackingArea_)
     return;
 
   // Update the button's state if the button has moved.

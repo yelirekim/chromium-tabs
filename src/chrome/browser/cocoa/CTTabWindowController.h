@@ -29,7 +29,6 @@
 #import <Cocoa/Cocoa.h>
 
 #import "cocoa_protocols_mac.h"
-#import "scoped_nsobject.h"
 
 @class FastResizeView;
 @class CTTabStripView;

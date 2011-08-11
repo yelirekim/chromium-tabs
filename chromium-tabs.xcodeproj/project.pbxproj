@@ -85,7 +85,6 @@
 		3A92919D1229BEE900DA7E43 /* observer_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA351225E911009E2908 /* observer_list.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92919E1229BEE900DA7E43 /* scoped_cftyperef.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA361225E911009E2908 /* scoped_cftyperef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92919F1229BEE900DA7E43 /* scoped_nsdisable_screen_updates.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA371225E911009E2908 /* scoped_nsdisable_screen_updates.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291A01229BEE900DA7E43 /* scoped_nsobject.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA381225E911009E2908 /* scoped_nsobject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A11229BEE900DA7E43 /* scoped_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA391225E911009E2908 /* scoped_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A21229BEE900DA7E43 /* stl_util-inl.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA3A1225E911009E2908 /* stl_util-inl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A31229BEE900DA7E43 /* throbber_view.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE71222D53500F1BB78 /* throbber_view.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -201,7 +200,6 @@
 		3A3EDA351225E911009E2908 /* observer_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = observer_list.h; sourceTree = "<group>"; };
 		3A3EDA361225E911009E2908 /* scoped_cftyperef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_cftyperef.h; sourceTree = "<group>"; };
 		3A3EDA371225E911009E2908 /* scoped_nsdisable_screen_updates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_nsdisable_screen_updates.h; sourceTree = "<group>"; };
-		3A3EDA381225E911009E2908 /* scoped_nsobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_nsobject.h; sourceTree = "<group>"; };
 		3A3EDA391225E911009E2908 /* scoped_ptr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_ptr.h; sourceTree = "<group>"; };
 		3A3EDA3A1225E911009E2908 /* stl_util-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "stl_util-inl.h"; sourceTree = "<group>"; };
 		3A3EDA701225EBBB009E2908 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -471,7 +469,6 @@
 				3A3EDA351225E911009E2908 /* observer_list.h */,
 				3A3EDA361225E911009E2908 /* scoped_cftyperef.h */,
 				3A3EDA371225E911009E2908 /* scoped_nsdisable_screen_updates.h */,
-				3A3EDA381225E911009E2908 /* scoped_nsobject.h */,
 				3A3EDA391225E911009E2908 /* scoped_ptr.h */,
 				3A3EDA3A1225E911009E2908 /* stl_util-inl.h */,
 				3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */,
@@ -550,7 +547,6 @@
 				3A92919D1229BEE900DA7E43 /* observer_list.h in Headers */,
 				3A92919E1229BEE900DA7E43 /* scoped_cftyperef.h in Headers */,
 				3A92919F1229BEE900DA7E43 /* scoped_nsdisable_screen_updates.h in Headers */,
-				3A9291A01229BEE900DA7E43 /* scoped_nsobject.h in Headers */,
 				3A9291A11229BEE900DA7E43 /* scoped_ptr.h in Headers */,
 				3A9291A21229BEE900DA7E43 /* stl_util-inl.h in Headers */,
 				3A928BD91226F7FC00DA7E43 /* CTTabStripModel.h in Headers */,

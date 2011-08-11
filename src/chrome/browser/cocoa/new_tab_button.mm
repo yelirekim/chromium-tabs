@@ -5,20 +5,20 @@
 #import "new_tab_button.h"
 
 @implementation NewTabButton {
-    scoped_nsobject<NSBezierPath> imagePath_;
+    NSBezierPath* imagePath_;
 }
 
 // Approximate the shape. It doesn't need to be perfect. This will need to be
 // updated if the size or shape of the icon ever changes.
 // TODO(pinkerton): use a click mask image instead of hard-coding points.
 - (NSBezierPath*)pathForButton {
-  if (imagePath_.get())
-    return imagePath_.get();
+  if (imagePath_)
+    return imagePath_;
 
   // Cache the path as it doesn't change (the coordinates are local to this
   // view). There's not much point making constants for these, as they are
   // custom.
-  imagePath_.reset([[NSBezierPath bezierPath] retain]);
+  [imagePath_ release], imagePath_ = [[NSBezierPath bezierPath] retain];
   [imagePath_ moveToPoint:NSMakePoint(9, 7)];
   [imagePath_ lineToPoint:NSMakePoint(26, 7)];
   [imagePath_ lineToPoint:NSMakePoint(33, 23)];

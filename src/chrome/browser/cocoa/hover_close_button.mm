@@ -4,7 +4,6 @@
 
 #import "hover_close_button.h"
 #import "hover_button+private.h"
-#import "scoped_nsobject.h"
 #import "NSBezierPath+MCAdditions.h"
 
 namespace  {
@@ -26,10 +25,10 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 
 @implementation HoverCloseButton {
     // Bezier path for drawing the 'x' within the button.
-    scoped_nsobject<NSBezierPath> xPath_;
+    NSBezierPath* xPath_;
     
     // Bezier path for drawing the hover state circle behind the 'x'.
-    scoped_nsobject<NSBezierPath> circlePath_;
+    NSBezierPath* circlePath_;
 }
 
 - (id)initWithFrame:(NSRect)frameRect {
@@ -45,7 +44,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 }
 
 - (void)drawRect:(NSRect)rect {
-  if (!circlePath_.get() || !xPath_.get())
+  if (!circlePath_ || !xPath_)
     [self setUpDrawingPaths];
 
   // If the user is hovering over the button, a light/dark gray circle is drawn
@@ -85,7 +84,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 - (void)setUpDrawingPaths {
   NSPoint viewCenter = MidRect([self bounds]);
 
-  circlePath_.reset([[NSBezierPath bezierPath] retain]);
+  [circlePath_ release], circlePath_ = [[NSBezierPath bezierPath] retain];
   [circlePath_ moveToPoint:viewCenter];
   CGFloat radius = kCircleRadiusPercentage * NSWidth([self bounds]);
   [circlePath_ appendBezierPathWithArcWithCenter:viewCenter
@@ -95,7 +94,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 
   // Construct an 'x' by drawing two intersecting rectangles in the shape of a
   // cross and then rotating the path by 45 degrees.
-  xPath_.reset([[NSBezierPath bezierPath] retain]);
+  [xPath_ release], xPath_ = [[NSBezierPath bezierPath] retain];
   [xPath_ appendBezierPathWithRect:NSMakeRect(3.5, 7.0, 9.0, 2.0)];
   [xPath_ appendBezierPathWithRect:NSMakeRect(7.0, 3.5, 2.0, 9.0)];
 

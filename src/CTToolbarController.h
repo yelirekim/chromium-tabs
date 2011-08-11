@@ -1,6 +1,5 @@
 #import <Cocoa/Cocoa.h>
 #import "scoped_ptr.h"
-#import "scoped_nsobject.h"
 
 @class CTBrowser;
 @class CTTabContents;

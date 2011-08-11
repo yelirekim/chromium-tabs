@@ -12,7 +12,7 @@
 @implementation CTToolbarController {
     CTBrowser* browser_;  // weak, one per window
     // Tracking area for mouse enter/exit/moved in the toolbar.
-    scoped_nsobject<NSTrackingArea> trackingArea_;
+    NSTrackingArea* trackingArea_;
 }
 
 - (id)initWithNibName:(NSString*)nibName

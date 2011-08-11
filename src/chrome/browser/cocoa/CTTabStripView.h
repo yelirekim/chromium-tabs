@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "scoped_nsobject.h"
 
 @class NewTabButton;
 

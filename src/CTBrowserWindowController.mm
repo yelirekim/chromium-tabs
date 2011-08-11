@@ -8,7 +8,7 @@
 #import "CTTabStripView.h"
 #import "CTToolbarController.h"
 #import "CTUtil.h"
-#import "fast_resize_view.h"
+#import "FastResizeView.h"
 
 @interface NSWindow (ThingsThatMightBeImplemented)
 - (void)setShouldHideTitle:(BOOL)y;

@@ -7,7 +7,6 @@
 #import <objc/runtime.h>
 #import <Carbon/Carbon.h>
 
-#import "scoped_nsautorelease_pool.h"
 #import "CTBrowserWindow.h"
 
 static const CGFloat kBrowserFrameViewPaintHeight = 60.0;
@@ -40,60 +39,59 @@ static BOOL gCanGetCornerRadius = NO;
   // others. If they all fail, we will lose window frame theming and
   // roll overs for our close widgets, but things should still function
   // correctly.
-  ScopedNSAutoreleasePool pool;
-  Class grayFrameClass = NSClassFromString(@"NSGrayFrame");
-  DCHECK(grayFrameClass);
-  if (!grayFrameClass) return;
-
-  // Exchange draw rect
-  Method m0 = class_getInstanceMethod([self class], @selector(drawRect:));
-  DCHECK(m0);
-  if (m0) {
-    BOOL didAdd = class_addMethod(grayFrameClass,
-                                  @selector(drawRectOriginal:),
-                                  method_getImplementation(m0),
-                                  method_getTypeEncoding(m0));
-    DCHECK(didAdd);
-    if (didAdd) {
-      Method m1 = class_getInstanceMethod(grayFrameClass, @selector(drawRect:));
-      Method m2 = class_getInstanceMethod(grayFrameClass,
-                                          @selector(drawRectOriginal:));
-      DCHECK(m1 && m2);
-      if (m1 && m2) {
-        method_exchangeImplementations(m1, m2);
-      }
+    Class grayFrameClass = NSClassFromString(@"NSGrayFrame");
+    DCHECK(grayFrameClass);
+    if (!grayFrameClass) return;
+    
+    // Exchange draw rect
+    Method m0 = class_getInstanceMethod([self class], @selector(drawRect:));
+    DCHECK(m0);
+    if (m0) {
+        BOOL didAdd = class_addMethod(grayFrameClass,
+                                      @selector(drawRectOriginal:),
+                                      method_getImplementation(m0),
+                                      method_getTypeEncoding(m0));
+        DCHECK(didAdd);
+        if (didAdd) {
+            Method m1 = class_getInstanceMethod(grayFrameClass, @selector(drawRect:));
+            Method m2 = class_getInstanceMethod(grayFrameClass,
+                                                @selector(drawRectOriginal:));
+            DCHECK(m1 && m2);
+            if (m1 && m2) {
+                method_exchangeImplementations(m1, m2);
+            }
+        }
     }
-  }
-
-  // Add _mouseInGroup
-  m0 = class_getInstanceMethod([self class], @selector(_mouseInGroup:));
-  DCHECK(m0);
-  if (m0) {
-    BOOL didAdd = class_addMethod(grayFrameClass,
-                                  @selector(_mouseInGroup:),
-                                  method_getImplementation(m0),
-                                  method_getTypeEncoding(m0));
-    DCHECK(didAdd);
-  }
-  // Add updateTrackingArea
-  m0 = class_getInstanceMethod([self class], @selector(updateTrackingAreas));
-  DCHECK(m0);
-  if (m0) {
-    BOOL didAdd = class_addMethod(grayFrameClass,
-                                  @selector(updateTrackingAreas),
-                                  method_getImplementation(m0),
-                                  method_getTypeEncoding(m0));
-    DCHECK(didAdd);
-  }
-
-  gCanDrawTitle =
-      [grayFrameClass
-        instancesRespondToSelector:@selector(_titlebarTitleRect)] &&
-      [grayFrameClass
-        instancesRespondToSelector:@selector(_drawTitleStringIn:withColor:)];
-  gCanGetCornerRadius =
-      [grayFrameClass
-        instancesRespondToSelector:@selector(roundedCornerRadius)];
+    
+    // Add _mouseInGroup
+    m0 = class_getInstanceMethod([self class], @selector(_mouseInGroup:));
+    DCHECK(m0);
+    if (m0) {
+        BOOL didAdd = class_addMethod(grayFrameClass,
+                                      @selector(_mouseInGroup:),
+                                      method_getImplementation(m0),
+                                      method_getTypeEncoding(m0));
+        DCHECK(didAdd);
+    }
+    // Add updateTrackingArea
+    m0 = class_getInstanceMethod([self class], @selector(updateTrackingAreas));
+    DCHECK(m0);
+    if (m0) {
+        BOOL didAdd = class_addMethod(grayFrameClass,
+                                      @selector(updateTrackingAreas),
+                                      method_getImplementation(m0),
+                                      method_getTypeEncoding(m0));
+        DCHECK(didAdd);
+    }
+    
+    gCanDrawTitle =
+    [grayFrameClass
+     instancesRespondToSelector:@selector(_titlebarTitleRect)] &&
+    [grayFrameClass
+     instancesRespondToSelector:@selector(_drawTitleStringIn:withColor:)];
+    gCanGetCornerRadius =
+    [grayFrameClass
+     instancesRespondToSelector:@selector(roundedCornerRadius)];
 }
 
 - (id)initWithFrame:(NSRect)frame {

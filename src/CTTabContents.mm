@@ -1,7 +1,6 @@
 #import "CTTabContents.h"
 #import "CTTabStripModel.h"
 #import "CTBrowser.h"
-#import "KVOChangeScope.hh"
 
 NSString* const CTTabContentsDidCloseNotification =
     @"CTTabContentsDidCloseNotification";
@@ -20,7 +19,7 @@ NSString* const CTTabContentsDidCloseNotification =
     NSString *title_; // title of this tab
     NSImage *icon_; // tab icon (nil means no or default icon)
     CTBrowser *browser_;
-    __weak CTTabContents* parentOpener_; // the tab which opened this tab (unless nil)
+    CTTabContents* parentOpener_; // the tab which opened this tab (unless nil)
 }
 @synthesize delegate = delegate_;
 @synthesize closedByUserGesture = closedByUserGesture_;
@@ -87,8 +86,9 @@ NSString* const CTTabContentsDidCloseNotification =
                   name:CTTabContentsDidCloseNotification
                 object:parentOpener_];
   }
-  kvo_change(parentOpener)
+    [self willChangeValueForKey:@"parentOpener"];
     parentOpener_ = parentOpener; // weak
+    [self didChangeValueForKey:@"parentOpener"];
   if (parentOpener_) {
     [nc addObserver:self
            selector:@selector(tabContentsDidClose:)

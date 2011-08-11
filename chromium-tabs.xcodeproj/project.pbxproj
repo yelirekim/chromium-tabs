@@ -120,7 +120,6 @@
 		3ABF4A8812A460DA0020233C /* CTBrowserFrameView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8612A460DA0020233C /* CTBrowserFrameView.mm */; };
 		3ABF4A8B12A461630020233C /* scoped_nsautorelease_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A8C12A461630020233C /* scoped_nsautorelease_pool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8A12A461630020233C /* scoped_nsautorelease_pool.mm */; };
-		3ABF4AAC12A465100020233C /* KVOChangeScope.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4AAB12A464F50020233C /* KVOChangeScope.hh */; settings = {ATTRIBUTES = (Public, ); }; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
 		A25493C313F414FA0027474A /* hover_button+private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493C213F414F90027474A /* hover_button+private.h */; };
 /* End PBXBuildFile section */
@@ -266,7 +265,6 @@
 		3ABF4A8612A460DA0020233C /* CTBrowserFrameView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowserFrameView.mm; sourceTree = "<group>"; };
 		3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_nsautorelease_pool.h; sourceTree = "<group>"; };
 		3ABF4A8A12A461630020233C /* scoped_nsautorelease_pool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = scoped_nsautorelease_pool.mm; sourceTree = "<group>"; };
-		3ABF4AAB12A464F50020233C /* KVOChangeScope.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KVOChangeScope.hh; sourceTree = "<group>"; };
 		3AEE19411222DC5B009DA438 /* CTTabStripModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripModel.mm; sourceTree = "<group>"; };
 		3AEE19421222DC5B009DA438 /* CTTabStripModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripModel.h; sourceTree = "<group>"; };
 		3AEE19431222DC5B009DA438 /* CTTabStripModelOrderController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripModelOrderController.mm; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 				3A3ED97D1225E116009E2908 /* ChromiumTabs.h */,
 				256AC3F00F4B6AF500CF3369 /* prefix.pch */,
 				3A3ED7071225D7A6009E2908 /* build_config.h */,
-				3ABF4AAB12A464F50020233C /* KVOChangeScope.hh */,
 				3A1168C31225404F00757641 /* common.h */,
 				3A1168C21225404F00757641 /* common.c */,
 				3A3EDA9B1225EF84009E2908 /* CTUtil.h */,
@@ -579,7 +576,6 @@
 			files = (
 				3A3EDACF1225FACA009E2908 /* ChromiumTabs.h in Headers */,
 				3A928F991228648F00DA7E43 /* common.h in Headers */,
-				3ABF4AAC12A465100020233C /* KVOChangeScope.hh in Headers */,
 				3A9292A21229D43300DA7E43 /* CTUtil.h in Headers */,
 				3A3EDAD31225FACA009E2908 /* CTBrowser.h in Headers */,
 				3A9291981229BEB600DA7E43 /* CTPageTransition.h in Headers */,

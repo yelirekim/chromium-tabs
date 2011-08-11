@@ -28,7 +28,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "cocoa_protocols_mac.h"
 
 @class FastResizeView;
 @class CTTabStripView;

@@ -262,12 +262,11 @@ const CGFloat kRapidCloseDist = 2.5;
 
 // Call to clear out transient weak references we hold during drags.
 - (void)resetDragControllers {
-  ct_objc_xch(&draggedController_, nil);
+  [draggedController_ release], draggedController_ = nil;
   dragWindow_ = nil;
   dragOverlay_ = nil;
-  ct_objc_xch(&sourceController_, nil);
+  [sourceController_ release], sourceController_ = nil;
   sourceWindow_ = nil;
-  //ct_objc_xch(&targetController_, nil);
   targetController_ = nil;
   workspaceIDCache_.clear();
 }
@@ -338,7 +337,7 @@ const CGFloat kRapidCloseDist = 2.5;
 
   sourceWindowFrame_ = [sourceWindow_ frame];
   sourceTabFrame_ = [self frame];
-  ct_objc_xch(&sourceController_, [sourceWindow_ windowController]);
+  [sourceController_ release], sourceController_ = [[sourceWindow_ windowController] retain];
   sourceController_.didShowNewTabButtonBeforeTemporalAction = sourceController_.showsNewTabButton;
   tabWasDragged_ = NO;
   tearTime_ = 0.0;
@@ -491,7 +490,7 @@ const CGFloat kRapidCloseDist = 2.5;
   if (targetController_ != newTarget) {
     targetDwellDate = [NSDate date];
     [targetController_ removePlaceholder];
-    ct_objc_xch(&targetController_, newTarget);
+    [targetController_ release], targetController_ = [newTarget retain];
     if (!newTarget) {
       tearTime_ = [NSDate timeIntervalSinceReferenceDate];
       tearOrigin_ = [dragWindow_ frame].origin;
@@ -508,12 +507,11 @@ const CGFloat kRapidCloseDist = 2.5;
     // go away (it's been autoreleased) so we need to ensure we don't reference
     // it any more. In that case the new controller becomes our source
     // controller.
-    ct_objc_xch(&draggedController_,
-                [sourceController_ detachTabToNewWindow:self]);
+    [draggedController_ release], draggedController_ = [[sourceController_ detachTabToNewWindow:self] retain];
     dragWindow_ = [draggedController_ window];
     [dragWindow_ setAlphaValue:0.0];
     if (![sourceController_ hasLiveTabs]) {
-      ct_objc_xch(&sourceController_, draggedController_);
+      [sourceController_ release], sourceController_ = [draggedController_ retain];
       sourceWindow_ = dragWindow_;
     }
 

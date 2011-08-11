@@ -22,36 +22,16 @@ NSString* const CTTabContentsDidCloseNotification =
     CTBrowser *browser_;
     __weak CTTabContents* parentOpener_; // the tab which opened this tab (unless nil)
 }
-
-// Custom @synthesize which invokes [browser_ updateTabStateForContent:self]
-// when setting values.
-#define _synthRetain(T, setname, getname) \
-- (T)getname { return getname##_; } \
-- (void)set##setname :(T)v { \
-  ct_objc_xch(&(getname##_), v); \
-  if (browser_) [browser_ updateTabStateForContent:self]; \
-}
-#define _synthAssign(T, setname, getname) \
-- (T)getname { return getname##_; } \
-- (void)set##setname :(T)v { \
-  getname##_ = v; \
-  if (browser_) [browser_ updateTabStateForContent:self]; \
-}
-
-// changing any of these implies [browser_ updateTabStateForContent:self]
-
-_synthAssign(BOOL, IsLoading, isLoading);
-_synthAssign(BOOL, IsWaitingForResponse, isWaitingForResponse);
-_synthAssign(BOOL, IsCrashed, isCrashed);
-
-_synthRetain(NSString*, Title, title);
-_synthRetain(NSImage*, Icon, icon);
-
 @synthesize delegate = delegate_;
 @synthesize closedByUserGesture = closedByUserGesture_;
 @synthesize view = view_;
 @synthesize isApp = isApp_;
 @synthesize browser = browser_;
+@synthesize isLoading = isLoading_;
+@synthesize isCrashed = isCrashed_;
+@synthesize isWaitingForResponse = isWaitingForResponse_;
+@synthesize title = title_;
+@synthesize icon = icon_;
 
 #undef _synth
 
@@ -258,6 +238,46 @@ _synthRetain(NSImage*, Icon, icon);
 
 -(void)viewFrameDidChange:(NSRect)newFrame {
   [view_ setFrame:newFrame];
+}
+
+- (void) setIsLoading:(BOOL)isLoading
+{
+    if (isLoading_ != isLoading) {
+        isLoading_ = isLoading;
+    }
+    if (browser_) [browser_ updateTabStateForContent:self];
+}
+
+- (void) setIsWaitingForResponse:(BOOL)isWaitingForResponse
+{
+    if (isWaitingForResponse_ != isWaitingForResponse) {
+        isWaitingForResponse_ = isWaitingForResponse;
+    }
+    if (browser_) [browser_ updateTabStateForContent:self];
+}
+
+- (void) setIsCrashed:(BOOL)isCrashed
+{
+    if (isCrashed_ != isCrashed) {
+        isCrashed_ = isCrashed;
+    }
+    if (browser_) [browser_ updateTabStateForContent:self];
+}
+
+- (void) setTitle:(NSString*)title
+{
+    if (title_ != title) {
+        [title_ release], title_ = title;
+    }
+    if (browser_) [browser_ updateTabStateForContent:self];
+}
+
+- (void) setIcon:(NSImage*)icon
+{
+    if (icon_ != icon) {
+        [icon_ release], icon_ = icon;
+    }
+    if (browser_) [browser_ updateTabStateForContent:self];
 }
 
 @end

@@ -71,8 +71,6 @@ extern CGPathRef CGContextCopyPath(CGContextRef context);
   
   [NSGraphicsContext restoreGraphicsState];
   
-  [path release];
-  [shadow release];
 }
 
 // Credit for the next two methods goes to Matt Gemmell

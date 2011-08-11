@@ -27,7 +27,6 @@
 
 - (void)dealloc {
   [self setTrackingEnabled:NO];
-  [super dealloc];
 }
 
 - (void)mouseEntered:(NSEvent*)theEvent {
@@ -47,7 +46,7 @@
   // it can be freed while |super mouseDown:| is in it's loop, and the
   // |checkImageState| call will crash.
   // http://crbug.com/28220
-  HoverButton* myself = [self retain];
+  //HoverButton* myself = self;
 
   [super mouseDown:theEvent];
   // We need to check the image state after the mouseDown event loop finishes.
@@ -57,12 +56,11 @@
   // http://crbug.com/31279
   [self checkImageState];
     
-  [myself release];
 }
 
 - (void)setTrackingEnabled:(BOOL)enabled {
   if (enabled) {
-    [trackingArea_ release], trackingArea_ =
+    trackingArea_ =
         [[NSTrackingArea alloc] initWithRect:[self bounds]
                                      options:NSTrackingMouseEnteredAndExited |
                                              NSTrackingActiveAlways
@@ -78,7 +76,7 @@
   } else {
     if (trackingArea_) {
       [self removeTrackingArea:trackingArea_];
-      [trackingArea_ release], trackingArea_ = nil;
+      trackingArea_ = nil;
     }
   }
 }

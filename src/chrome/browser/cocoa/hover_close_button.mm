@@ -63,7 +63,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 
   // Give the 'x' an inner shadow for depth. If the button is in a hover state
   // (circle behind it), then adjust the shadow accordingly (not as harsh).
-  NSShadow* shadow = [[[NSShadow alloc] init] autorelease];
+  NSShadow* shadow = [[NSShadow alloc] init];
   CGFloat alpha = (self.hoverState != kHoverStateNone) ?
       kXShadowCircleAlpha : kXShadowAlpha;
   [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.15
@@ -84,7 +84,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 - (void)setUpDrawingPaths {
   NSPoint viewCenter = MidRect([self bounds]);
 
-  [circlePath_ release], circlePath_ = [[NSBezierPath bezierPath] retain];
+  circlePath_ = [NSBezierPath bezierPath];
   [circlePath_ moveToPoint:viewCenter];
   CGFloat radius = kCircleRadiusPercentage * NSWidth([self bounds]);
   [circlePath_ appendBezierPathWithArcWithCenter:viewCenter
@@ -94,7 +94,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 
   // Construct an 'x' by drawing two intersecting rectangles in the shape of a
   // cross and then rotating the path by 45 degrees.
-  [xPath_ release], xPath_ = [[NSBezierPath bezierPath] retain];
+  xPath_ = [NSBezierPath bezierPath];
   [xPath_ appendBezierPathWithRect:NSMakeRect(3.5, 7.0, 9.0, 2.0)];
   [xPath_ appendBezierPathWithRect:NSMakeRect(7.0, 3.5, 2.0, 9.0)];
 

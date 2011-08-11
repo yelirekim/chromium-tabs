@@ -47,8 +47,8 @@ extern NSString* const CTTabContentsDidCloseNotification;
 @property(retain, nonatomic) NSView *view;
 @property(retain, nonatomic) NSString *title;
 @property(retain, nonatomic) NSImage *icon;
-@property(assign, nonatomic) CTBrowser *browser;
-@property(assign, nonatomic) CTTabContents* parentOpener;
+@property(strong, nonatomic) CTBrowser *browser;
+@property(strong, nonatomic) CTTabContents* parentOpener;
 
 // If this returns true, special icons like throbbers and "crashed" is
 // displayed, even if |icon| is nil. By default this returns true.

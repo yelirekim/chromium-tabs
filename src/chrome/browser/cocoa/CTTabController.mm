@@ -26,7 +26,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
     CTTabLoadingState loadingState_;
     CGFloat iconTitleXOffset_;  // between left edges of icon and title
     CGFloat titleCloseWidthOffset_;  // between right edges of icon and close btn.
-    id<CTTabControllerTarget> target_;  // weak, where actions are sent
+    id<CTTabControllerTarget> __unsafe_unretained target_;  // weak, where actions are sent
     SEL action_;  // selector sent when tab is selected by clicking
     //scoped_ptr<TabMenuModel> contextMenuModel_;
     //scoped_ptr<TabControllerInternal::MenuDelegate> contextMenuDelegate_;
@@ -80,7 +80,6 @@ static NSString* const kBrowserThemeDidChangeNotification =
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[self tabView] setController:nil];
-  [super dealloc];
 }
 
 // The internals of |-setSelected:| but doesn't check if we're already set

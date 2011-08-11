@@ -59,7 +59,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 }*/
 
 + (CTBrowserWindowController*)browserWindowController {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 + (CTBrowserWindowController*)mainBrowserWindowController {
@@ -93,7 +93,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   initializing_ = YES;
 
   // Our browser
-  browser_ = [browser retain];
+  browser_ = browser;
   browser_.windowController = self;
 
   // Observe tabs
@@ -123,7 +123,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   // Create a toolbar controller. The browser object might return nil, in which
   // means we do not have a toolbar.
-  toolbarController_ = [[browser_ createToolbarController] retain];
+  toolbarController_ = [browser_ createToolbarController];
   if (toolbarController_) {
     [[[self window] contentView] addSubview:[toolbarController_ view]];
   }
@@ -135,7 +135,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   initializing_ = NO;
   if (!_currentMain) {
-      _currentMain = [self retain];
+      _currentMain = self;
   }
   return self;
 }
@@ -158,7 +158,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 -(void)dealloc {
   DLOG("[ChromiumTabs] dealloc window controller");
   if (_currentMain == self) {
-    [_currentMain release], _currentMain = nil;
+    _currentMain = nil;
   }
   delete tabStripObserver_;
 
@@ -173,16 +173,13 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
-  [browser_ release];
-  [tabStripController_ release];
-    [toolbarController_ release], toolbarController_ = nil;
-  [super dealloc];
+    toolbarController_ = nil;
 }
 
 
 -(void)finalize {
   if (_currentMain == self) {
-    [_currentMain release], _currentMain = nil;
+    _currentMain = nil;
   }
   //NSLog(@"%@ will finalize (retainCount: %u)", self, [self retainCount]);
   //NSLog(@"%@", [NSThread callStackSymbols]);
@@ -272,7 +269,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 - (IBAction)newWindow:(id)sender {
   CTBrowserWindowController* windowController =
-      [[isa browserWindowController] retain];
+      [isa browserWindowController];
   [windowController newDocument:sender];
   [windowController showWindow:self];
 }
@@ -780,7 +777,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
             [[self window] orderOut:self];
             [browser_ windowDidBeginToClose];
             if (_currentMain == self) {
-                [_currentMain release], _currentMain = nil;
+                _currentMain = nil;
             }
             return NO;
         }
@@ -794,7 +791,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 
 - (void)windowWillClose:(NSNotification *)notification {
-  [self autorelease];
 }
 
 
@@ -803,7 +799,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   // NOTE: if you use custom window bounds saving/restoring, you should probably
   //       save the window bounds here.
 
-  [_currentMain release], _currentMain = [self retain];
+  _currentMain = self;
 
   // TODO(dmaclach): Instead of redrawing the whole window, views that care
   // about the active window state should be registering for notifications.
@@ -816,7 +812,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 - (void)windowDidResignMain:(NSNotification*)notification {
   if (_currentMain == self) {
-    [_currentMain release], _currentMain = nil;
+    _currentMain = nil;
   }
 
   // TODO(dmaclach): Instead of redrawing the whole window, views that care

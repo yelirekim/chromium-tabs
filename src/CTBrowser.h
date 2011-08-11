@@ -24,10 +24,10 @@ class CTTabStripModel;
 @property(readonly, nonatomic) CTTabStripModel* tabStripModel;
 
 // The window controller
-@property(readonly, nonatomic, retain) CTBrowserWindowController* windowController;
+@property(strong, readonly, nonatomic, retain) CTBrowserWindowController* windowController;
 
 // The window. Convenience for [windowController window]
-@property(readonly, nonatomic) NSWindow* window;
+@property(strong, readonly, nonatomic) NSWindow* window;
 
 // Create a new browser with a window.
 // @autoreleased

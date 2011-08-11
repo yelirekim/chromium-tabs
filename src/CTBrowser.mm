@@ -27,7 +27,7 @@
 
 
 + (CTBrowser*)browser {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 
@@ -42,7 +42,6 @@
 -(void)dealloc {
   DLOG("[ChromiumTabs] deallocing browser %@", self);
   delete tabStripModel_;
-  [super dealloc];
 }
 
 
@@ -55,16 +54,16 @@
 -(CTToolbarController *)createToolbarController {
   // subclasses could override this -- returning nil means no toolbar
   NSBundle *bundle = [CTUtil bundleForResource:@"Toolbar" ofType:@"nib"];
-  return [[[CTToolbarController alloc] initWithNibName:@"Toolbar"
+  return [[CTToolbarController alloc] initWithNibName:@"Toolbar"
                                                    bundle:bundle
-                                                  browser:self] autorelease];
+                                                  browser:self];
 }
 
 -(CTTabContentsController*)createTabContentsControllerWithContents:
     (CTTabContents*)contents {
   // subclasses could override this
-  return [[[CTTabContentsController alloc]
-      initWithContents:contents] autorelease];
+  return [[CTTabContentsController alloc]
+      initWithContents:contents];
 }
 
 
@@ -172,7 +171,6 @@
       [[cls alloc] initWithBrowser:browser];
   [browser addBlankTabInForeground:YES];
   [windowController showWindow:self];
-  [windowController autorelease];
 }
 
 -(void)closeWindow {
@@ -209,8 +207,8 @@
 -(CTTabContents*)createBlankTabBasedOn:(CTTabContents*)baseContents {
   // subclasses should override this to provide a custom CTTabContents type
   // and/or initialization
-  return [[[CTTabContents alloc]
-      initWithBaseTabContents:baseContents] autorelease];
+  return [[CTTabContents alloc]
+      initWithBaseTabContents:baseContents];
 }
 
 // implementation conforms to CTTabStripModelDelegate
@@ -435,7 +433,7 @@
 - (void) setWindowController:(CTBrowserWindowController *)windowController
 {
     if (windowController_ != windowController) {
-        [windowController_ release], windowController_ = [windowController retain];
+        windowController_ = windowController;
     }
 }
 

@@ -36,8 +36,8 @@
 
 @interface CTTabWindowController : NSWindowController<NSWindowDelegate>
 
-@property(readonly, nonatomic) CTTabStripView* tabStripView;
-@property(readonly, nonatomic) FastResizeView* tabContentArea;
+@property(strong, readonly, nonatomic) CTTabStripView* tabStripView;
+@property(strong, readonly, nonatomic) FastResizeView* tabContentArea;
 @property(assign, nonatomic) BOOL didShowNewTabButtonBeforeTemporalAction;
 
 // Used during tab dragging to turn on/off the overlay window when a tab

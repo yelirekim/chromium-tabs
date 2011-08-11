@@ -336,14 +336,10 @@ private:
 @synthesize indentForControls = indentForControls_;
 
 + (void)initialize {
-  NSAutoreleasePool* pool = [NSAutoreleasePool new];
-  #define PIMG(name) [[NSImage imageInAppOrCTFrameworkNamed:name] retain]
-  kNewTabHoverImage = PIMG(@"newtab_h");
-  kNewTabImage = PIMG(@"newtab");
-  kNewTabPressedImage = PIMG(@"newtab_p");
-  kDefaultIconImage = PIMG(@"default-icon");
-  #undef PIMG
-  [pool drain];
+  kNewTabHoverImage = [NSImage imageInAppOrCTFrameworkNamed:@"newtab_h"];
+  kNewTabImage = [NSImage imageInAppOrCTFrameworkNamed:@"newtab"];
+  kNewTabPressedImage = [NSImage imageInAppOrCTFrameworkNamed:@"newtab_p"];
+  kDefaultIconImage = [NSImage imageInAppOrCTFrameworkNamed:@"default-icon"];
 }
 
 - (id)initWithView:(CTTabStripView*)view
@@ -351,7 +347,7 @@ private:
            browser:(CTBrowser*)browser {
   assert(view && switchView && browser);
   if ((self = [super init])) {
-    tabStripView_ = [view retain];
+    tabStripView_ = view;
     switchView_ = switchView;
     browser_ = browser;
     tabStripModel_ = [browser_ tabStripModel];
@@ -364,7 +360,7 @@ private:
     permanentSubviews_ = [[NSMutableArray alloc] init];
 
     //ResourceBundle& rb = ResourceBundle::GetSharedInstance();
-    defaultFavIcon_ = [kDefaultIconImage retain];
+    defaultFavIcon_ = kDefaultIconImage;
 
     [self setIndentForControls:[[self class] defaultIndentForControls]];
 
@@ -480,7 +476,6 @@ private:
     [[[view animationForKey:@"frameOrigin"] delegate] invalidate];
   }
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [super dealloc];
 }
 
 + (CGFloat)defaultTabHeight {
@@ -547,7 +542,7 @@ private:
 // set the frame here. This also creates the view as hidden, it will be
 // shown during layout.
 - (CTTabController*)newTab {
-  CTTabController* controller = [[[CTTabController alloc] init] autorelease];
+  CTTabController* controller = [[CTTabController alloc] init];
   [controller setTarget:self];
   [controller setAction:@selector(selectTab:)];
   [[controller view] setHidden:YES];
@@ -1182,7 +1177,6 @@ private:
   // Register delegate (owned by the animation system).
   NSView* tabView = [closingTab view];
   CAAnimation* animation = [[tabView animationForKey:@"frameOrigin"] copy];
-  [animation autorelease];
   TabCloseAnimationDelegate* delegate = 
     [[TabCloseAnimationDelegate alloc] initWithTabStrip:self
                                           tabController:closingTab];
@@ -1234,7 +1228,7 @@ private:
   if (!image)
     image = defaultFavIcon_;
   NSRect frame = NSMakeRect(0, 0, kIconWidthAndHeight, kIconWidthAndHeight);
-  NSImageView* view = [[[NSImageView alloc] initWithFrame:frame] autorelease];
+  NSImageView* view = [[NSImageView alloc] initWithFrame:frame];
   //DLOG_EXPR(image);
   [view setImage:image];
   return view;
@@ -1252,13 +1246,13 @@ private:
   static NSImage* sadFaviconImage = nil;
   if (throbberWaitingImage == nil) {
     throbberWaitingImage =
-        [[NSImage imageInAppOrCTFrameworkNamed:@"throbber_waiting"] retain];
+        [NSImage imageInAppOrCTFrameworkNamed:@"throbber_waiting"];
     assert(throbberWaitingImage);
     throbberLoadingImage =
-        [[NSImage imageInAppOrCTFrameworkNamed:@"throbber"] retain];
+        [NSImage imageInAppOrCTFrameworkNamed:@"throbber"];
     assert(throbberLoadingImage);
     sadFaviconImage =
-        [[NSImage imageInAppOrCTFrameworkNamed:@"sadfavicon"] retain];
+        [NSImage imageInAppOrCTFrameworkNamed:@"sadfavicon"];
     assert(sadFaviconImage);
   }
 
@@ -1366,12 +1360,12 @@ private:
   NSInteger to = [self indexFromModelIndex:modelTo];
 
   CTTabContentsController* movedTabContentsController = 
-      [[tabContentsArray_ objectAtIndex:from] retain];
+      [tabContentsArray_ objectAtIndex:from];
   [tabContentsArray_ removeObjectAtIndex:from];
   [tabContentsArray_ insertObject:movedTabContentsController
                           atIndex:to];
   CTTabController* movedTabController = 
-      [[tabArray_ objectAtIndex:from] retain];
+      [tabArray_ objectAtIndex:from];
   assert([movedTabController isKindOfClass:[CTTabController class]]);
   [tabArray_ removeObjectAtIndex:from];
   [tabArray_ insertObject:movedTabController atIndex:to];

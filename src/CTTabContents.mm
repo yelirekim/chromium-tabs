@@ -58,14 +58,10 @@ NSString* const CTTabContentsDidCloseNotification =
   return [super init];
 }
 
--(void)dealloc {
-  [super dealloc];
-}
 
 -(void)destroy:(CTTabStripModel*)sender {
   // TODO: notify "disconnected"?
   sender->TabContentsWasDestroyed(self); // TODO: NSNotification
-  [self release];
 }
 
 #pragma mark Properties impl.
@@ -267,7 +263,7 @@ NSString* const CTTabContentsDidCloseNotification =
 - (void) setTitle:(NSString*)title
 {
     if (title_ != title) {
-        [title_ release], title_ = title;
+        title_ = title;
     }
     if (browser_) [browser_ updateTabStateForContent:self];
 }
@@ -275,7 +271,7 @@ NSString* const CTTabContentsDidCloseNotification =
 - (void) setIcon:(NSImage*)icon
 {
     if (icon_ != icon) {
-        [icon_ release], icon_ = icon;
+        icon_ = icon;
     }
     if (browser_) [browser_ updateTabStateForContent:self];
 }

@@ -16,9 +16,9 @@
 
 @interface CTBrowserWindowController : CTTabWindowController
 
-@property(readonly, nonatomic) CTTabStripController *tabStripController;
-@property(readonly, nonatomic) CTToolbarController *toolbarController;
-@property(readonly, nonatomic) CTBrowser *browser;
+@property(strong, readonly, nonatomic) CTTabStripController *tabStripController;
+@property(strong, readonly, nonatomic) CTToolbarController *toolbarController;
+@property(strong, readonly, nonatomic) CTBrowser *browser;
 @property(readonly, nonatomic) BOOL isFullscreen; // fullscreen or not
 
 // Called to check whether or not this window has a toolbar. By default returns

@@ -144,7 +144,6 @@ const CGFloat kRapidCloseDist = 2.5;
 - (void)dealloc {
   // Cancel any delayed requests that may still be pending (drags or hover).
   [NSObject cancelPreviousPerformRequestsWithTarget:self];
-  [super dealloc];
 }
 
 // Called to obtain the context menu for when the user hits the right mouse
@@ -260,10 +259,10 @@ const CGFloat kRapidCloseDist = 2.5;
 
 // Call to clear out transient weak references we hold during drags.
 - (void)resetDragControllers {
-  [draggedController_ release], draggedController_ = nil;
+  draggedController_ = nil;
   dragWindow_ = nil;
   dragOverlay_ = nil;
-  [sourceController_ release], sourceController_ = nil;
+  sourceController_ = nil;
   sourceWindow_ = nil;
   targetController_ = nil;
   workspaceIDCache_.clear();
@@ -335,7 +334,7 @@ const CGFloat kRapidCloseDist = 2.5;
 
   sourceWindowFrame_ = [sourceWindow_ frame];
   sourceTabFrame_ = [self frame];
-  [sourceController_ release], sourceController_ = [[sourceWindow_ windowController] retain];
+  sourceController_ = [sourceWindow_ windowController];
   sourceController_.didShowNewTabButtonBeforeTemporalAction = sourceController_.showsNewTabButton;
   tabWasDragged_ = NO;
   tearTime_ = 0.0;
@@ -367,7 +366,7 @@ const CGFloat kRapidCloseDist = 2.5;
   // strip and then deallocated. This will also result in *us* being
   // deallocated. Both these are bad, so we prevent this by retaining the
   // controller.
-  CTTabController* controller = [tabController_ retain];
+  CTTabController* controller = tabController_;
 
   // Because we move views between windows, we need to handle the event loop
   // ourselves. Ideally we should use the standard event loop.
@@ -488,7 +487,7 @@ const CGFloat kRapidCloseDist = 2.5;
   if (targetController_ != newTarget) {
     targetDwellDate = [NSDate date];
     [targetController_ removePlaceholder];
-    [targetController_ release], targetController_ = [newTarget retain];
+    targetController_ = newTarget;
     if (!newTarget) {
       tearTime_ = [NSDate timeIntervalSinceReferenceDate];
       tearOrigin_ = [dragWindow_ frame].origin;
@@ -505,11 +504,11 @@ const CGFloat kRapidCloseDist = 2.5;
     // go away (it's been autoreleased) so we need to ensure we don't reference
     // it any more. In that case the new controller becomes our source
     // controller.
-    [draggedController_ release], draggedController_ = [[sourceController_ detachTabToNewWindow:self] retain];
+    draggedController_ = [sourceController_ detachTabToNewWindow:self];
     dragWindow_ = [draggedController_ window];
     [dragWindow_ setAlphaValue:0.0];
     if (![sourceController_ hasLiveTabs]) {
-      [sourceController_ release], sourceController_ = [draggedController_ retain];
+      sourceController_ = draggedController_;
       sourceWindow_ = dragWindow_;
     }
 
@@ -753,8 +752,7 @@ const CGFloat kRapidCloseDist = 2.5;
 
     // Draw a mouse hover gradient for the default themes.
     if (!selected && hoverAlpha > 0) {
-      NSGradient* glow = [NSGradient alloc];
-      [glow initWithStartingColor:[NSColor colorWithCalibratedWhite:1.0
+      NSGradient* glow = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:1.0
                                       alpha:1.0 * hoverAlpha]
                       endingColor:[NSColor colorWithCalibratedWhite:1.0
                                                               alpha:0.0]];

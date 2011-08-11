@@ -29,7 +29,6 @@
 - (void)dealloc {
   // make sure our contents have been removed from the window
   [[self view] removeFromSuperview];
-  [super dealloc];
 }
 
 // Call when the tab view is properly sized and the render widget host view

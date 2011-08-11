@@ -33,7 +33,6 @@
 		3A3ED9D91225E32A009E2908 /* CTBrowser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7188A122479CE005022BE /* CTBrowser.mm */; };
 		3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */; };
 		3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */; };
-		3A3ED9DD1225E32A009E2908 /* GTMWindowSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6861225CE7A009E2908 /* GTMWindowSheetController.m */; };
 		3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */; };
 		3A3ED9DF1225E32A009E2908 /* NSPasteboard+Utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6A21225CEB1009E2908 /* NSPasteboard+Utils.mm */; };
 		3A3ED9E01225E32A009E2908 /* NSScreen+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6A41225CEB1009E2908 /* NSScreen+Utils.m */; };
@@ -112,7 +111,6 @@
 		3A9291B11229BF0100DA7E43 /* GTMNSBezierPath+CGPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED74C1225DDBE009E2908 /* GTMNSBezierPath+CGPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B21229BF0100DA7E43 /* GTMNSAnimation+Duration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6811225CE7A009E2908 /* GTMNSAnimation+Duration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291B41229BF0100DA7E43 /* GTMWindowSheetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6851225CE7A009E2908 /* GTMWindowSheetController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B51229BF0100DA7E43 /* GTMFadeTruncatingTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED7671225DF06009E2908 /* GTMFadeTruncatingTextFieldCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B61229BF0100DA7E43 /* NSBezierPath+MCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9292A21229D43300DA7E43 /* CTUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA9B1225EF84009E2908 /* CTUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -206,8 +204,6 @@
 		3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSAnimation+Duration.m"; sourceTree = "<group>"; };
 		3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSColor+Luminance.h"; sourceTree = "<group>"; };
 		3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSColor+Luminance.m"; sourceTree = "<group>"; };
-		3A3ED6851225CE7A009E2908 /* GTMWindowSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMWindowSheetController.h; sourceTree = "<group>"; };
-		3A3ED6861225CE7A009E2908 /* GTMWindowSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMWindowSheetController.m; sourceTree = "<group>"; };
 		3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+MCAdditions.h"; path = "src/third_party/molokocacao/NSBezierPath+MCAdditions.h"; sourceTree = SOURCE_ROOT; };
 		3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MCAdditions.m"; sourceTree = "<group>"; };
 		3A3ED6A11225CEB1009E2908 /* NSPasteboard+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPasteboard+Utils.h"; sourceTree = "<group>"; };
@@ -488,8 +484,6 @@
 				3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */,
 				3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */,
 				3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */,
-				3A3ED6851225CE7A009E2908 /* GTMWindowSheetController.h */,
-				3A3ED6861225CE7A009E2908 /* GTMWindowSheetController.m */,
 				3A3ED7671225DF06009E2908 /* GTMFadeTruncatingTextFieldCell.h */,
 				3A3ED7681225DF06009E2908 /* GTMFadeTruncatingTextFieldCell.m */,
 			);
@@ -631,7 +625,6 @@
 				3A9291B11229BF0100DA7E43 /* GTMNSBezierPath+CGPath.h in Headers */,
 				3A9291B21229BF0100DA7E43 /* GTMNSAnimation+Duration.h in Headers */,
 				3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */,
-				3A9291B41229BF0100DA7E43 /* GTMWindowSheetController.h in Headers */,
 				3A9291B51229BF0100DA7E43 /* GTMFadeTruncatingTextFieldCell.h in Headers */,
 				3A9291B61229BF0100DA7E43 /* NSBezierPath+MCAdditions.h in Headers */,
 				3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */,
@@ -769,7 +762,6 @@
 				3A3ED9D91225E32A009E2908 /* CTBrowser.mm in Sources */,
 				3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */,
 				3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */,
-				3A3ED9DD1225E32A009E2908 /* GTMWindowSheetController.m in Sources */,
 				3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */,
 				3A3ED9DF1225E32A009E2908 /* NSPasteboard+Utils.mm in Sources */,
 				3A3ED9E01225E32A009E2908 /* NSScreen+Utils.m in Sources */,

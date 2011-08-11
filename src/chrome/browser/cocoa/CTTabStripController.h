@@ -11,7 +11,6 @@
 #import "scoped_nsobject.h"
 #import "scoped_ptr.h"
 #import "CTTabControllerTarget.h"
-#import "GTMWindowSheetController.h"
 
 @class NewTabButton;
 @class CTTabContentsController;
@@ -32,8 +31,7 @@ class CTTabStripModel;
 // For a full description of the design, see
 // http://www.chromium.org/developers/design-documents/tab-strip-mac
 @interface CTTabStripController :
-  NSObject<CTTabControllerTarget,
-           GTMWindowSheetControllerDelegate>
+  NSObject<CTTabControllerTarget>
 
 @property(nonatomic) CGFloat indentForControls;
 
@@ -116,19 +114,6 @@ class CTTabStripModel;
 
 // Default indentation for tabs (see |indentForControls_|).
 + (CGFloat)defaultIndentForControls;
-
-// Returns the (lazily created) window sheet controller of this window. Used
-// for the per-tab sheets.
-- (GTMWindowSheetController*)sheetController;
-
-// Destroys the window sheet controller of this window, if it exists.  The sheet
-// controller can be recreated by a subsequent call to |-sheetController|.  Must
-// not be called if any sheets are currently open.
-// TODO(viettrungluu): This is temporary code needed to allow sheets to work
-// (read: not crash) in fullscreen mode.  Once GTMWindowSheetController is
-// modified to support moving sheets between windows, this code can go away.
-// http://crbug.com/19093.
-- (void)destroySheetController;
 
 // Returns the currently active CTTabContentsController.
 - (CTTabContentsController*)activeTabContentsController;

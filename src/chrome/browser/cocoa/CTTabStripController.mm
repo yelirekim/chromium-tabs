@@ -329,9 +329,6 @@ private:
     // red/yellow/green buttons).
     CGFloat indentForControls_;
     
-    // Manages per-tab sheets.
-    scoped_nsobject<GTMWindowSheetController> sheetController_;
-    
     // Is the mouse currently inside the strip;
     BOOL mouseInside_;
 }
@@ -543,11 +540,6 @@ private:
           static_cast<CTBrowserWindowController*>(controller));
     }
   }*/
-
-  // Tell per-tab sheet manager about currently selected tab.
-  if (sheetController_.get()) {
-    [sheetController_ setActiveView:newView];
-  }
 }
 
 // Create a new tab view and set its cell correctly so it draws the way we want
@@ -1811,19 +1803,6 @@ private:
     [tabStripView_ setDropArrowShown:NO];
     [tabStripView_ setNeedsDisplay:YES];
   }
-}
-
-- (GTMWindowSheetController*)sheetController {
-  if (!sheetController_.get())
-    sheetController_.reset([[GTMWindowSheetController alloc]
-        initWithWindow:[switchView_ window] delegate:self]);
-  return sheetController_.get();
-}
-
-- (void)destroySheetController {
-  // Make sure there are no open sheets.
-  DCHECK_EQ(0U, [[sheetController_ viewsWithAttachedSheets] count]);
-  sheetController_.reset();
 }
 
 - (CTTabContentsController*)activeTabContentsController {

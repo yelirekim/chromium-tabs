@@ -7,7 +7,7 @@
 #import "CTUtil.h"
 
 @implementation CTTabContentsController {
-    __weak CTTabContents* contents_;  // weak
+    CTTabContents* contents_;  // weak
     IBOutlet NSSplitView* contentsContainer_;
 }
 

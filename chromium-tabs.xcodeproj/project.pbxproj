@@ -94,8 +94,6 @@
 		3A9291A71229BEE900DA7E43 /* hover_close_button.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921EF1221AF58006D8305 /* hover_close_button.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A81229BEE900DA7E43 /* new_tab_button.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A236DD71223414F00D21E66 /* new_tab_button.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A91229BEE900DA7E43 /* fast_resize_view.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A1CF98712235CEE008A3B8C /* fast_resize_view.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291AF1229BF0100DA7E43 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED74F1225DDF2009E2908 /* GTMDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291B01229BF0100DA7E43 /* GTMGarbageCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED74B1225DDBE009E2908 /* GTMGarbageCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B21229BF0100DA7E43 /* GTMNSAnimation+Duration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6811225CE7A009E2908 /* GTMNSAnimation+Duration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291B61229BF0100DA7E43 /* NSBezierPath+MCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -192,8 +190,6 @@
 		3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+MCAdditions.h"; path = "src/third_party/molokocacao/NSBezierPath+MCAdditions.h"; sourceTree = SOURCE_ROOT; };
 		3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MCAdditions.m"; sourceTree = "<group>"; };
 		3A3ED7071225D7A6009E2908 /* build_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = build_config.h; sourceTree = "<group>"; };
-		3A3ED74B1225DDBE009E2908 /* GTMGarbageCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMGarbageCollection.h; sourceTree = "<group>"; };
-		3A3ED74F1225DDF2009E2908 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		3A3ED9751225E0A7009E2908 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3A3ED97D1225E116009E2908 /* ChromiumTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.h; sourceTree = "<group>"; };
 		3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChromiumTabs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -444,8 +440,6 @@
 		3A3ED67F1225CE7A009E2908 /* gtm-subset */ = {
 			isa = PBXGroup;
 			children = (
-				3A3ED74F1225DDF2009E2908 /* GTMDefines.h */,
-				3A3ED74B1225DDBE009E2908 /* GTMGarbageCollection.h */,
 				3A3ED6811225CE7A009E2908 /* GTMNSAnimation+Duration.h */,
 				3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */,
 				3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */,
@@ -561,8 +555,6 @@
 				3A9291A71229BEE900DA7E43 /* hover_close_button.h in Headers */,
 				3A9291A81229BEE900DA7E43 /* new_tab_button.h in Headers */,
 				3A9291A91229BEE900DA7E43 /* fast_resize_view.h in Headers */,
-				3A9291AF1229BF0100DA7E43 /* GTMDefines.h in Headers */,
-				3A9291B01229BF0100DA7E43 /* GTMGarbageCollection.h in Headers */,
 				3A9291B21229BF0100DA7E43 /* GTMNSAnimation+Duration.h in Headers */,
 				3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */,
 				3A9291B61229BF0100DA7E43 /* NSBezierPath+MCAdditions.h in Headers */,

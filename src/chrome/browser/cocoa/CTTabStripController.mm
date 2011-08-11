@@ -258,17 +258,17 @@ private:
 @implementation CTTabStripController {
     // YES if tabs are to be laid out vertically instead of horizontally.
     BOOL verticalLayout_;
-    __weak CTTabContents* currentTab_;  // weak, tab for which we're showing state
+    CTTabContents* currentTab_;  // weak, tab for which we're showing state
     scoped_nsobject<CTTabStripView> tabStripView_;
-    __weak NSView* switchView_;  // weak
+    NSView* switchView_;  // weak
     scoped_nsobject<NSView> dragBlockingView_;  // avoid bad window server drags
-    __weak NewTabButton* newTabButton_;  // weak, obtained from the nib.
+    NewTabButton* newTabButton_;  // weak, obtained from the nib.
     
     // Tracks the newTabButton_ for rollovers.
     scoped_nsobject<NSTrackingArea> newTabTrackingArea_;
     scoped_ptr<CTTabStripModelObserverBridge> bridge_;
-    __weak CTBrowser *browser_;  // weak
-    __weak CTTabStripModel* tabStripModel_;  // weak
+    CTBrowser *browser_;  // weak
+    CTTabStripModel* tabStripModel_;  // weak
     
     // YES if the new tab button is currently displaying the hover image (if the
     // mouse is currently over the button).

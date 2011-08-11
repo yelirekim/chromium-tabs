@@ -10,8 +10,6 @@
 #import "CTUtil.h"
 #import "fast_resize_view.h"
 
-#import "scoped_nsdisable_screen_updates.h"
-
 @interface NSWindow (ThingsThatMightBeImplemented)
 - (void)setShouldHideTitle:(BOOL)y;
 - (void)setBottomCornerRounded:(BOOL)y;
@@ -405,7 +403,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 // new window will be the same size as this window.
 - (CTTabWindowController*)detachTabToNewWindow:(CTTabView*)tabView {
   // Disable screen updates so that this appears as a single visual change.
-  base::ScopedNSDisableScreenUpdates disabler;
+    NSDisableScreenUpdates();
+    @try {
 
   // Keep a local ref to the tab strip model object
   CTTabStripModel *tabStripModel = [browser_ tabStripModel];
@@ -468,7 +467,11 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   // And make sure we use the correct frame in the new view.
   [[controller tabStripController] setFrameOfSelectedTab:tabRect];
-  return controller;
+
+        return controller;
+    } @finally {
+        NSEnableScreenUpdates();
+    }
 }
 
 
@@ -761,29 +764,32 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 - (BOOL)windowShouldClose:(id)sender {
   // Disable updates while closing all tabs to avoid flickering.
-  base::ScopedNSDisableScreenUpdates disabler;
-
-  // NOTE: when using the default BrowserWindow.xib, window bounds are saved and
-  //       restored by Cocoa using NSUserDefaults key "browserWindow".
-
-  // NOTE: orderOut: ends up activating another window, so if we save window
-  //       bounds in a custom manner we have to do it here, before we call
-  //       orderOut:
-
-  if (browser_.tabStripModel->HasNonPhantomTabs()) {
-    // Tab strip isn't empty.  Hide the frame (so it appears to have closed
-    // immediately) and close all the tabs, allowing them to shut down. When the
-    // tab strip is empty we'll be called back again.
-    [[self window] orderOut:self];
-    [browser_ windowDidBeginToClose];
-    if (_currentMain == self) {
-      [_currentMain release], _currentMain = nil;
+    NSDisableScreenUpdates();
+    @try {
+        // NOTE: when using the default BrowserWindow.xib, window bounds are saved and
+        //       restored by Cocoa using NSUserDefaults key "browserWindow".
+        
+        // NOTE: orderOut: ends up activating another window, so if we save window
+        //       bounds in a custom manner we have to do it here, before we call
+        //       orderOut:
+        
+        if (browser_.tabStripModel->HasNonPhantomTabs()) {
+            // Tab strip isn't empty.  Hide the frame (so it appears to have closed
+            // immediately) and close all the tabs, allowing them to shut down. When the
+            // tab strip is empty we'll be called back again.
+            [[self window] orderOut:self];
+            [browser_ windowDidBeginToClose];
+            if (_currentMain == self) {
+                [_currentMain release], _currentMain = nil;
+            }
+            return NO;
+        }
+        
+        // the tab strip is empty, it's ok to close the window
+        return YES;
+    } @finally {
+        NSEnableScreenUpdates();
     }
-    return NO;
-  }
-
-  // the tab strip is empty, it's ok to close the window
-  return YES;
 }
 
 

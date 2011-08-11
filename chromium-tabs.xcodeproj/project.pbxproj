@@ -83,7 +83,6 @@
 		3A92919B1229BEE900DA7E43 /* basictypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA331225E911009E2908 /* basictypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92919C1229BEE900DA7E43 /* cocoa_protocols_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA341225E911009E2908 /* cocoa_protocols_mac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92919D1229BEE900DA7E43 /* observer_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA351225E911009E2908 /* observer_list.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A92919F1229BEE900DA7E43 /* scoped_nsdisable_screen_updates.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA371225E911009E2908 /* scoped_nsdisable_screen_updates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A21229BEE900DA7E43 /* stl_util-inl.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA3A1225E911009E2908 /* stl_util-inl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A31229BEE900DA7E43 /* throbber_view.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE71222D53500F1BB78 /* throbber_view.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A51229BEE900DA7E43 /* background_gradient_view.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3927111221C596006D8305 /* background_gradient_view.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -194,7 +193,6 @@
 		3A3EDA331225E911009E2908 /* basictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basictypes.h; sourceTree = "<group>"; };
 		3A3EDA341225E911009E2908 /* cocoa_protocols_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoa_protocols_mac.h; sourceTree = "<group>"; };
 		3A3EDA351225E911009E2908 /* observer_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = observer_list.h; sourceTree = "<group>"; };
-		3A3EDA371225E911009E2908 /* scoped_nsdisable_screen_updates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_nsdisable_screen_updates.h; sourceTree = "<group>"; };
 		3A3EDA3A1225E911009E2908 /* stl_util-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "stl_util-inl.h"; sourceTree = "<group>"; };
 		3A3EDA701225EBBB009E2908 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3A3EDA711225EBBB009E2908 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -459,7 +457,6 @@
 				3A3EDA331225E911009E2908 /* basictypes.h */,
 				3A3EDA341225E911009E2908 /* cocoa_protocols_mac.h */,
 				3A3EDA351225E911009E2908 /* observer_list.h */,
-				3A3EDA371225E911009E2908 /* scoped_nsdisable_screen_updates.h */,
 				3A3EDA3A1225E911009E2908 /* stl_util-inl.h */,
 			);
 			path = base;
@@ -533,7 +530,6 @@
 				3A92919B1229BEE900DA7E43 /* basictypes.h in Headers */,
 				3A92919C1229BEE900DA7E43 /* cocoa_protocols_mac.h in Headers */,
 				3A92919D1229BEE900DA7E43 /* observer_list.h in Headers */,
-				3A92919F1229BEE900DA7E43 /* scoped_nsdisable_screen_updates.h in Headers */,
 				3A9291A21229BEE900DA7E43 /* stl_util-inl.h in Headers */,
 				3A928BD91226F7FC00DA7E43 /* CTTabStripModel.h in Headers */,
 				3A928BDA1226F7FC00DA7E43 /* CTTabStripModelOrderController.h in Headers */,

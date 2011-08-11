@@ -10,7 +10,8 @@ CTTabStripModelObserverBridge::CTTabStripModelObserverBridge(CTTabStripModel* mo
   assert(model && controller);
   // Register to be a listener on the model so we can get updates and tell
   // |controller_| about them in the future.
-  model_->AddObserver(this);
+        model2_ = [[CTTabStripModel2 alloc] initWithPointer:model_];
+        [model2_ addObserver:this];
   
   // test which messages |controller| accepts
   #define TEST(sele) [controller_ respondsToSelector:@selector(sele)]
@@ -29,7 +30,7 @@ CTTabStripModelObserverBridge::CTTabStripModelObserverBridge(CTTabStripModel* mo
 CTTabStripModelObserverBridge::~CTTabStripModelObserverBridge() {
   // Remove ourselves from receiving notifications.
   assert(model_ != NULL);
-  model_->RemoveObserver(this);
+    [model2_ removeObserver:this];
 }
 
 

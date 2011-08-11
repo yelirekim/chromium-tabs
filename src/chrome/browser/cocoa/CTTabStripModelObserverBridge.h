@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 
 @class CTTabContents;
 
@@ -55,6 +56,7 @@ class CTTabStripModelObserverBridge : public CTTabStripModelObserver {
  private:
   id controller_;  // owns me
   CTTabStripModel* model_;  // owned by CTBrowser
+    CTTabStripModel2* model2_;
 };
 
 // A collection of methods which can be selectively implemented by any

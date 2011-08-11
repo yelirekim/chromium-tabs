@@ -7,6 +7,7 @@
 #pragma once
 
 #import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 #import "CTPageTransition.h"
 
 @class CTTabContents;
@@ -59,6 +60,8 @@ class CTTabStripModelOrderController : public CTTabStripModelObserver {
   int GetValidIndex(int index, int removing_index, bool is_remove) const;
 
   CTTabStripModel* tabStripModel_;
+    
+    CTTabStripModel2* tabStripModel2_;
 
   CTTabStripModel::InsertionPolicy insertion_policy_;
 

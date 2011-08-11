@@ -4,12 +4,13 @@
 
 CTTabStripModelOrderController::CTTabStripModelOrderController(CTTabStripModel* tab_strip_model) : tabStripModel_(tab_strip_model), insertion_policy_(CTTabStripModel::INSERT_AFTER) 
 {
-    tabStripModel_->AddObserver(this);
+    tabStripModel2_ = [[CTTabStripModel2 alloc] initWithPointer:tabStripModel_];
+    [tabStripModel2_ addObserver:this];
 }
 
 CTTabStripModelOrderController::~CTTabStripModelOrderController() 
 {
-    tabStripModel_->RemoveObserver(this);
+    [tabStripModel2_ removeObserver:this];
 }
 
 int CTTabStripModelOrderController::DetermineInsertionIndex(CTTabContents* new_contents, CTPageTransition transition, bool foreground) 

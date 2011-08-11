@@ -18,7 +18,7 @@ class CTTabStripModel;
 // There is one CTBrowser instance per percieved window.
 // A CTBrowser instance has one TabStripModel.
 
-@interface CTBrowser : NSObject <CTTabStripModelDelegate, NSFastEnumeration> 
+@interface CTBrowser : NSObject <CTTabStripModelDelegate> 
 
 // The tab strip model
 @property(readonly, nonatomic) CTTabStripModel* tabStripModel;

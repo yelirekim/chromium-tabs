@@ -432,29 +432,6 @@
   return YES;
 }
 
-
-#pragma mark -
-#pragma mark NSFastEnumeration
-
-
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-                                  objects:(id *)stackbuf
-                                    count:(NSUInteger)fetchCount {
-  NSUInteger totalCount = tabStripModel_->count();
-  NSUInteger fetchIndex = 0;
-
-  while (state->state+fetchIndex < totalCount && fetchIndex < fetchCount) {
-    stackbuf[fetchIndex++] =
-        tabStripModel_->GetTabContentsAt(state->state + fetchIndex);
-  }
-
-  state->state += fetchIndex;
-  state->itemsPtr = stackbuf;
-  state->mutationsPtr = (unsigned long *)self;  // TODO
-
-  return fetchIndex;
-}
-
 - (void) setWindowController:(CTBrowserWindowController *)windowController
 {
     if (windowController_ != windowController) {

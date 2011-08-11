@@ -21,10 +21,7 @@
 // - Toast: Draws an image animating down to the bottom and then another image
 //   animating up from the bottom. Stops once the animation is complete.
 
-@interface ThrobberView : NSView {
- @private
-  id<ThrobberDataDelegate> dataDelegate_;
-}
+@interface ThrobberView : NSView
 
 // Creates a filmstrip view with |frame| and image |image|.
 + (id)filmstripThrobberViewWithFrame:(NSRect)frame

@@ -33,7 +33,14 @@ namespace {
 - (void)setDocumentEdited:(BOOL)arg1;
 @end
 
-@implementation CTBrowserWindow
+@implementation CTBrowserWindow {
+    BOOL shouldHideTitle_;
+    NSButton* closeButton_;
+    NSButton* miniaturizeButton_;
+    NSButton* zoomButton_;
+    BOOL entered_;
+    scoped_nsobject<NSTrackingArea> widgetTrackingArea_;
+}
 
 - (id)initWithContentRect:(NSRect)contentRect
                 styleMask:(NSUInteger)aStyle

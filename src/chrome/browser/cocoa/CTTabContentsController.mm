@@ -6,7 +6,10 @@
 #import "CTTabContents.h"
 #import "CTUtil.h"
 
-@implementation CTTabContentsController
+@implementation CTTabContentsController {
+    __weak CTTabContents* contents_;  // weak
+    IBOutlet NSSplitView* contentsContainer_;
+}
 
 - (id)initWithContents:(CTTabContents*)contents {
   // subclasses might override this to load a different nib

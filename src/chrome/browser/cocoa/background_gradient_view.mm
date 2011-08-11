@@ -31,7 +31,9 @@ static NSGradient *_mkGradient(BOOL faded) {
                                                         nil];
 }
 
-@implementation BackgroundGradientView
+@implementation BackgroundGradientView {
+    BOOL showsDivider_;
+}
 @synthesize showsDivider = showsDivider_;
 
 static NSGradient *_gradientFaded = nil;

@@ -12,7 +12,11 @@
 - (void)layoutSubviews;
 @end
 
-@implementation FastResizeView
+@implementation FastResizeView {
+@private
+    BOOL fastResizeMode_;
+}
+
 - (void)setFastResizeMode:(BOOL)fastResizeMode {
   fastResizeMode_ = fastResizeMode;
 

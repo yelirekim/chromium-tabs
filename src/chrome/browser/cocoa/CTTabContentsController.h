@@ -18,12 +18,7 @@ class CTTabStripModel;
 // to avoid multiple resize messages to the renderer. You must call
 // |-ensureContentsVisible| to display the render widget host view.
 
-@interface CTTabContentsController : NSViewController {
- @private
-  __weak CTTabContents* contents_;  // weak
-
-  IBOutlet NSSplitView* contentsContainer_;
-}
+@interface CTTabContentsController : NSViewController
 
 // Create the contents of a tab represented by |contents| and loaded from the
 // nib given by |name|.

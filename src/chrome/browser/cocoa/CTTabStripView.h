@@ -16,21 +16,7 @@
 // A view class that handles rendering the tab strip and drops of URLS with
 // a positioning locator for drop feedback.
 
-@interface CTTabStripView : NSView<URLDropTarget> {
- @private
-  NSTimeInterval lastMouseUp_;
-
-  // Handles being a drag-and-drop target.
-  scoped_nsobject<URLDropTargetHandler> dropHandler_;
-
-  // Weak; the following come from the nib.
-  NewTabButton* newTabButton_;
-
-  // Whether the drop-indicator arrow is shown, and if it is, the coordinate of
-  // its tip.
-  BOOL dropArrowShown_;
-  NSPoint dropArrowPosition_;
-}
+@interface CTTabStripView : NSView<URLDropTarget>
 
 @property(assign, nonatomic) IBOutlet NewTabButton* newTabButton;
 @property(assign, nonatomic) BOOL dropArrowShown;

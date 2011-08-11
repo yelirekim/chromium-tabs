@@ -13,10 +13,7 @@
 
 // Object which coordinates the dropping of URLs on a given view, sending data
 // and updates to a controller.
-@interface URLDropTargetHandler : NSObject {
- @private
-  NSView<URLDropTarget>* view_;  // weak
-}
+@interface URLDropTargetHandler : NSObject
 
 // Initialize the given view, which must implement the |URLDropTarget| (below),
 // to accept drops of URLs.

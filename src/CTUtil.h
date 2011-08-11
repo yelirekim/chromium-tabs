@@ -10,8 +10,7 @@ inline NSString *L10n(NSString *key) {
   return [CTFrameworkBundle localizedStringForKey:key value:nil table:nil];
 }
 
-@interface CTUtil : NSObject {
-}
+@interface CTUtil : NSObject 
 
 +(NSBundle *)bundleForResource:(NSString *)name ofType:(NSString *)ext;
 +(NSBundle *)bundleForResource:(NSString *)name; // ofType:nil

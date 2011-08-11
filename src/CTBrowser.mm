@@ -8,7 +8,6 @@
 #import "CTUtil.h"
 
 @implementation CTBrowser
-
 @synthesize windowController = windowController_;
 @synthesize tabStripModel = tabStripModel_;
 
@@ -456,5 +455,11 @@
   return fetchIndex;
 }
 
+- (void) setWindowController:(CTBrowserWindowController *)windowController
+{
+    if (windowController_ != windowController) {
+        [windowController_ release], windowController_ = [windowController retain];
+    }
+}
 
 @end

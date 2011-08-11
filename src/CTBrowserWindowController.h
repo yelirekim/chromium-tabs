@@ -14,14 +14,7 @@
                                          error:(NSError **)outError;
 @end
 
-@interface CTBrowserWindowController : CTTabWindowController {
-  CTBrowser* browser_; // we own the browser
-  CTTabStripController *tabStripController_;
-  CTTabStripModelObserverBridge *tabStripObserver_;
-  CTToolbarController *toolbarController_;
- @private
-  BOOL initializing_; // true if the instance is initializing
-}
+@interface CTBrowserWindowController : CTTabWindowController
 
 @property(readonly, nonatomic) CTTabStripController *tabStripController;
 @property(readonly, nonatomic) CTToolbarController *toolbarController;

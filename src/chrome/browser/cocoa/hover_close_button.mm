@@ -3,6 +3,7 @@
 // found in the LICENSE-chromium file.
 
 #import "hover_close_button.h"
+#import "hover_button+private.h"
 #import "scoped_nsobject.h"
 #import "NSBezierPath+MCAdditions.h"
 
@@ -23,7 +24,13 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 - (void)setUpDrawingPaths;
 @end
 
-@implementation HoverCloseButton
+@implementation HoverCloseButton {
+    // Bezier path for drawing the 'x' within the button.
+    scoped_nsobject<NSBezierPath> xPath_;
+    
+    // Bezier path for drawing the hover state circle behind the 'x'.
+    scoped_nsobject<NSBezierPath> circlePath_;
+}
 
 - (id)initWithFrame:(NSRect)frameRect {
   if ((self = [super initWithFrame:frameRect])) {
@@ -43,10 +50,10 @@ const CGFloat kXShadowCircleAlpha = 0.1;
 
   // If the user is hovering over the button, a light/dark gray circle is drawn
   // behind the 'x'.
-  if (hoverState_ != kHoverStateNone) {
+  if (self.hoverState != kHoverStateNone) {
     // Adjust the darkness of the circle depending on whether it is being
     // clicked.
-    CGFloat white = (hoverState_ == kHoverStateMouseOver) ?
+    CGFloat white = (self.hoverState == kHoverStateMouseOver) ?
         kCircleHoverWhite : kCircleClickWhite;
     [[NSColor colorWithCalibratedWhite:white alpha:1.0] set];
     [circlePath_ fill];
@@ -58,7 +65,7 @@ const CGFloat kXShadowCircleAlpha = 0.1;
   // Give the 'x' an inner shadow for depth. If the button is in a hover state
   // (circle behind it), then adjust the shadow accordingly (not as harsh).
   NSShadow* shadow = [[[NSShadow alloc] init] autorelease];
-  CGFloat alpha = (hoverState_ != kHoverStateNone) ?
+  CGFloat alpha = (self.hoverState != kHoverStateNone) ?
       kXShadowCircleAlpha : kXShadowAlpha;
   [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.15
                                                      alpha:alpha]];

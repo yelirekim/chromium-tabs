@@ -11,10 +11,7 @@
 
 // A custom view that draws a 'standard' background gradient.
 // Base class for other Chromium views.
-@interface BackgroundGradientView : NSView {
- @private
-  BOOL showsDivider_;
-}
+@interface BackgroundGradientView : NSView
 
 // The color used for the bottom stroke. Public so subclasses can use.
 - (NSColor *)strokeColor;

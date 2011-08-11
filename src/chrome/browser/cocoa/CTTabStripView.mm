@@ -19,7 +19,21 @@ static bool ShouldWindowsMiniaturizeOnDoubleClick() {
       [NSWindow performSelector:@selector(_shouldMiniaturizeOnDoubleClick)];
 }
 
-@implementation CTTabStripView
+@implementation CTTabStripView {
+@private
+    NSTimeInterval lastMouseUp_;
+    
+    // Handles being a drag-and-drop target.
+    scoped_nsobject<URLDropTargetHandler> dropHandler_;
+    
+    // Weak; the following come from the nib.
+    NewTabButton* newTabButton_;
+    
+    // Whether the drop-indicator arrow is shown, and if it is, the coordinate of
+    // its tip.
+    BOOL dropArrowShown_;
+    NSPoint dropArrowPosition_;
+}
 
 @synthesize newTabButton = newTabButton_;
 @synthesize dropArrowShown = dropArrowShown_;

@@ -281,7 +281,9 @@ typedef std::set<ThrobberView*> ThrobberSet;
 }
 @end
 
-@implementation ThrobberView
+@implementation ThrobberView {
+    id<ThrobberDataDelegate> dataDelegate_;
+}
 
 + (id)filmstripThrobberViewWithFrame:(NSRect)frame
                                image:(NSImage*)image {

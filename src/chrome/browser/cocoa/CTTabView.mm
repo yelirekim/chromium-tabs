@@ -71,7 +71,59 @@ const CGFloat kRapidCloseDist = 2.5;
 
 @end  // CTTabView(Private)
 
-@implementation CTTabView
+@implementation CTTabView {
+    IBOutlet CTTabController* tabController_;
+    // TODO(rohitrao): Add this button to a CoreAnimation layer so we can fade it
+    // in and out on mouseovers.
+    IBOutlet HoverCloseButton* closeButton_;
+    BOOL closing_;
+    
+    // Tracking area for close button mouseover images.
+    scoped_nsobject<NSTrackingArea> closeTrackingArea_;
+    
+    BOOL isMouseInside_;  // Is the mouse hovering over?
+    tabs::AlertState alertState_;
+    
+    CGFloat hoverAlpha_;  // How strong the hover glow is.
+    NSTimeInterval hoverHoldEndTime_;  // When the hover glow will begin dimming.
+    
+    CGFloat alertAlpha_;  // How strong the alert glow is.
+    NSTimeInterval alertHoldEndTime_;  // When the hover glow will begin dimming.
+    
+    NSTimeInterval lastGlowUpdate_;  // Time either glow was last updated.
+    
+    NSPoint hoverPoint_;  // Current location of hover in view coords.
+    
+    // All following variables are valid for the duration of a drag.
+    // These are released on mouseUp:
+    BOOL moveWindowOnDrag_;  // Set if the only tab of a window is dragged.
+    BOOL tabWasDragged_;  // Has the tab been dragged?
+    BOOL draggingWithinTabStrip_;  // Did drag stay in the current tab strip?
+    BOOL chromeIsVisible_;
+    
+    NSTimeInterval tearTime_;  // Time since tear happened
+    NSPoint tearOrigin_;  // Origin of the tear rect
+    NSPoint dragOrigin_;  // Origin point of the drag
+    // TODO(alcor): these references may need to be strong to avoid crashes
+    // due to JS closing windows
+    CTTabWindowController* sourceController_;  // weak. controller starting the drag
+    NSWindow* sourceWindow_;  // weak. The window starting the drag
+    NSRect sourceWindowFrame_;
+    NSRect sourceTabFrame_;
+    
+    CTTabWindowController* draggedController_;  // weak. Controller being dragged.
+    NSWindow* dragWindow_;  // weak. The window being dragged
+    NSWindow* dragOverlay_;  // weak. The overlay being dragged
+    // Cache workspace IDs per-drag because computing them on 10.5 with
+    // CGWindowListCreateDescriptionFromArray is expensive.
+    // resetDragControllers clears this cache.
+    //
+    // TODO(davidben): When 10.5 becomes unsupported, remove this.
+    std::map<CGWindowID, int> workspaceIDCache_;
+    
+    CTTabWindowController* targetController_;  // weak. Controller being targeted
+    NSCellStateValue state_;
+}
 
 @synthesize state = state_;
 @synthesize hoverAlpha = hoverAlpha_;

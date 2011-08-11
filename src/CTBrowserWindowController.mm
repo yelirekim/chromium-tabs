@@ -1,4 +1,5 @@
 #import "CTBrowserWindowController.h"
+#import "CTBrowser+Private.h"
 #import "CTTabStripModel.h"
 #import "CTTabContents.h"
 #import "CTTabStripController.h"
@@ -36,7 +37,10 @@
 
 static CTBrowserWindowController* _currentMain = nil; // weak
 
-@implementation CTBrowserWindowController
+@implementation CTBrowserWindowController {
+    CTTabStripModelObserverBridge *tabStripObserver_;
+    BOOL initializing_; // true if the instance is initializing
+}
 
 @synthesize tabStripController = tabStripController_;
 @synthesize toolbarController = toolbarController_;
@@ -92,7 +96,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   // Our browser
   browser_ = [browser retain];
-  browser_->windowController_ = self;
+  browser_.windowController = self;
 
   // Observe tabs
   tabStripObserver_ =

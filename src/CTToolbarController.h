@@ -20,12 +20,7 @@
 // 3. Implement createToolbarController in your CTBrowser subclass to initialize
 //    and return a CTToolbarController based on your nib.
 //
-@interface CTToolbarController : NSViewController<URLDropTargetController> {
-  __weak CTBrowser* browser_;  // weak, one per window
- @private
-  // Tracking area for mouse enter/exit/moved in the toolbar.
-  scoped_nsobject<NSTrackingArea> trackingArea_;
-}
+@interface CTToolbarController : NSViewController<URLDropTargetController>
 
 - (id)initWithNibName:(NSString*)nibName
                bundle:(NSBundle*)bundle

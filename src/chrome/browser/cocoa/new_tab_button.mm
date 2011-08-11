@@ -4,7 +4,9 @@
 
 #import "new_tab_button.h"
 
-@implementation NewTabButton
+@implementation NewTabButton {
+    scoped_nsobject<NSBezierPath> imagePath_;
+}
 
 // Approximate the shape. It doesn't need to be perfect. This will need to be
 // updated if the size or shape of the icon ever changes.

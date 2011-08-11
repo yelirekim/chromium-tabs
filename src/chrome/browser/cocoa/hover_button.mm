@@ -2,9 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "chrome/browser/cocoa/hover_button.h"
+#import "chrome/browser/cocoa/hover_button+private.h"
 
-@implementation HoverButton
+@implementation HoverButton {
+    HoverState hoverState_;
+    // Tracking area for button mouseover states.
+    scoped_nsobject<NSTrackingArea> trackingArea_;
+}
 
 - (id)initWithFrame:(NSRect)frameRect {
   if ((self = [super initWithFrame:frameRect])) {
@@ -92,6 +96,11 @@
   hoverState_ = NSPointInRect(mouseLoc, [self bounds]) ?
       kHoverStateMouseOver : kHoverStateNone;
   [self setNeedsDisplay:YES];
+}
+
+- (HoverState) hoverState
+{
+    return hoverState_;
 }
 
 @end

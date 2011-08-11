@@ -31,10 +31,10 @@
   // We need to recalculate the frame of the NSTextView when the frame changes.
   // This happens when a tab is created and when it's moved between windows.
   [super viewFrameDidChange:newFrame];
-  NSClipView* clipView = [[view_ subviews] objectAtIndex:0];
+  NSClipView* clipView = [[self.view subviews] objectAtIndex:0];
   NSTextView* tv = [[clipView subviews] objectAtIndex:0];
   NSRect frame = NSZeroRect;
-  frame.size = [(NSScrollView*)(view_) contentSize];
+  frame.size = [(NSScrollView*)(self.view) contentSize];
   [tv setFrame:frame];
 }
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "chrome/browser/cocoa/hover_button+private.h"
+#import "HoverButton+Private.h"
 
 @implementation HoverButton {
     HoverState hoverState_;

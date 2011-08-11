@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE-chromium file.
 
-#import "throbber_view.h"
+#import "ThrobberView.h"
 
-#import <set>
+//#import <set>
 
 static const float kAnimationIntervalSeconds = 0.03;  // 30ms, same as windows
 
@@ -150,15 +150,13 @@ static const float kAnimationIntervalSeconds = 0.03;  // 30ms, same as windows
 
 @end
 
-typedef std::set<ThrobberView*> ThrobberSet;
-
 // ThrobberTimer manages the animation of a set of ThrobberViews.  It allows
 // a single timer instance to be shared among as many ThrobberViews as needed.
 @interface ThrobberTimer : NSObject {
  @private
   // A set of weak references to each ThrobberView that should be notified
   // whenever the timer fires.
-  ThrobberSet throbbers_;
+  NSMutableSet* throbbers_;
 
   // Weak reference to the timer that calls back to this object.  The timer
   // retains this object.
@@ -204,6 +202,7 @@ typedef std::set<ThrobberView*> ThrobberSet;
 @implementation ThrobberTimer
 - (id)init {
   if ((self = [super init])) {
+      throbbers_ = [[NSMutableSet alloc] init];
     // Start out with a timer that fires at the appropriate interval, but
     // prevent it from firing by setting its next-fire date to the distant
     // future.  Once a ThrobberView is added, the timer will be allowed to
@@ -223,7 +222,11 @@ typedef std::set<ThrobberView*> ThrobberSet;
 
 + (ThrobberTimer*)sharedThrobberTimer {
   // Leaked.  That's OK, it's scoped to the lifetime of the application.
-  static ThrobberTimer* sharedInstance = [[ThrobberTimer alloc] init];
+    static ThrobberTimer* sharedInstance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[ThrobberTimer alloc] init];
+    });
   return sharedInstance;
 }
 
@@ -233,19 +236,19 @@ typedef std::set<ThrobberView*> ThrobberSet;
 
 - (void)addThrobber:(ThrobberView*)throbber {
   assert([NSThread currentThread] == validThread_);
-  throbbers_.insert(throbber);
+    [throbbers_ addObject:throbber];
   [self maintainTimer];
 }
 
 - (void)removeThrobber:(ThrobberView*)throbber {
   assert([NSThread currentThread] == validThread_);
-  throbbers_.erase(throbber);
+    [throbbers_ removeObject:throbber];
   [self maintainTimer];
 }
 
 - (void)maintainTimer {
   BOOL oldRunning = timerRunning_;
-  BOOL newRunning = throbbers_.empty() ? NO : YES;
+  BOOL newRunning = ![throbbers_ count] ? NO : YES;
 
   if (oldRunning == newRunning)
     return;
@@ -263,20 +266,11 @@ typedef std::set<ThrobberView*> ThrobberSet;
   timerRunning_ = newRunning;
 }
 
-- (void)fire:(NSTimer*)timer {
-  // The call to [throbber animate] may result in the ThrobberView calling
-  // removeThrobber: if it decides it's done animating.  That would invalidate
-  // the iterator, making it impossible to correctly get to the next element
-  // in the set.  To prevent that from happening, a second iterator is used
-  // and incremented before calling [throbber animate].
-  ThrobberSet::const_iterator current = throbbers_.begin();
-  ThrobberSet::const_iterator next = current;
-  while (current != throbbers_.end()) {
-    ++next;
-    ThrobberView* throbber = *current;
-    [throbber animate];
-    current = next;
-  }
+- (void)fire:(NSTimer*)timer 
+{
+    for (ThrobberView* throbber in throbbers_) {
+        [throbber animate];
+    }
 }
 @end
 

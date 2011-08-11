@@ -2,22 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE-chromium file.
 
-#import "hover_close_button.h"
-#import "hover_button+private.h"
+#import "HoverCloseButton.h"
+#import "HoverButton+Private.h"
 #import "NSBezierPath+MCAdditions.h"
 
-namespace  {
 // Convenience function to return the middle point of the given |rect|.
 static NSPoint MidRect(NSRect rect) {
   return NSMakePoint(NSMidX(rect), NSMidY(rect));
 }
 
-const CGFloat kCircleRadiusPercentage = 0.415;
-const CGFloat kCircleHoverWhite = 0.565;
-const CGFloat kCircleClickWhite = 0.396;
-const CGFloat kXShadowAlpha = 0.75;
-const CGFloat kXShadowCircleAlpha = 0.1;
-}  // namespace
+static const CGFloat kCircleRadiusPercentage = 0.415;
+static const CGFloat kCircleHoverWhite = 0.565;
+static const CGFloat kCircleClickWhite = 0.396;
+static const CGFloat kXShadowAlpha = 0.75;
+static const CGFloat kXShadowCircleAlpha = 0.1;
 
 @interface HoverCloseButton(Private)
 - (void)setUpDrawingPaths;

@@ -13,13 +13,13 @@
 #import <limits>
 #import <string>
 
-#import "new_tab_button.h"
+#import "NewTabButton.h"
 #import "CTTabStripView.h"
 #import "CTTabContentsController.h"
 #import "CTTabController.h"
 #import "CTTabStripModelObserverBridge.h"
 #import "CTTabView.h"
-#import "throbber_view.h"
+#import "ThrobberView.h"
 #import "CTTabStripModel.h"
 #import "GTMNSAnimation+Duration.h"
 

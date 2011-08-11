@@ -11,8 +11,8 @@
 
 #import <map>
 
-#import "background_gradient_view.h"
-#import "hover_close_button.h"
+#import "BackgroundGradientView.h"
+#import "HoverCloseButton.h"
 
 namespace tabs {
 

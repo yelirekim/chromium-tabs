@@ -9,14 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 #import "scoped_nsobject.h"
-#import "url_drop_target.h"
 
 @class NewTabButton;
 
 // A view class that handles rendering the tab strip and drops of URLS with
 // a positioning locator for drop feedback.
 
-@interface CTTabStripView : NSView<URLDropTarget>
+@interface CTTabStripView : NSView
 
 @property(assign, nonatomic) IBOutlet NewTabButton* newTabButton;
 @property(assign, nonatomic) BOOL dropArrowShown;

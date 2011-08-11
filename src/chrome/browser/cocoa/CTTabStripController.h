@@ -11,7 +11,6 @@
 #import "scoped_nsobject.h"
 #import "scoped_ptr.h"
 #import "CTTabControllerTarget.h"
-#import "url_drop_target.h"
 #import "GTMWindowSheetController.h"
 
 @class NewTabButton;
@@ -34,7 +33,6 @@ class CTTabStripModel;
 // http://www.chromium.org/developers/design-documents/tab-strip-mac
 @interface CTTabStripController :
   NSObject<CTTabControllerTarget,
-           URLDropTargetController,
            GTMWindowSheetControllerDelegate>
 
 @property(nonatomic) CGFloat indentForControls;

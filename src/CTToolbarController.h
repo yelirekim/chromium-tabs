@@ -1,7 +1,6 @@
 #import <Cocoa/Cocoa.h>
 #import "scoped_ptr.h"
 #import "scoped_nsobject.h"
-#import "url_drop_target.h"
 
 @class CTBrowser;
 @class CTTabContents;
@@ -20,7 +19,7 @@
 // 3. Implement createToolbarController in your CTBrowser subclass to initialize
 //    and return a CTToolbarController based on your nib.
 //
-@interface CTToolbarController : NSViewController<URLDropTargetController>
+@interface CTToolbarController : NSViewController
 
 - (id)initWithNibName:(NSString*)nibName
                bundle:(NSBundle*)bundle

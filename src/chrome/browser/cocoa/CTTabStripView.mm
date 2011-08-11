@@ -23,9 +23,6 @@ static bool ShouldWindowsMiniaturizeOnDoubleClick() {
 @private
     NSTimeInterval lastMouseUp_;
     
-    // Handles being a drag-and-drop target.
-    scoped_nsobject<URLDropTargetHandler> dropHandler_;
-    
     // Weak; the following come from the nib.
     NewTabButton* newTabButton_;
     
@@ -45,9 +42,6 @@ static bool ShouldWindowsMiniaturizeOnDoubleClick() {
     // Set lastMouseUp_ = -1000.0 so that timestamp-lastMouseUp_ is big unless
     // lastMouseUp_ has been reset.
     lastMouseUp_ = -1000.0;
-
-    // Register to be an URL drop target.
-    dropHandler_.reset([[URLDropTargetHandler alloc] initWithView:self]);
   }
   return self;
 }
@@ -180,34 +174,6 @@ static bool ShouldWindowsMiniaturizeOnDoubleClick() {
 
   // If clickCount is 0, the drag threshold was passed.
   lastMouseUp_ = (clickCount == 1) ? timestamp : -1000.0;
-}
-
-// (URLDropTarget protocol)
-- (id<URLDropTargetController>)urlDropController {
-  //CTBrowserWindowController* windowController = [[self window] windowController];
-  //assert([windowController isKindOfClass:[CTBrowserWindowController class]]);
-  //return [windowController tabStripController];
-  return nil;
-}
-
-// (URLDropTarget protocol)
-- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-  return [dropHandler_ draggingEntered:sender];
-}
-
-// (URLDropTarget protocol)
-- (NSDragOperation)draggingUpdated:(id<NSDraggingInfo>)sender {
-  return [dropHandler_ draggingUpdated:sender];
-}
-
-// (URLDropTarget protocol)
-- (void)draggingExited:(id<NSDraggingInfo>)sender {
-  return [dropHandler_ draggingExited:sender];
-}
-
-// (URLDropTarget protocol)
-- (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-  return [dropHandler_ performDragOperation:sender];
 }
 
 - (BOOL)accessibilityIsIgnored {

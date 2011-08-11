@@ -12,8 +12,6 @@
 
 @interface NSBezierPath (MCAdditions)
 
-+ (NSBezierPath*)bezierPathWithCGPath:(CGPathRef)pathRef;
-
 - (void)fillWithInnerShadow:(NSShadow*)shadow;
 - (void)drawBlurWithColor:(NSColor*)color radius:(CGFloat)radius;
 

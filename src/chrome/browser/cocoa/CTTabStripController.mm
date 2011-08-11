@@ -266,7 +266,7 @@ private:
     
     // Tracks the newTabButton_ for rollovers.
     NSTrackingArea* newTabTrackingArea_;
-    scoped_ptr<CTTabStripModelObserverBridge> bridge_;
+    CTTabStripModelObserverBridge* bridge_;
     CTBrowser *browser_;  // weak
     CTTabStripModel* tabStripModel_;  // weak
     
@@ -355,7 +355,7 @@ private:
     switchView_ = switchView;
     browser_ = browser;
     tabStripModel_ = [browser_ tabStripModel];
-    bridge_.reset(new CTTabStripModelObserverBridge(tabStripModel_, self));
+    bridge_ = new CTTabStripModelObserverBridge(tabStripModel_, self);
     tabContentsArray_ = [[NSMutableArray alloc] init];
     tabArray_ = [[NSMutableArray alloc] init];
 

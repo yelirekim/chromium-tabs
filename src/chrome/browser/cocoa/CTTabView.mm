@@ -4,7 +4,6 @@
 
 #import "CTTabView.h"
 
-#import "scoped_cftyperef.h"
 #import "CTTabController.h"
 #import "CTTabWindowController.h"
 #import "CTTabStripView.h"
@@ -19,12 +18,10 @@ static CFTypeRef GetValueFromDictionary(CFDictionaryRef dict,
     return value;
 
   if (CFGetTypeID(value) != expected_type) {
-    scoped_cftyperef<CFStringRef> expected_type_ref(
-        CFCopyTypeIDDescription(expected_type));
-    scoped_cftyperef<CFStringRef> actual_type_ref(
-        CFCopyTypeIDDescription(CFGetTypeID(value)));
+    CFStringRef expected_type_ref = CFCopyTypeIDDescription(expected_type);
+    CFStringRef actual_type_ref = CFCopyTypeIDDescription(CFGetTypeID(value));
     NSLog(@"warning: Expected value for key %@ to be %@ but it was %@ instead",
-          key, expected_type_ref.get(), actual_type_ref.get());
+          key, expected_type_ref, actual_type_ref);
     return NULL;
   }
 
@@ -1029,14 +1026,12 @@ const CGFloat kRapidCloseDist = 2.5;
 
   int workspace = -1;
   // It's possible to query in bulk, but probably not necessary.
-  scoped_cftyperef<CFArrayRef> windowIDs(CFArrayCreate(
-      NULL, reinterpret_cast<const void **>(&windowID), 1, NULL));
-  scoped_cftyperef<CFArrayRef> descriptions(
-      CGWindowListCreateDescriptionFromArray(windowIDs));
-  assert(CFArrayGetCount(descriptions.get()) <= 1);
-  if (CFArrayGetCount(descriptions.get()) > 0) {
+  CFArrayRef windowIDs = CFArrayCreate(NULL, reinterpret_cast<const void **>(&windowID), 1, NULL);
+  CFArrayRef descriptions = CGWindowListCreateDescriptionFromArray(windowIDs);
+  assert(CFArrayGetCount(descriptions) <= 1);
+  if (CFArrayGetCount(descriptions) > 0) {
     CFDictionaryRef dict = static_cast<CFDictionaryRef>(
-        CFArrayGetValueAtIndex(descriptions.get(), 0));
+        CFArrayGetValueAtIndex(descriptions, 0));
     assert(CFGetTypeID(dict) == CFDictionaryGetTypeID());
 
     // Sanity check the ID.
@@ -1060,6 +1055,8 @@ const CGFloat kRapidCloseDist = 2.5;
   if (useCache) {
     workspaceIDCache_[windowID] = workspace;
   }
+    CFRelease(windowIDs);
+    CFRelease(descriptions);
   return workspace;
 }
 

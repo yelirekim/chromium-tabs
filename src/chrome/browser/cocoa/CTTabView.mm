@@ -7,6 +7,7 @@
 #import "scoped_cftyperef.h"
 #import "CTTabController.h"
 #import "CTTabWindowController.h"
+#import "CTTabStripView.h"
 #import "NSWindow+CTThemed.h"
 
 // ported from mac_util.mm:

@@ -1626,18 +1626,4 @@ namespace {
     return [tabContentsArray_ objectAtIndex:index];
 }
 
-- (void)gtm_systemRequestsVisibilityForView:(NSView*)view {
-    // This implementation is required by GTMWindowSheetController.
-    
-    // Raise window...
-    [[switchView_ window] makeKeyAndOrderFront:self];
-    
-    // ...and raise a tab with a sheet.
-    NSInteger index = [self modelIndexForContentsView:view];
-    assert(index >= 0);
-    if (index >= 0) {
-        [tabStripModel2_ selectTabContentsAtIndex:index userGesture:NO];
-    }
-}
-
 @end

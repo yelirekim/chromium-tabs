@@ -20,8 +20,19 @@ extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
 extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
 
 
+@interface CTTabStripModel2 (OrderController)
+
+- (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents pageTransition:(CTPageTransition)transition foreground:(BOOL)foreground;
+- (NSInteger) determineInsertionIndexForAppending;
+- (NSInteger) determineNewSelectedIndexByRemovingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove;
+- (NSInteger) validIndexForIndex:(NSInteger)index removingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove;
+
+@end
+
+
 @implementation CTTabStripModel2 {
     CTTabStripModel* tabStripModel_;
+    ObserverList<CTTabStripModelObserver> observers_;
 }
 
 - (id) initWithPointer:(CTTabStripModel*)tabStripModel
@@ -35,16 +46,18 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 - (void) addObserver:(CTTabStripModelObserver*)observer
 {
     tabStripModel_->AddObserver(observer);
+    observers_.AddObserver(observer);
 }
 
 - (void) removeObserver:(CTTabStripModelObserver*)observer
 {
     tabStripModel_->RemoveObserver(observer);
+    observers_.RemoveObserver(observer);
 }
 
 - (BOOL) hasNonPhantomTabs
 {
-    return tabStripModel_->HasNonPhantomTabs();
+    return [self count];
 }
 
 - (void) setInsertionPolicy:(InsertionPolicy)insertionPolicy
@@ -89,7 +102,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 
 - (BOOL) containsIndex:(NSInteger)index
 {
-    return tabStripModel_->ContainsIndex(index);
+    return index >= 0 && index < [self count];
 }
     
 - (void) selectTabContentsAtIndex:(NSInteger)index userGesture:(BOOL)userGesture
@@ -184,12 +197,63 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 
 - (void) appendTabContents:(CTTabContents*)contents foreground:(BOOL)foreground
 {
-    tabStripModel_->AppendTabContents(contents, foreground);
+    int index = [self determineInsertionIndexForAppending];
+    [self insertTabContents:contents atIndex:index options:foreground ? (ADD_INHERIT_GROUP | ADD_SELECTED) : ADD_NONE];
 }
 
 - (void) detachTabContentsAtIndex:(NSInteger)index
 {
     tabStripModel_->DetachTabContentsAt(index);
+}
+
+// Model Order Controller Functions
+
+- (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents pageTransition:(CTPageTransition)transition foreground:(BOOL)foreground
+{
+    int tab_count = [self count];
+    if (!tab_count)
+        return 0;
+    
+    NSInteger selectedIndex = [self selectedIndex];
+    if (transition == CTPageTransitionLink && selectedIndex != -1) {
+        int delta = (self.insertionPolicy == INSERT_AFTER) ? 1 : 0;
+        if (foreground) {
+            return selectedIndex + delta;
+        }
+        return selectedIndex + delta;
+    }
+    
+    return [self determineInsertionIndexForAppending];
+}
+
+- (NSInteger) determineInsertionIndexForAppending
+{
+    return (self.insertionPolicy == INSERT_AFTER) ? [self count] : 0;
+}
+
+- (NSInteger) determineNewSelectedIndexByRemovingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove
+{
+    int tab_count = [self count];
+    assert(removing_index >= 0 && removing_index < tab_count);
+    
+    CTTabContents* parentOpener = [[self tabContentsAtIndex:removing_index] parentOpener];
+    if (parentOpener) {
+        int index = [self indexOfTabContents:parentOpener];
+        if (index != CTTabStripModel::kNoTab)
+            return [self validIndexForIndex:index removingIndex:removing_index isRemove:is_remove];
+    }
+    
+    int selected_index = [self selectedIndex];
+    if (is_remove && selected_index >= (tab_count - 1))
+        return selected_index - 1;
+    return selected_index;
+}
+
+- (NSInteger) validIndexForIndex:(NSInteger)index removingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove
+{
+    if (is_remove && removing_index < index)
+        index = MAX(0, index - 1);
+    return index;
 }
 
 @end

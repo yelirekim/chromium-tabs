@@ -95,8 +95,6 @@
 		3A9292A21229D43300DA7E43 /* CTUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA9B1225EF84009E2908 /* CTUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */; };
-		3ABF4A8712A460DA0020233C /* CTBrowserFrameView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A8512A460DA0020233C /* CTBrowserFrameView.h */; settings = {ATTRIBUTES = (); }; };
-		3ABF4A8812A460DA0020233C /* CTBrowserFrameView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8612A460DA0020233C /* CTBrowserFrameView.mm */; };
 		A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */; };
 		A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
@@ -221,8 +219,6 @@
 		3AA7188A122479CE005022BE /* CTBrowser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowser.mm; sourceTree = "<group>"; };
 		3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserWindow.h; sourceTree = "<group>"; };
 		3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowserWindow.mm; sourceTree = "<group>"; };
-		3ABF4A8512A460DA0020233C /* CTBrowserFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserFrameView.h; sourceTree = "<group>"; };
-		3ABF4A8612A460DA0020233C /* CTBrowserFrameView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowserFrameView.mm; sourceTree = "<group>"; };
 		3AEE19411222DC5B009DA438 /* CTTabStripModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripModel.mm; sourceTree = "<group>"; };
 		3AEE19421222DC5B009DA438 /* CTTabStripModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripModel.h; sourceTree = "<group>"; };
 		3AEE19431222DC5B009DA438 /* CTTabStripModelOrderController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripModelOrderController.mm; sourceTree = "<group>"; };
@@ -280,8 +276,6 @@
 				3AA7188A122479CE005022BE /* CTBrowser.mm */,
 				3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */,
 				3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */,
-				3ABF4A8512A460DA0020233C /* CTBrowserFrameView.h */,
-				3ABF4A8612A460DA0020233C /* CTBrowserFrameView.mm */,
 				3A1CF95F12235704008A3B8C /* CTBrowserWindowController.h */,
 				3A1CF96012235704008A3B8C /* CTBrowserWindowController.mm */,
 				3AEE19521222DDEB009DA438 /* CTTabContents.h */,
@@ -545,7 +539,6 @@
 				3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */,
 				3A9291B61229BF0100DA7E43 /* NSBezierPath+MCAdditions.h in Headers */,
 				3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */,
-				3ABF4A8712A460DA0020233C /* CTBrowserFrameView.h in Headers */,
 				A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */,
 				A25493C313F414FA0027474A /* HoverButton+Private.h in Headers */,
 				A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */,
@@ -687,7 +680,6 @@
 				3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */,
 				3A92904712294F1900DA7E43 /* CTToolbarController.mm in Sources */,
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */,
-				3ABF4A8812A460DA0020233C /* CTBrowserFrameView.mm in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
 				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.mm in Sources */,
 			);

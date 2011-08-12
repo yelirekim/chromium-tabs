@@ -169,7 +169,6 @@ private:
 
 
 @implementation CTTabStripController {
-    // YES if tabs are to be laid out vertically instead of horizontally.
     BOOL verticalLayout_;
     CTTabContents* currentTab_;  // weak, tab for which we're showing state
     CTTabStripView* tabStripView_;
@@ -211,9 +210,7 @@ private:
     kDefaultIconImage = [NSImage imageInAppOrCTFrameworkNamed:@"default-icon"];
 }
 
-- (id)initWithView:(CTTabStripView*)view
-        switchView:(NSView*)switchView
-           browser:(CTBrowser*)browser {
+- (id)initWithView:(CTTabStripView*)view switchView:(NSView*)switchView browser:(CTBrowser*)browser {
     assert(view && switchView && browser);
     if ((self = [super init])) {
         tabStripView_ = view;

@@ -343,7 +343,7 @@
     
     // Create an empty new browser window the same size as the old one.
     CTBrowser* browser = [isa browser];
-    browser.tabStripModel->AppendTabContents(contents, true);
+    [browser.tabStripModel2 appendTabContents:contents foreground:YES];
     [browser loadingStateDidChange:contents];
     
     // Orig impl:

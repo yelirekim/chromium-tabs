@@ -182,4 +182,14 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
     tabStripModel_->SelectLastTab();
 }
 
+- (void) appendTabContents:(CTTabContents*)contents foreground:(BOOL)foreground
+{
+    tabStripModel_->AppendTabContents(contents, foreground);
+}
+
+- (void) detachTabContentsAtIndex:(NSInteger)index
+{
+    tabStripModel_->DetachTabContentsAt(index);
+}
+
 @end

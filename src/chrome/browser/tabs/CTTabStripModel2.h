@@ -38,5 +38,16 @@ class CTTabStripModelObserver;
 - (NSInteger) selectedIndex;
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index;
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents;
+- (CTTabContents*) selectedTabContents;
+- (BOOL) containsIndex:(NSInteger)index;
+- (void) selectTabContentsAtIndex:(NSInteger)index userGesture:(BOOL)userGesture;
+- (BOOL) closeTabContentsAtIndex:(NSInteger)index options:(NSInteger)options;
+- (NSInteger) indexOfFirstNonMiniTab;
+- (BOOL) isMiniTabAtIndex:(NSInteger)index;
+- (BOOL) isTabPinnedAtIndex:(NSInteger)index;
+- (BOOL) isAppTabAtIndex:(NSInteger)index;
+- (BOOL) isPhantomTabAtIndex:(NSInteger)index;
+- (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
+- (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options;
 
 @end

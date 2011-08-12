@@ -12,14 +12,6 @@
 @protocol CTTabControllerTarget
 - (void)selectTab:(id)sender;
 - (void)closeTab:(id)sender;
-
-// Dispatch context menu commands for the given tab controller.
-//- (void)commandDispatch:(TabStripModel::ContextMenuCommand)command
-//          forController:(CTTabController*)controller;
-// Returns YES if the specificed command should be enabled for the given
-// controller.
-//- (BOOL)isCommandEnabled:(TabStripModel::ContextMenuCommand)command
-//           forController:(CTTabController*)controller;
 @end
 
 #endif  // CHROME_BROWSER_COCOA_TAB_CONTROLLER_TARGET_H_

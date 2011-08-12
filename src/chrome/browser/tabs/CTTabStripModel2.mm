@@ -63,4 +63,59 @@
     return tabStripModel_->GetIndexOfTabContents(tabContents);
 }
 
+- (CTTabContents*) selectedTabContents
+{
+    return tabStripModel_->GetSelectedTabContents();
+}
+
+- (BOOL) containsIndex:(NSInteger)index
+{
+    return tabStripModel_->ContainsIndex(index);
+}
+    
+- (void) selectTabContentsAtIndex:(NSInteger)index userGesture:(BOOL)userGesture
+{
+    tabStripModel_->SelectTabContentsAt(index, userGesture);
+}
+
+- (BOOL) closeTabContentsAtIndex:(NSInteger)index options:(NSInteger)options
+{
+    return tabStripModel_->CloseTabContentsAt(index, options);
+}
+
+- (NSInteger) indexOfFirstNonMiniTab
+{
+    return tabStripModel_->IndexOfFirstNonMiniTab();
+}
+
+- (BOOL) isMiniTabAtIndex:(NSInteger)index
+{
+    return tabStripModel_->IsMiniTab(index);
+}
+
+- (BOOL) isTabPinnedAtIndex:(NSInteger)index
+{
+    return tabStripModel_->IsTabPinned(index);
+}
+
+- (BOOL) isAppTabAtIndex:(NSInteger)index
+{
+    return tabStripModel_->IsAppTab(index);
+}
+
+- (BOOL) isPhantomTabAtIndex:(NSInteger)index
+{
+    return tabStripModel_->IsPhantomTab(index);
+}
+
+- (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
+{
+    tabStripModel_->MoveTabContentsAt(fromIndex, toIndex, selectedAfterMove);
+}
+
+- (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options
+{
+    tabStripModel_->InsertTabContentsAt(index, contents, options);
+}
+
 @end

@@ -10,6 +10,7 @@
 @implementation CTBrowser
 @synthesize windowController = windowController_;
 @synthesize tabStripModel = tabStripModel_;
+@synthesize tabStripModel2 = tabStripModel2_;
 
 
 /*- (id)retain {
@@ -34,6 +35,7 @@
 - (id)init {
   if ((self = [super init])) {
     tabStripModel_ = new CTTabStripModel(self);
+      tabStripModel2_ = [[CTTabStripModel2 alloc] initWithPointer:tabStripModel_];
   }
   return self;
 }
@@ -127,7 +129,7 @@
 
 -(void)closeTabAtIndex:(int)index makeHistory:(BOOL)makeHistory {
   tabStripModel_->CloseTabContentsAt(index,
-      makeHistory ? CTTabStripModel::CLOSE_CREATE_HISTORICAL_TAB : 0);
+      makeHistory ? CLOSE_CREATE_HISTORICAL_TAB : 0);
 }
 
 -(void)closeAllTabs {
@@ -180,12 +182,12 @@
 -(CTTabContents*)addTabContents:(CTTabContents*)contents
                         atIndex:(int)index
                    inForeground:(BOOL)foreground {
-  int addTypes = foreground ? (CTTabStripModel::ADD_SELECTED |
-                               CTTabStripModel::ADD_INHERIT_GROUP)
-                            : CTTabStripModel::ADD_NONE;
+  int addTypes = foreground ? (ADD_SELECTED |
+                               ADD_INHERIT_GROUP)
+                            : ADD_NONE;
   index = tabStripModel_->AddTabContents(contents, index, CTPageTransitionTyped,
                                          addTypes);
-  if ((addTypes & CTTabStripModel::ADD_SELECTED) == 0) {
+  if ((addTypes & ADD_SELECTED) == 0) {
     // TabStripModel::AddTabContents invokes HideContents if not foreground.
     contents.isVisible = NO;
   }
@@ -231,8 +233,8 @@
   if ([self canCloseTab]) {
     tabStripModel_->CloseTabContentsAt(
         tabStripModel_->selected_index(),
-        CTTabStripModel::CLOSE_USER_GESTURE |
-        CTTabStripModel::CLOSE_CREATE_HISTORICAL_TAB);
+        CLOSE_USER_GESTURE |
+        CLOSE_CREATE_HISTORICAL_TAB);
   }
 }
 

@@ -24,10 +24,10 @@ class CTTabStripModelOrderController : public CTTabStripModelObserver {
   virtual ~CTTabStripModelOrderController();
 
   // Sets the insertion policy. Default is INSERT_AFTER.
-  void set_insertion_policy(CTTabStripModel::InsertionPolicy policy) {
+  void set_insertion_policy(InsertionPolicy policy) {
     insertion_policy_ = policy;
   }
-  CTTabStripModel::InsertionPolicy insertion_policy() const {
+  InsertionPolicy insertion_policy() const {
     return insertion_policy_;
   }
 
@@ -63,7 +63,7 @@ class CTTabStripModelOrderController : public CTTabStripModelObserver {
     
     CTTabStripModel2* tabStripModel2_;
 
-  CTTabStripModel::InsertionPolicy insertion_policy_;
+  InsertionPolicy insertion_policy_;
 
   DISALLOW_COPY_AND_ASSIGN(CTTabStripModelOrderController);
 };

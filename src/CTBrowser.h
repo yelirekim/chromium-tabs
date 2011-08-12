@@ -22,6 +22,7 @@ class CTTabStripModel;
 
 // The tab strip model
 @property(readonly, nonatomic) CTTabStripModel* tabStripModel;
+@property(retain, readonly, nonatomic) CTTabStripModel2* tabStripModel2;
 
 // The window controller
 @property(strong, readonly, nonatomic, retain) CTBrowserWindowController* windowController;

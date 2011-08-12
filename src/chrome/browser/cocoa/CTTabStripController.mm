@@ -689,8 +689,8 @@ private:
     }
     tabStripModel_->CloseTabContentsAt(
         index,
-        CTTabStripModel::CLOSE_USER_GESTURE |
-        CTTabStripModel::CLOSE_CREATE_HISTORICAL_TAB);
+        CLOSE_USER_GESTURE |
+        CLOSE_CREATE_HISTORICAL_TAB);
   } else {
     // Use the standard window close if this is the last tab
     // this prevents the tab from being removed from the model until after
@@ -1473,8 +1473,8 @@ private:
   // inherit the current tab's group.
   tabStripModel_->InsertTabContentsAt(
       modelIndex, contents,
-      CTTabStripModel::ADD_SELECTED |
-      (pinned ? CTTabStripModel::ADD_PINNED : 0));
+      ADD_SELECTED |
+      (pinned ? ADD_PINNED : 0));
 }
 
 // Called when the tab strip view changes size. As we only registered for

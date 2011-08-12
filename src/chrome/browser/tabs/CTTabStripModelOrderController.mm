@@ -2,7 +2,7 @@
 #import "CTTabContents.h"
 
 
-CTTabStripModelOrderController::CTTabStripModelOrderController(CTTabStripModel* tab_strip_model) : tabStripModel_(tab_strip_model), insertion_policy_(CTTabStripModel::INSERT_AFTER) 
+CTTabStripModelOrderController::CTTabStripModelOrderController(CTTabStripModel* tab_strip_model) : tabStripModel_(tab_strip_model), insertion_policy_(INSERT_AFTER) 
 {
     tabStripModel2_ = [[CTTabStripModel2 alloc] initWithPointer:tabStripModel_];
     [tabStripModel2_ addObserver:this];
@@ -15,17 +15,17 @@ CTTabStripModelOrderController::~CTTabStripModelOrderController()
 
 int CTTabStripModelOrderController::DetermineInsertionIndex(CTTabContents* new_contents, CTPageTransition transition, bool foreground) 
 {
-    int tab_count = tabStripModel_->count();
+    int tab_count = [tabStripModel2_ count];
     if (!tab_count)
         return 0;
     
     if (transition == CTPageTransitionLink &&
-        tabStripModel_->selected_index() != -1) {
-        int delta = (insertion_policy_ == CTTabStripModel::INSERT_AFTER) ? 1 : 0;
+        [tabStripModel2_ selectedIndex] != -1) {
+        int delta = (insertion_policy_ == INSERT_AFTER) ? 1 : 0;
         if (foreground) {
-            return tabStripModel_->selected_index() + delta;
+            return [tabStripModel2_ selectedIndex] + delta;
         }
-        return tabStripModel_->selected_index() + delta;
+        return [tabStripModel2_ selectedIndex] + delta;
     }
 
     return DetermineInsertionIndexForAppending();
@@ -33,24 +33,23 @@ int CTTabStripModelOrderController::DetermineInsertionIndex(CTTabContents* new_c
 
 int CTTabStripModelOrderController::DetermineInsertionIndexForAppending() 
 {
-    return (insertion_policy_ == CTTabStripModel::INSERT_AFTER) ?
-    tabStripModel_->count() : 0;
+    return (insertion_policy_ == INSERT_AFTER) ?
+    [tabStripModel2_ count] : 0;
 }
 
 int CTTabStripModelOrderController::DetermineNewSelectedIndex(int removing_index, bool is_remove) const 
 {
-    int tab_count = tabStripModel_->count();
+    int tab_count = [tabStripModel2_ count];
     assert(removing_index >= 0 && removing_index < tab_count);
     
-    CTTabContents* parentOpener =
-    tabStripModel_->GetTabContentsAt(removing_index).parentOpener;
+    CTTabContents* parentOpener = [[tabStripModel2_ tabContentsAtIndex:removing_index] parentOpener];
     if (parentOpener) {
-        int index = tabStripModel_->GetIndexOfTabContents(parentOpener);
+        int index = [tabStripModel2_ indexOfTabContents:parentOpener];
         if (index != CTTabStripModel::kNoTab)
             return GetValidIndex(index, removing_index, is_remove);
     }
     
-    int selected_index = tabStripModel_->selected_index();
+    int selected_index = [tabStripModel2_ selectedIndex];
     if (is_remove && selected_index >= (tab_count - 1))
         return selected_index - 1;
     return selected_index;

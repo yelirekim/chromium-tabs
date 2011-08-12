@@ -299,7 +299,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   CTTabStripModel *tabStripModel = browser_.tabStripModel;
   //tabStripModel->CloseAllTabs();
   tabStripModel->CloseTabContentsAt(tabStripModel->selected_index(),
-                                    CTTabStripModel::CLOSE_CREATE_HISTORICAL_TAB);
+                                    CLOSE_CREATE_HISTORICAL_TAB);
 }
 
 
@@ -530,7 +530,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 
 - (BOOL)hasLiveTabs {
-  return [browser_ tabStripModel]->HasNonPhantomTabs();
+  return [browser_.tabStripModel2 hasNonPhantomTabs];
 }
 
 
@@ -770,7 +770,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
         //       bounds in a custom manner we have to do it here, before we call
         //       orderOut:
         
-        if (browser_.tabStripModel->HasNonPhantomTabs()) {
+        if ([browser_.tabStripModel2 hasNonPhantomTabs]) {
             // Tab strip isn't empty.  Hide the frame (so it appears to have closed
             // immediately) and close all the tabs, allowing them to shut down. When the
             // tab strip is empty we'll be called back again.

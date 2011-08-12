@@ -173,7 +173,7 @@ void CTTabStripModel::SetInsertionPolicy(InsertionPolicy policy) {
   order_controller_->set_insertion_policy(policy);
 }
 
-CTTabStripModel::InsertionPolicy CTTabStripModel::insertion_policy() const {
+InsertionPolicy CTTabStripModel::insertion_policy() const {
   return order_controller_->insertion_policy();
 }
 

@@ -12,6 +12,7 @@
 #import "observer_list.h"
 
 #import "CTTabStripModelDelegate.h"
+#import "CTTabStripModel2.h"
 
 @class CTTabContents;
 
@@ -203,57 +204,6 @@ class CTTabStripModelObserver {
 ////////////////////////////////////////////////////////////////////////////////
 class CTTabStripModel /*: public NotificationObserver*/ {
  public:
-  // Policy for how new tabs are inserted.
-  enum InsertionPolicy {
-    // Newly created tabs are created after the selection. This is the default.
-    INSERT_AFTER,
-
-    // Newly created tabs are inserted before the selection.
-    INSERT_BEFORE,
-  };
-
-  // Used to specify what should happen when the tab is closed.
-  enum CloseTypes {
-    CLOSE_NONE                     = 0,
-
-    // Indicates the tab was closed by the user. If true,
-    // CTTabContents::set_closed_by_user_gesture(true) is invoked.
-    CLOSE_USER_GESTURE             = 1 << 0,
-
-    // If true the history is recorded so that the tab can be reopened later.
-    // You almost always want to set this.
-    CLOSE_CREATE_HISTORICAL_TAB    = 1 << 1,
-  };
-
-  // Constants used when adding tabs.
-  enum AddTabTypes {
-    // Used to indicate nothing special should happen to the newly inserted
-    // tab.
-    ADD_NONE          = 0,
-
-    // The tab should be selected.
-    ADD_SELECTED      = 1 << 0,
-
-    // The tab should be pinned.
-    ADD_PINNED        = 1 << 1,
-
-    // If not set the insertion index of the CTTabContents is left up to the Order
-    // Controller associated, so the final insertion index may differ from the
-    // specified index. Otherwise the index supplied is used.
-    ADD_FORCE_INDEX   = 1 << 2,
-
-    // If set the newly inserted tab inherits the group of the currently
-    // selected tab. If not set the tab may still inherit the group under
-    // certain situations.
-    ADD_INHERIT_GROUP = 1 << 3,
-
-    // If set the newly inserted tab's opener is set to the currently selected
-    // tab. If not set the tab may still inherit the group/opener under certain
-    // situations.
-    // NOTE: this is ignored if ADD_INHERIT_GROUP is set.
-    ADD_INHERIT_OPENER = 1 << 4,
-  };
-
   static const int kNoTab = -1;
 
   // Construct a TabStripModel with a delegate to help it do certain things

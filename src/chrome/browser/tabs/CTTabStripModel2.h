@@ -72,3 +72,18 @@ class CTTabStripModelObserver;
 - (void) selectLastTab;
 
 @end
+
+
+extern NSString* const kCTTabInsertedNotification;
+extern NSString* const kCTTabClosingNotification;
+extern NSString* const kCTTabDetachedNotification;
+extern NSString* const kCTTabDeselectedNotification;
+extern NSString* const kCTTabSelectedNotification;
+extern NSString* const kCTTabMovedNotification;
+extern NSString* const kCTTabChangedNotification;
+extern NSString* const kCTTabReplacedNotification;
+extern NSString* const kCTTabPinnedStateChangedNotification;
+extern NSString* const kCTTabMiniStateChangedNotification;
+extern NSString* const kCTTabBlockedStateChangedNotification;
+extern NSString* const kCTTabStripEmptyNotification;
+extern NSString* const kCTTabStripModelDeletedNotification;

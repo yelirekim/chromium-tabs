@@ -1,6 +1,21 @@
 #import "CTTabStripModel2.h"
 #import "CTTabStripModel.h"
 
+extern NSString* const kCTTabInsertedNotification = @"kCTTabInsertedNotification";
+extern NSString* const kCTTabClosingNotification = @"kCTTabClosingNotification";
+extern NSString* const kCTTabDetachedNotification = @"kCTTabDetachedNotification";
+extern NSString* const kCTTabDeselectedNotification = @"kCTTabDeselectedNotification";
+extern NSString* const kCTTabSelectedNotification = @"kCTTabSelectedNotification";
+extern NSString* const kCTTabMovedNotification = @"kCTTabMovedNotification";
+extern NSString* const kCTTabChangedNotification = @"kCTTabChangedNotification";
+extern NSString* const kCTTabReplacedNotification = @"kCTTabReplacedNotification";
+extern NSString* const kCTTabPinnedStateChangedNotification = @"kCTTabPinnedStateChangedNotification";
+extern NSString* const kCTTabMiniStateChangedNotification = @"kCTTabMiniStateChangedNotification";
+extern NSString* const kCTTabBlockedStateChangedNotification = @"kCTTabBlockedStateChangedNotification";
+extern NSString* const kCTTabStripEmptyNotification = @"kCTTabStripEmptyNotification";
+extern NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelDeletedNotification";
+
+
 @implementation CTTabStripModel2 {
     CTTabStripModel* tabStripModel_;
 }

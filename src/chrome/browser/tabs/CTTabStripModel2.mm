@@ -118,4 +118,49 @@
     tabStripModel_->InsertTabContentsAt(index, contents, options);
 }
 
+- (void) updateTabContentsStateAtIndex:(NSInteger)index changeType:(CTTabChangeType)changeType
+{
+    tabStripModel_->UpdateTabContentsStateAt(index, changeType);
+}
+
+- (void) replaceTabContentsAtIndex:(NSInteger)index withContents:contents replaceType:(CTTabReplaceType)replaceType
+{
+    tabStripModel_->ReplaceTabContentsAt(index, contents, replaceType);
+}
+
+- (void) closeAllTabs
+{
+    tabStripModel_->CloseAllTabs();
+}
+
+- (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options
+{
+    return tabStripModel_->AddTabContents(contents, index, pageTransition, options);
+}
+
+- (void) selectNextTab
+{
+    tabStripModel_->SelectNextTab();
+}
+
+- (void) selectPreviousTab
+{
+    tabStripModel_->SelectPreviousTab();
+}
+
+- (void) moveTabNext
+{
+    tabStripModel_->MoveTabNext();
+}
+
+- (void) moveTabPrevious
+{
+    tabStripModel_->MoveTabPrevious();
+}
+
+- (void) selectLastTab
+{
+    tabStripModel_->SelectLastTab();
+}
+
 @end

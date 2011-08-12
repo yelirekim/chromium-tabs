@@ -1,3 +1,4 @@
+#import "CTPageTransition.h"
 
 enum InsertionPolicy {
     INSERT_AFTER,
@@ -17,6 +18,17 @@ enum AddTabTypes {
     ADD_FORCE_INDEX   = 1 << 2,
     ADD_INHERIT_GROUP = 1 << 3,
     ADD_INHERIT_OPENER = 1 << 4,
+};
+
+enum CTTabChangeType {
+    CTTabChangeTypeLoadingOnly,
+    CTTabChangeTypeTitleNotLoading,
+    CTTabChangeTypeAll
+};
+
+enum CTTabReplaceType {
+    REPLACE_MADE_PHANTOM,
+    REPLACE_MATCH_PREVIEW
 };
 
 class CTTabStripModel;
@@ -49,5 +61,14 @@ class CTTabStripModelObserver;
 - (BOOL) isPhantomTabAtIndex:(NSInteger)index;
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options;
+- (void) updateTabContentsStateAtIndex:(NSInteger)index changeType:(CTTabChangeType)changeType;
+- (void) replaceTabContentsAtIndex:(NSInteger)index withContents:contents replaceType:(CTTabReplaceType)replaceType;
+- (void) closeAllTabs;
+- (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options;
+- (void) selectNextTab;
+- (void) selectPreviousTab;
+- (void) moveTabNext;
+- (void) moveTabPrevious;
+- (void) selectLastTab;
 
 @end

@@ -28,25 +28,7 @@ class CTTabStripModelOrderController;
 class CTTabStripModel;
 
 // Enumeration of the possible values supplied to TabChangedAt.
-enum CTTabChangeType {
-  // Only the loading state changed.
-  CTTabChangeTypeLoadingOnly,
 
-  // Only the title changed and page isn't loading.
-  CTTabChangeTypeTitleNotLoading,
-
-  // Change not characterized by CTTabChangeTypeLoadingOnly or CTTabChangeTypeTitleNotLoading.
-  CTTabChangeTypeAll
-};
-
-// Enum used by ReplaceTabContentsAt.
-enum CTTabReplaceType {
-  // The replace is the result of the tab being made phantom.
-  REPLACE_MADE_PHANTOM,
-
-  // The replace is the result of the match preview being committed.
-  REPLACE_MATCH_PREVIEW
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 //

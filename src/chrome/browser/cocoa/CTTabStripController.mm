@@ -219,6 +219,7 @@ private:
         tabStripModel_ = [browser_ tabStripModel];
         tabStripModel2_ = [[CTTabStripModel2 alloc] initWithPointer:tabStripModel_];
         bridge_ = new CTTabStripModelObserverBridge(tabStripModel_, self);
+        
         tabContentsArray_ = [[NSMutableArray alloc] init];
         tabArray_ = [[NSMutableArray alloc] init];
         
@@ -283,7 +284,7 @@ private:
         [[newTabButton_ cell]
          accessibilitySetOverrideValue:@"New tab"
          forAttribute:NSAccessibilityDescriptionAttribute];
-        
+#if 0        
         const int existingTabCount = [tabStripModel2_ count];
         const CTTabContents* selection = [tabStripModel2_ selectedTabContents];
         for (int i = 0; i < existingTabCount; ++i) {
@@ -303,6 +304,7 @@ private:
                                    withObject:nil
                                 waitUntilDone:NO];
         }
+#endif
     }
     return self;
 }

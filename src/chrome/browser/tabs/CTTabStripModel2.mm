@@ -15,6 +15,10 @@ extern NSString* const kCTTabBlockedStateChangedNotification = @"kCTTabBlockedSt
 extern NSString* const kCTTabStripEmptyNotification = @"kCTTabStripEmptyNotification";
 extern NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelDeletedNotification";
 
+extern NSString* const kCTTabContentsUserInfoKey = @"kCTTabContentsUserInfoKey";
+extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
+extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
+
 
 @implementation CTTabStripModel2 {
     CTTabStripModel* tabStripModel_;

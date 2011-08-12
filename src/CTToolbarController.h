@@ -32,11 +32,4 @@
 - (void)updateToolbarWithContents:(CTTabContents*)contents
                shouldRestoreState:(BOOL)shouldRestore;
 
-// Called by the Window delegate so we can provide a custom field editor if
-// needed.
-// Note that this may be called for objects unrelated to the toolbar.
-// returns nil if we don't want to override the custom field editor for |obj|.
-// The default implementation returns nil
-- (id)customFieldEditorForObject:(id)obj;
-
 @end

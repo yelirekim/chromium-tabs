@@ -1020,23 +1020,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     [self updateToolbarWithContents:nil shouldRestoreState:NO];
 }
 
-/*
-- (void)tabMovedWithContents:(CTTabContents*)contents
-                    fromIndex:(NSInteger)from
-                      toIndex:(NSInteger)to {
-  DLOG_TRACE();
-}
-- (void)tabChangedWithContents:(CTTabContents*)contents
-                       atIndex:(NSInteger)index
-                    changeType:(CTTabChangeType)change {
-  DLOG_TRACE();
-}
-- (void)tabMiniStateChangedWithContents:(CTTabContents*)contents
-                                atIndex:(NSInteger)index {
-  DLOG_TRACE();
-}
-//*/
-
 - (void)tabStripEmpty {
   [self close];
 }

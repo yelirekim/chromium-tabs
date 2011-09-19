@@ -116,8 +116,4 @@ InsertionPolicy CTTabStripModel::insertion_policy() const {
 bool CTTabStripModel::HasObserver(CTTabStripModelObserver* observer) {
     return observers_.HasObserver(observer);
 }
-//DONE
-bool CTTabStripModel::IsPhantomTab(int index) const {
-    return false;
-}
 

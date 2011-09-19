@@ -169,7 +169,7 @@ static const int kNoTab = -1;
 
 - (BOOL) isPhantomTabAtIndex:(NSInteger)index
 {
-    return tabStripModel_->IsPhantomTab(index);
+    return NO;
 }
 
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove

@@ -491,7 +491,7 @@ class CTTabStripModel /*: public NotificationObserver*/ {
   // Returns a vector of indices of the tabs that will close when executing the
   // command |id| for the tab at |index|. The returned indices are sorted in
   // descending order.
-  std::vector<int> GetIndicesClosedByCommand(int index,
+  NSArray* GetIndicesClosedByCommand(int index,
                                              ContextMenuCommand id) const;
 
   // Overridden from notificationObserver:
@@ -520,7 +520,7 @@ class CTTabStripModel /*: public NotificationObserver*/ {
   //
   // Returns true if the CTTabContents were closed immediately, false if we are
   // waiting for the result of an onunload handler.
-  bool InternalCloseTabs(const std::vector<int>& indices, uint32 close_types);
+  bool InternalCloseTabs(NSArray* indices, uint32 close_types);
 
   // Invoked from InternalCloseTabs and when an extension is removed for an app
   // tab. Notifies observers of TabClosingAt and deletes |contents|. If

@@ -366,15 +366,15 @@ void CTTabStripModel::CloseAllTabs() {
     // specific condition when CloseTabContentsAt causes a flurry of
     // Close/Detach/Select notifications to be sent.
     closing_all_ = true;
-    std::vector<int> closing_tabs;
+    NSMutableArray* closing_tabs = [NSMutableArray array];
     for (int i = count() - 1; i >= 0; --i)
-        closing_tabs.push_back(i);
+        [closing_tabs addObject:[NSNumber numberWithInt:i]];
     InternalCloseTabs(closing_tabs, CLOSE_CREATE_HISTORICAL_TAB);
 }
 
 bool CTTabStripModel::CloseTabContentsAt(int index, uint32 close_types) {
-    std::vector<int> closing_tabs;
-    closing_tabs.push_back(index);
+    NSMutableArray* closing_tabs = [NSMutableArray array];
+    [closing_tabs addObject:[NSNumber numberWithInt:index]];
     return InternalCloseTabs(closing_tabs, close_types);
 }
 
@@ -814,13 +814,13 @@ void CTTabStripModel::ExecuteContextMenuCommand(
 }
 
 
-std::vector<int> CTTabStripModel::GetIndicesClosedByCommand(
+NSArray* CTTabStripModel::GetIndicesClosedByCommand(
                                                             int index,
                                                             ContextMenuCommand id) const {
     assert(ContainsIndex(index));
     
     // NOTE: some callers assume indices are sorted in reverse order.
-    std::vector<int> indices;
+    NSMutableArray* indices = [NSMutableArray array];
     
     if (id != CommandCloseTabsToRight && id != CommandCloseOtherTabs)
         return indices;
@@ -828,7 +828,7 @@ std::vector<int> CTTabStripModel::GetIndicesClosedByCommand(
     int start = (id == CommandCloseTabsToRight) ? index + 1 : 0;
     for (int i = count() - 1; i >= start; --i) {
         if (i != index && !IsMiniTab(i))
-            indices.push_back(i);
+            [indices addObject:[NSNumber numberWithInt:i]];
     }
     return indices;
 }
@@ -912,7 +912,7 @@ bool CTTabStripModel::IsNewTabAtEndOfTabStrip(CTTabContents* contents) const {
      contents->controller().entry_count() == 1;*/
 }
 
-bool CTTabStripModel::InternalCloseTabs(const std::vector<int>& indices,
+bool CTTabStripModel::InternalCloseTabs(NSArray* indices,
                                         uint32 close_types) {
     bool retval = true;
     
@@ -949,11 +949,11 @@ bool CTTabStripModel::InternalCloseTabs(const std::vector<int>& indices,
      }*/
     
     // We now return to our regularly scheduled shutdown procedure.
-    for (size_t i = 0; i < indices.size(); ++i) {
-        CTTabContents* detached_contents = GetContentsAt(indices[i]);
+    for (size_t i = 0; i < indices.count; ++i) {
+        CTTabContents* detached_contents = GetContentsAt([[indices objectAtIndex:i] intValue]);
         [detached_contents closingOfTabDidStart:this]; // TODO notification
         
-        if (![delegate_ canCloseContentsAt:indices[i]]) {
+        if (![delegate_ canCloseContentsAt:[[indices objectAtIndex:i] intValue]]) {
             retval = false;
             continue;
         }
@@ -972,7 +972,7 @@ bool CTTabStripModel::InternalCloseTabs(const std::vector<int>& indices,
             continue;
         }
         
-        InternalCloseTab(detached_contents, indices[i],
+        InternalCloseTab(detached_contents, [[indices objectAtIndex:i] intValue],
                          (close_types & CLOSE_CREATE_HISTORICAL_TAB) != 0);
     }
     

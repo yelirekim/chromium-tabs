@@ -148,22 +148,30 @@ static const int kNoTab = -1;
 
 - (NSInteger) indexOfFirstNonMiniTab
 {
-    return tabStripModel_->IndexOfFirstNonMiniTab();
+    for (size_t i = 0; i < tabStripModel_->contents_data_.count; ++i) {
+        if (![self isMiniTabAtIndex:i]) {
+            return i;
+        }
+    }
+    // No mini-tabs.
+    return self.count;
 }
 
 - (BOOL) isMiniTabAtIndex:(NSInteger)index
 {
-    return tabStripModel_->IsMiniTab(index);
+    return [self isTabPinnedAtIndex:index] || [self isAppTabAtIndex:index];
 }
 
 - (BOOL) isTabPinnedAtIndex:(NSInteger)index
 {
-    return tabStripModel_->IsTabPinned(index);
+    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    return data->pinned;
 }
 
 - (BOOL) isAppTabAtIndex:(NSInteger)index
 {
-    return tabStripModel_->IsAppTab(index);
+    CTTabContents* contents = [self tabContentsAtIndex:index];
+    return contents && contents.isApp;
 }
 
 - (BOOL) isPhantomTabAtIndex:(NSInteger)index

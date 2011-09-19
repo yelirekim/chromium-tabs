@@ -26,6 +26,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 - (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab;
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
 - (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options;
+- (void) _closeTabAtIndex:(NSInteger)index contents:(CTTabContents*)contents history:(BOOL)createHistory;
 
 @end
 
@@ -239,7 +240,7 @@ static const int kNoTab = -1;
     data->contents = contents;
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                       TabReplacedAt(old_contents, contents, index, replaceType));
-    [old_contents destroy:nil];
+    [old_contents destroy:tabStripModel_];
 }
 
 - (void) closeAllTabs
@@ -498,11 +499,27 @@ static const int kNoTab = -1;
             continue;
         }
         
-        tabStripModel_->InternalCloseTab(detached_contents, index,
-                         (options & CLOSE_CREATE_HISTORICAL_TAB) != 0);
+        [self _closeTabAtIndex:index contents:detached_contents history:(options & CLOSE_CREATE_HISTORICAL_TAB) != 0];
     }
     
     return retval;
+}
+
+- (void) _closeTabAtIndex:(NSInteger)index contents:(CTTabContents*)contents history:(BOOL)createHistory
+{
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabClosingAt(contents, index));
+    
+    // Ask the delegate to save an entry for this tab in the historical tab
+    // database if applicable.
+    if (createHistory) {
+        [tabStripModel_->delegate_ createHistoricalTab:contents];
+        //delegate_->CreateHistoricalTab(contents);
+    }
+    
+    // Deleting the CTTabContents will call back to us via NotificationObserver
+    // and detach it.
+    [contents destroy:tabStripModel_];
 }
 
 #pragma mark -

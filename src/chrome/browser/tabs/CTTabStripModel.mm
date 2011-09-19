@@ -206,41 +206,6 @@ bool CTTabStripModel::IsNewTabAtEndOfTabStrip(CTTabContents* contents) const {
      contents->controller().entry_count() == 1;*/
 }
 
-bool CTTabStripModel::InternalCloseTabs(NSArray* indices,
-                                        uint32 close_types) {
-    bool retval = true;
-    
-    // We now return to our regularly scheduled shutdown procedure.
-    for (size_t i = 0; i < indices.count; ++i) {
-        CTTabContents* detached_contents = GetContentsAt([[indices objectAtIndex:i] intValue]);
-        [detached_contents closingOfTabDidStart:this]; // TODO notification
-        
-        if (![delegate_ canCloseContentsAt:[[indices objectAtIndex:i] intValue]]) {
-            retval = false;
-            continue;
-        }
-        
-        // Update the explicitly closed state. If the unload handlers cancel the
-        // close the state is reset in CTBrowser. We don't update the explicitly
-        // closed state if already marked as explicitly closed as unload handlers
-        // call back to this if the close is allowed.
-        if (!detached_contents.closedByUserGesture) {
-            detached_contents.closedByUserGesture = close_types & CLOSE_USER_GESTURE;
-        }
-        
-        //if (delegate_->RunUnloadListenerBeforeClosing(detached_contents)) {
-        if ([delegate_ runUnloadListenerBeforeClosing:detached_contents]) {
-            retval = false;
-            continue;
-        }
-        
-        InternalCloseTab(detached_contents, [[indices objectAtIndex:i] intValue],
-                         (close_types & CLOSE_CREATE_HISTORICAL_TAB) != 0);
-    }
-    
-    return retval;
-}
-
 void CTTabStripModel::InternalCloseTab(CTTabContents* contents,
                                        int index,
                                        bool create_historical_tabs) {

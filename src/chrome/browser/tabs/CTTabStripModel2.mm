@@ -111,7 +111,7 @@ static const int kNoTab = -1;
 
 - (CTTabContents*) selectedTabContents
 {
-    return tabStripModel_->GetSelectedTabContents();
+    return [self tabContentsAtIndex:self.selectedIndex];
 }
 
 - (BOOL) containsIndex:(NSInteger)index

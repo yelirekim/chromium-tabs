@@ -147,7 +147,6 @@ static const int kNoTab = -1;
             return i;
         }
     }
-    // No mini-tabs.
     return self.count;
 }
 
@@ -181,7 +180,6 @@ static const int kNoTab = -1;
     
     int first_non_mini_tab = [self indexOfFirstNonMiniTab];
     if ((fromIndex < first_non_mini_tab && toIndex >= first_non_mini_tab) || (toIndex < first_non_mini_tab && fromIndex >= first_non_mini_tab)) {
-        // This would result in mini tabs mixed with non-mini tabs. We don't allow that.
         return;
     }
     
@@ -195,15 +193,8 @@ static const int kNoTab = -1;
     bool pin = contents.isApp || options & ADD_PINNED;
     index = [self constrainInsertionIndex:index miniTab:pin];
     
-    // In tab dragging situations, if the last tab in the window was detached
-    // then the user aborted the drag, we will have the |closing_all_| member
-    // set (see DetachTabContentsAt) which will mess with our mojo here. We need
-    // to clear this bit.
     tabStripModel_->closing_all_ = false;
     
-    // Have to get the selected contents before we monkey with |contents_|
-    // otherwise we run into problems when we try to change the selected contents
-    // since the old contents and the new contents will be the same...
     CTTabContents* selected_contents = [self selectedTabContents];
     TabContentsData* data = [[TabContentsData alloc] init];
     data->contents = contents;
@@ -212,8 +203,6 @@ static const int kNoTab = -1;
     [tabStripModel_->contents_data_ insertObject:data atIndex:index];
     
     if (index <= self.selectedIndex) {
-        // If a tab is inserted before the current selected index,
-        // then |selected_index| needs to be incremented.
         ++self.selectedIndex;
     }
     
@@ -240,7 +229,7 @@ static const int kNoTab = -1;
     data->contents = contents;
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                       TabReplacedAt(old_contents, contents, index, replaceType));
-    [old_contents destroy:tabStripModel_];
+    [self detachTabContentsAtIndex:index];
 }
 
 - (void) closeAllTabs
@@ -269,7 +258,6 @@ static const int kNoTab = -1;
     }
     [self insertTabContents:contents atIndex:index options:options | (inherit_group ? ADD_INHERIT_GROUP : 0)];
     
-    // Reset the index, just in case insert ended up moving it on us.
     index = [self indexOfTabContents:contents];
     
     return index;
@@ -333,8 +321,6 @@ static const int kNoTab = -1;
         if (index == tabStripModel_->selected_index_) {
             [self changeSelectedContentsFrom:removed_contents toIndex:next_selected_index userGesture:NO];
         } else if (index < tabStripModel_->selected_index_) {
-            // The selected tab didn't change, but its position shifted; update our
-            // index to continue to point at it.
             --tabStripModel_->selected_index_;
         }
     }
@@ -350,24 +336,19 @@ static const int kNoTab = -1;
     
     if ([self isAppTabAtIndex:index]) {
         if (!pinned) {
-            // App tabs should always be pinned.
             NOTREACHED();
             return;
         }
-        // Changing the pinned state of an app tab doesn't effect it's mini-tab
-        // status.
         data->pinned = pinned;
     } else {
-        // The tab is not an app tab, it's position may have to change as the
-        // mini-tab state is changing.
         int non_mini_tab_index = [self indexOfFirstNonMiniTab];
         data->pinned = pinned;
         if (pinned && index != non_mini_tab_index) {
             [self _moveTabContentsFromIndex:index toIndex:non_mini_tab_index selectAfterMove:NO];
-            return;  // Don't send TabPinnedStateChanged notification.
+            return;
         } else if (!pinned && index + 1 != non_mini_tab_index) {
             [self _moveTabContentsFromIndex:index toIndex:non_mini_tab_index - 1 selectAfterMove:NO];
-            return;  // Don't send TabPinnedStateChanged notification.
+            return;
         }
         
         FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
@@ -375,7 +356,6 @@ static const int kNoTab = -1;
                                               index));
     }
     
-    // else: the tab was at the boundary and it's position doesn't need to change.
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                       TabPinnedStateChanged(data->contents,
                                             index));
@@ -440,7 +420,6 @@ static const int kNoTab = -1;
     [tabStripModel_->contents_data_ removeObjectAtIndex:fromIndex];
     [tabStripModel_->contents_data_ insertObject:moved_data atIndex:toIndex];
 
-    // if !select_after_move, keep the same tab selected as was selected before.
     int selectedIndex = self.selectedIndex;
     if (selectedAfterMove || fromIndex == selectedIndex) {
         self.selectedIndex = toIndex;
@@ -456,12 +435,9 @@ static const int kNoTab = -1;
 
 - (void) selectRelativeTab:(BOOL)next
 {
-    // This may happen during automated testing or if a user somehow buffers
-    // many key accelerators.
     if (tabStripModel_->contents_data_.count == 0)
         return;
     
-    // Skip pinned-app-phantom tabs when iterating.
     int index = self.selectedIndex;
     int delta = next ? 1 : -1;
     do {
@@ -474,7 +450,6 @@ static const int kNoTab = -1;
 {
     bool retval = true;
     
-    // We now return to our regularly scheduled shutdown procedure.
     for (size_t i = 0; i < indices.count; ++i) {
         int index = [[indices objectAtIndex:i] intValue];
         CTTabContents* detached_contents = tabStripModel_->GetContentsAt(index);
@@ -485,15 +460,10 @@ static const int kNoTab = -1;
             continue;
         }
         
-        // Update the explicitly closed state. If the unload handlers cancel the
-        // close the state is reset in CTBrowser. We don't update the explicitly
-        // closed state if already marked as explicitly closed as unload handlers
-        // call back to this if the close is allowed.
         if (!detached_contents.closedByUserGesture) {
             detached_contents.closedByUserGesture = options & CLOSE_USER_GESTURE;
         }
         
-        //if (delegate_->RunUnloadListenerBeforeClosing(detached_contents)) {
         if ([tabStripModel_->delegate_ runUnloadListenerBeforeClosing:detached_contents]) {
             retval = false;
             continue;
@@ -510,16 +480,11 @@ static const int kNoTab = -1;
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                       TabClosingAt(contents, index));
     
-    // Ask the delegate to save an entry for this tab in the historical tab
-    // database if applicable.
     if (createHistory) {
         [tabStripModel_->delegate_ createHistoricalTab:contents];
-        //delegate_->CreateHistoricalTab(contents);
     }
     
-    // Deleting the CTTabContents will call back to us via NotificationObserver
-    // and detach it.
-    [contents destroy:tabStripModel_];
+    [self detachTabContentsAtIndex:index];
 }
 
 #pragma mark -

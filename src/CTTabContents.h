@@ -60,9 +60,6 @@ extern NSString* const CTTabContentsDidCloseNotification;
 // customized initialization.
 -(id)initWithBaseTabContents:(CTTabContents*)baseContents;
 
-// Called when the tab should be destroyed (involves some finalization).
--(void)destroy:(CTTabStripModel*)sender;
-
 #pragma mark Action
 
 // Selects the tab in it's window and brings the window to front

@@ -58,12 +58,6 @@ NSString* const CTTabContentsDidCloseNotification =
   return [super init];
 }
 
-
--(void)destroy:(CTTabStripModel*)sender {
-  // TODO: notify "disconnected"?
-  sender->TabContentsWasDestroyed(self); // TODO: NSNotification
-}
-
 #pragma mark Properties impl.
 
 -(BOOL)hasIcon {

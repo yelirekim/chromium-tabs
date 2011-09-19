@@ -173,29 +173,6 @@ bool CTTabStripModel::IsPhantomTab(int index) const {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// TabStripModel, NotificationObserver implementation:
-
-// TODO replace with NSNotification if possible
-// Invoked by CTTabContents when they dealloc
-void CTTabStripModel::TabContentsWasDestroyed(CTTabContents *contents) {
-    // Sometimes, on qemu, it seems like a CTTabContents object can be destroyed
-    // while we still have a reference to it. We need to break this reference
-    // here so we don't crash later.
-    int index = GetIndexOfTabContents(contents);
-    if (index != CTTabStripModel::kNoTab) {
-        // Note that we only detach the contents here, not close it - it's
-        // already been closed. We just want to undo our bookkeeping.
-        //if (ShouldMakePhantomOnClose(index)) {
-        //  // We don't actually allow pinned tabs to close. Instead they become
-        //  // phantom.
-        //  MakePhantom(index);
-        //} else {
-        DetachTabContentsAt(index);
-        //}
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // TabStripModel, private:
 //DONE
 CTTabContents* CTTabStripModel::GetContentsAt(int index) const {

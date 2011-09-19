@@ -44,6 +44,8 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
     ObserverList<CTTabStripModelObserver> observers_;
 }
 
+@synthesize insertionPolicy = insertionPolicy_;
+
 static const int kNoTab = -1;
 
 - (id) initWithPointer:(CTTabStripModel*)tabStripModel
@@ -69,16 +71,6 @@ static const int kNoTab = -1;
 - (BOOL) hasNonPhantomTabs
 {
     return [self count];
-}
-
-- (void) setInsertionPolicy:(InsertionPolicy)insertionPolicy
-{
-    tabStripModel_->SetInsertionPolicy(insertionPolicy);
-}
-
-- (InsertionPolicy) insertionPolicy
-{
-    return tabStripModel_->insertion_policy();
 }
 
 - (BOOL) hasObserver:(CTTabStripModelObserver*)observer

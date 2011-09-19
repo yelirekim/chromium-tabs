@@ -339,6 +339,7 @@ int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const 
         if (data->contents == contents) {
             return index;
         }
+        index++;
     }
     return kNoTab;
 }

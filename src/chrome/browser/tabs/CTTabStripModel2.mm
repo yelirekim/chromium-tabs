@@ -206,8 +206,12 @@ static const int kNoTab = -1;
         ++self.selectedIndex;
     }
     
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabInsertedAt(contents, index, foreground));
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              contents, kCTTabContentsUserInfoKey,
+                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithBool:foreground], kCTTabForegroundUserInfoKey, 
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabInsertedNotification object:self userInfo:userInfo];
     
     if (foreground) {
         [self changeSelectedContentsFrom:selected_contents toIndex:index userGesture:NO];

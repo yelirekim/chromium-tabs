@@ -38,6 +38,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 @implementation CTBrowserWindowController {
     CTTabStripModelObserverBridge *tabStripObserver_;
     BOOL initializing_; // true if the instance is initializing
+    id ob1;
 }
 
 @synthesize tabStripController = tabStripController_;
@@ -137,6 +138,16 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   if (!_currentMain) {
       _currentMain = self;
   }
+    
+    ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        NSDictionary* userInfo = notification.userInfo;
+        CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+        NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+        BOOL foreground = [[userInfo objectForKey:kCTTabForegroundUserInfoKey] boolValue];
+        [contents tabDidInsertIntoBrowser:browser_
+                                  atIndex:index
+                             inForeground:foreground];
+    }];
   return self;
 }
 
@@ -171,6 +182,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   //[fullscreenController_ exitFullscreen]; // TODO
   //fullscreenController_.reset();
 
+    [[NSNotificationCenter defaultCenter] removeObserver:ob1];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     toolbarController_ = nil;
@@ -915,15 +927,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   [contents tabWillCloseInBrowser:browser_ atIndex:index];
   if (contents.isSelected)
     [self updateToolbarWithContents:nil shouldRestoreState:NO];
-}
-
-
-- (void)tabInsertedWithContents:(CTTabContents*)contents
-                      atIndex:(NSInteger)index
-                 inForeground:(bool)foreground {
-  [contents tabDidInsertIntoBrowser:browser_
-                            atIndex:index
-                       inForeground:foreground];
 }
 
 

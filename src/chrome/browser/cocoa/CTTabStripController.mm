@@ -90,6 +90,8 @@ private:
 - (void)mouseMoved:(NSEvent*)event;
 - (void)setTabTrackingAreasEnabled:(BOOL)enabled;
 - (void)setNewTabButtonHoverState:(BOOL)showHover;
+- (CTTabController*)newTab;
+- (void)setTabTitle:(NSViewController*)tab withContents:(CTTabContents*)contents;
 @end
 
 
@@ -199,6 +201,8 @@ private:
     NSImage* defaultFavIcon_;
     CGFloat indentForControls_;
     BOOL mouseInside_;
+    
+    id ob1;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -217,7 +221,7 @@ private:
         switchView_ = switchView;
         browser_ = browser;
         tabStripModel_ = [browser_ tabStripModel];
-        tabStripModel2_ = [[CTTabStripModel2 alloc] initWithPointer:tabStripModel_];
+        tabStripModel2_ = [browser_ tabStripModel2];
         bridge_ = new CTTabStripModelObserverBridge(tabStripModel_, self);
         
         tabContentsArray_ = [[NSMutableArray alloc] init];
@@ -305,6 +309,45 @@ private:
                                 waitUntilDone:NO];
         }
 #endif
+        
+        ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            BOOL inForeground = [[userInfo objectForKey:kCTTabForegroundUserInfoKey] boolValue];
+            assert(contents);
+            assert(modelIndex == CTTabStripModel::kNoTab || [tabStripModel2_ containsIndex:modelIndex]);
+            
+            NSInteger index = [self indexFromModelIndex:modelIndex];
+            
+            CTTabContentsController* contentsController =
+            [browser_ createTabContentsControllerWithContents:contents];
+            [tabContentsArray_ insertObject:contentsController atIndex:index];
+            
+            CTTabController* newController = [self newTab];
+            [newController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
+            [newController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
+            [newController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
+            [tabArray_ insertObject:newController atIndex:index];
+            NSView* newView = [newController view];
+            
+            [newView setFrame:NSOffsetRect([newView frame],
+                                           0, -[[self class] defaultTabHeight])];
+            
+            [self setTabTitle:newController withContents:contents];
+            
+            availableResizeWidth_ = kUseFullAvailableWidth;
+            
+            if (!inForeground) {
+                [self layoutTabs];
+            }
+            
+            [self updateFavIconForContents:contents atIndex:modelIndex];
+            
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:kTabStripNumberOfTabsChanged
+             object:self];
+        }];
     }
     return self;
 }
@@ -318,6 +361,8 @@ private:
         NSView* view = [controller view];
         [[[view animationForKey:@"frameOrigin"] delegate] invalidate];
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:ob1];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -687,43 +732,6 @@ private:
     if (!titleString || ![titleString length])
         titleString = L10n(@"New Tab");
     [tab setTitle:titleString];
-}
-
-- (void)tabInsertedWithContents:(CTTabContents*)contents
-                        atIndex:(NSInteger)modelIndex
-                   inForeground:(bool)inForeground {
-    assert(contents);
-    assert(modelIndex == CTTabStripModel::kNoTab || [tabStripModel2_ containsIndex:modelIndex]);
-    
-    NSInteger index = [self indexFromModelIndex:modelIndex];
-    
-    CTTabContentsController* contentsController =
-    [browser_ createTabContentsControllerWithContents:contents];
-    [tabContentsArray_ insertObject:contentsController atIndex:index];
-    
-    CTTabController* newController = [self newTab];
-    [newController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
-    [newController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
-    [newController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
-    [tabArray_ insertObject:newController atIndex:index];
-    NSView* newView = [newController view];
-    
-    [newView setFrame:NSOffsetRect([newView frame],
-                                   0, -[[self class] defaultTabHeight])];
-    
-    [self setTabTitle:newController withContents:contents];
-    
-    availableResizeWidth_ = kUseFullAvailableWidth;
-    
-    if (!inForeground) {
-        [self layoutTabs];
-    }
-    
-    [self updateFavIconForContents:contents atIndex:modelIndex];
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:kTabStripNumberOfTabsChanged
-     object:self];
 }
 
 - (void)tabSelectedWithContents:(CTTabContents*)newContents

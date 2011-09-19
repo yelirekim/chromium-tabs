@@ -71,7 +71,7 @@ class CTTabStripModelObserver;
 - (void) moveTabPrevious;
 - (void) selectLastTab;
 - (void) appendTabContents:(CTTabContents*)contents foreground:(BOOL)foreground;
-- (void) detachTabContentsAtIndex:(NSInteger)index;
+- (CTTabContents*) detachTabContentsAtIndex:(NSInteger)index;
 
 @end
 

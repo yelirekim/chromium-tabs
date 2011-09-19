@@ -500,6 +500,34 @@ class CTTabStripModel /*: public NotificationObserver*/ {
                        const NotificationDetails& details);*/
   // TODO replace with NSNotification if possible:
   void TabContentsWasDestroyed(CTTabContents *contents);
+    
+    
+    NSMutableArray* contents_data_;
+    
+    // An object that determines where new Tabs should be inserted and where
+    // selection should move when a Tab is closed.
+    CTTabStripModelOrderController* order_controller_;
+    
+    // The index of the CTTabContents in |contents_| that is currently selected.
+    int selected_index_;
+    
+    // True if all tabs are currently being closed via CloseAllTabs.
+    bool closing_all_;
+    
+    // The actual implementation of SelectTabContentsAt. Takes the previously
+    // selected contents in |old_contents|, which may actually not be in
+    // |contents_| anymore because it may have been removed by a call to say
+    // DetachTabContentsAt...
+    void ChangeSelectedContentsFrom(
+                                    CTTabContents* old_contents, int to_index, bool user_gesture);
+    
+    // Returns the first non-phantom tab starting at |index|, skipping the tab at
+    // |ignore_index|.
+    int IndexOfNextNonPhantomTab(int index, int ignore_index);
+    
+    // Our observers.
+    typedef ObserverList<CTTabStripModelObserver> TabStripModelObservers;
+    TabStripModelObservers observers_;
 
  private:
   // We cannot be constructed without a delegate.
@@ -536,23 +564,12 @@ class CTTabStripModel /*: public NotificationObserver*/ {
 
   CTTabContents* GetContentsAt(int index) const;
 
-  // The actual implementation of SelectTabContentsAt. Takes the previously
-  // selected contents in |old_contents|, which may actually not be in
-  // |contents_| anymore because it may have been removed by a call to say
-  // DetachTabContentsAt...
-  void ChangeSelectedContentsFrom(
-      CTTabContents* old_contents, int to_index, bool user_gesture);
-
   // Returns the number of New Tab tabs in the TabStripModel.
   int GetNewTabCount() const;
 
   // Selects either the next tab (|foward| is true), or the previous tab
   // (|forward| is false).
   void SelectRelativeTab(bool forward);
-
-  // Returns the first non-phantom tab starting at |index|, skipping the tab at
-  // |ignore_index|.
-  int IndexOfNextNonPhantomTab(int index, int ignore_index);
 
   // Returns true if the tab at the specified index should be made phantom when
   // the tab is closing.
@@ -642,25 +659,6 @@ class CTTabStripModel /*: public NotificationObserver*/ {
     // Is the tab interaction blocked by a modal dialog?
     bool blocked;
   };
-
-  NSMutableArray* contents_data_;
-
-  // The index of the CTTabContents in |contents_| that is currently selected.
-  int selected_index_;
-
-  // A profile associated with this TabStripModel, used when creating new Tabs.
-  //Profile* profile_;
-
-  // True if all tabs are currently being closed via CloseAllTabs.
-  bool closing_all_;
-
-  // An object that determines where new Tabs should be inserted and where
-  // selection should move when a Tab is closed.
-  CTTabStripModelOrderController* order_controller_;
-
-  // Our observers.
-  typedef ObserverList<CTTabStripModelObserver> TabStripModelObservers;
-  TabStripModelObservers observers_;
 
   // A scoped container for notification registries.
   //NotificationRegistrar registrar_;

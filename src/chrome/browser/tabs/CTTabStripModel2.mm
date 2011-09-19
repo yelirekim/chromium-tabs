@@ -201,9 +201,37 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
     [self insertTabContents:contents atIndex:index options:foreground ? (ADD_INHERIT_GROUP | ADD_SELECTED) : ADD_NONE];
 }
 
-- (void) detachTabContentsAtIndex:(NSInteger)index
+- (CTTabContents*) detachTabContentsAtIndex:(NSInteger)index
 {
-    tabStripModel_->DetachTabContentsAt(index);
+    NSMutableArray* contents_data_ = tabStripModel_->contents_data_;
+    if (contents_data_.count == 0)
+        return nil;
+    
+    assert([self containsIndex:index]);
+    
+    CTTabContents* removed_contents = [self tabContentsAtIndex:index];
+    int next_selected_index = [self determineNewSelectedIndexByRemovingIndex:index isRemove:YES];
+    [contents_data_ removeObjectAtIndex:index];
+    next_selected_index = tabStripModel_->IndexOfNextNonPhantomTab(next_selected_index, -1);
+    if (![self hasNonPhantomTabs]) {
+        tabStripModel_->closing_all_ = true;
+    }
+    ObserverList<CTTabStripModelObserver>::Iterator iter(tabStripModel_->observers_);
+    while (CTTabStripModelObserver* obs = iter.GetNext()) {
+        obs->TabDetachedAt(removed_contents, index);
+        if (![self hasNonPhantomTabs])
+            obs->TabStripEmpty();
+    }
+    if ([self hasNonPhantomTabs]) {
+        if (index == tabStripModel_->selected_index_) {
+            tabStripModel_->ChangeSelectedContentsFrom(removed_contents, next_selected_index, false);
+        } else if (index < tabStripModel_->selected_index_) {
+            // The selected tab didn't change, but its position shifted; update our
+            // index to continue to point at it.
+            --tabStripModel_->selected_index_;
+        }
+    }
+    return removed_contents;
 }
 
 // Model Order Controller Functions

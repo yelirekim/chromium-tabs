@@ -155,15 +155,15 @@ CTTabStripModel::~CTTabStripModel() {
     
     delete order_controller_;
 }
-
+//DONE
 void CTTabStripModel::AddObserver(CTTabStripModelObserver* observer) {
     observers_.AddObserver(observer);
 }
-
+//DONE
 void CTTabStripModel::RemoveObserver(CTTabStripModelObserver* observer) {
     observers_.RemoveObserver(observer);
 }
-
+//DONE
 bool CTTabStripModel::HasNonPhantomTabs() const {
     /*for (int i = 0; i < count(); i++) {
      if (!IsPhantomTab(i))
@@ -172,30 +172,30 @@ bool CTTabStripModel::HasNonPhantomTabs() const {
      return false;*/
     return !!count();
 }
-
+//DONE
 void CTTabStripModel::SetInsertionPolicy(InsertionPolicy policy) {
     order_controller_->set_insertion_policy(policy);
 }
-
+//DONE
 InsertionPolicy CTTabStripModel::insertion_policy() const {
     return order_controller_->insertion_policy();
 }
-
+//DONE
 bool CTTabStripModel::HasObserver(CTTabStripModelObserver* observer) {
     return observers_.HasObserver(observer);
 }
-
+//DONE
 bool CTTabStripModel::ContainsIndex(int index) const {
     return index >= 0 && index < count();
 }
-
+//DONE
 void CTTabStripModel::AppendTabContents(CTTabContents* contents, bool foreground) {
     int index = order_controller_->DetermineInsertionIndexForAppending();
     InsertTabContentsAt(index, contents,
                         foreground ? (ADD_INHERIT_GROUP | ADD_SELECTED) :
                         ADD_NONE);
 }
-
+//DONE
 void CTTabStripModel::InsertTabContentsAt(int index,
                                           CTTabContents* contents,
                                           int add_types) {
@@ -248,7 +248,7 @@ void CTTabStripModel::InsertTabContentsAt(int index,
     if (foreground)
         ChangeSelectedContentsFrom(selected_contents, index, false);
 }
-
+//DONE
 void CTTabStripModel::ReplaceTabContentsAt(int index,
                                            CTTabContents* new_contents,
                                            CTTabReplaceType type) {
@@ -269,7 +269,7 @@ void CTTabStripModel::ReplaceTabContentsAt(int index,
  closing_tabs.push_back(index);
  InternalCloseTabs(closing_tabs, CLOSE_NONE);
  }*/
-
+//DONE
 CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
     if (contents_data_.count == 0)
         return NULL;
@@ -300,7 +300,7 @@ CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
     }
     return removed_contents;
 }
-
+//DONE
 void CTTabStripModel::SelectTabContentsAt(int index, bool user_gesture) {
     if (ContainsIndex(index)) {
         ChangeSelectedContentsFrom(GetSelectedTabContents(), index, user_gesture);
@@ -309,7 +309,7 @@ void CTTabStripModel::SelectTabContentsAt(int index, bool user_gesture) {
              __PRETTY_FUNCTION__);
     }
 }
-
+//DONE
 void CTTabStripModel::MoveTabContentsAt(int index, int to_position,
                                         bool select_after_move) {
     assert(ContainsIndex(index));
@@ -326,17 +326,17 @@ void CTTabStripModel::MoveTabContentsAt(int index, int to_position,
     
     MoveTabContentsAtImpl(index, to_position, select_after_move);
 }
-
+//DONE
 CTTabContents* CTTabStripModel::GetSelectedTabContents() const {
     return GetTabContentsAt(selected_index_);
 }
-
+//DONE
 CTTabContents* CTTabStripModel::GetTabContentsAt(int index) const {
     if (ContainsIndex(index))
         return GetContentsAt(index);
     return NULL;
 }
-
+//DONE
 int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const {
     int index = 0;
     for (TabContentsData* data in contents_data_) {
@@ -358,14 +358,14 @@ int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const 
  }
  return kNoTab;
  }*/
-
+//DONE
 void CTTabStripModel::UpdateTabContentsStateAt(int index,
                                                CTTabChangeType change_type) {
     assert(ContainsIndex(index));
     FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
                       TabChangedAt(GetContentsAt(index), index, change_type));
 }
-
+//DONE
 void CTTabStripModel::CloseAllTabs() {
     // Set state so that observers can adjust their behavior to suit this
     // specific condition when CloseTabContentsAt causes a flurry of
@@ -376,7 +376,7 @@ void CTTabStripModel::CloseAllTabs() {
         [closing_tabs addObject:[NSNumber numberWithInt:i]];
     InternalCloseTabs(closing_tabs, CLOSE_CREATE_HISTORICAL_TAB);
 }
-
+//DONE
 bool CTTabStripModel::CloseTabContentsAt(int index, uint32 close_types) {
     NSMutableArray* closing_tabs = [NSMutableArray array];
     [closing_tabs addObject:[NSNumber numberWithInt:index]];
@@ -545,21 +545,21 @@ void CTTabStripModel::SetTabPinned(int index, bool pinned) {
                       TabPinnedStateChanged(data->contents,
                                             index));
 }
-
+//DONE
 bool CTTabStripModel::IsTabPinned(int index) const {
     TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->pinned;
 }
-
+//DONE
 bool CTTabStripModel::IsMiniTab(int index) const {
     return IsTabPinned(index) || IsAppTab(index);
 }
-
+//DONE
 bool CTTabStripModel::IsAppTab(int index) const {
     CTTabContents* contents = GetTabContentsAt(index);
     return contents && contents.isApp;
 }
-
+//DONE
 bool CTTabStripModel::IsPhantomTab(int index) const {
     /*return IsTabPinned(index) &&
      GetTabContentsAt(index)->controller().needs_reload();*/
@@ -570,7 +570,7 @@ bool CTTabStripModel::IsTabBlocked(int index) const {
     TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->blocked;
 }
-
+//DONE
 int CTTabStripModel::IndexOfFirstNonMiniTab() const {
     for (size_t i = 0; i < contents_data_.count; ++i) {
         if (!IsMiniTab(static_cast<int>(i)))
@@ -579,7 +579,7 @@ int CTTabStripModel::IndexOfFirstNonMiniTab() const {
     // No mini-tabs.
     return count();
 }
-
+//DONE
 int CTTabStripModel::ConstrainInsertionIndex(int index, bool mini_tab) {
     return mini_tab ? std::min(std::max(0, index), IndexOfFirstNonMiniTab()) :
     std::min(count(), std::max(index, IndexOfFirstNonMiniTab()));
@@ -673,24 +673,24 @@ int CTTabStripModel::AddTabContents(CTTabContents* contents,
 void CTTabStripModel::CloseSelectedTab() {
     CloseTabContentsAt(selected_index_, CLOSE_CREATE_HISTORICAL_TAB);
 }
-
+//DONE
 void CTTabStripModel::SelectNextTab() {
     SelectRelativeTab(true);
 }
-
+//DONE
 void CTTabStripModel::SelectPreviousTab() {
     SelectRelativeTab(false);
 }
-
+//DONE
 void CTTabStripModel::SelectLastTab() {
     SelectTabContentsAt(count() - 1, true);
 }
-
+//DONE
 void CTTabStripModel::MoveTabNext() {
     int new_index = std::min(selected_index_ + 1, count() - 1);
     MoveTabContentsAt(selected_index_, new_index, true);
 }
-
+//DONE
 void CTTabStripModel::MoveTabPrevious() {
     int new_index = std::max(selected_index_ - 1, 0);
     MoveTabContentsAt(selected_index_, new_index, true);
@@ -1003,14 +1003,14 @@ void CTTabStripModel::InternalCloseTab(CTTabContents* contents,
     // and detach it.
     [contents destroy:this];
 }
-
+//DONE
 CTTabContents* CTTabStripModel::GetContentsAt(int index) const {
     assert(ContainsIndex(index));
     //<< "Failed to find: " << index << " in: " << count() << " entries.";
     TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->contents;
 }
-
+//DONE
 void CTTabStripModel::ChangeSelectedContentsFrom(
                                                  CTTabContents* old_contents, int to_index, bool user_gesture) {
     assert(ContainsIndex(to_index));
@@ -1044,7 +1044,7 @@ void CTTabStripModel::SelectRelativeTab(bool next) {
     } while (index != selected_index_ && IsPhantomTab(index));
     SelectTabContentsAt(index, true);
 }
-
+//DONE
 int CTTabStripModel::IndexOfNextNonPhantomTab(int index,
                                               int ignore_index) {
     if (index == kNoTab)
@@ -1136,7 +1136,7 @@ void CTTabStripModel::MoveTabContentsAtImpl(int index, int to_position,
  bool use_group) {
  return data->opener == opener || (use_group && data->group == opener);
  }*/
-
+//DONE
 CTTabContents* CTTabStripModel::ReplaceTabContentsAtImpl(
                                                          int index,
                                                          CTTabContents* new_contents,

@@ -121,7 +121,9 @@ static const int kNoTab = -1;
     
 - (void) selectTabContentsAtIndex:(NSInteger)index userGesture:(BOOL)userGesture
 {
-    tabStripModel_->SelectTabContentsAt(index, userGesture);
+    if ([self containsIndex:index]) {
+        [self changeSelectedContentsFrom:[self selectedTabContents] toIndex:index userGesture:userGesture];
+    }
 }
 
 - (BOOL) closeTabContentsAtIndex:(NSInteger)index options:(NSInteger)options

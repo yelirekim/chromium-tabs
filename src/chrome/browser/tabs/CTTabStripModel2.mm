@@ -23,6 +23,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 
 - (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex;
 - (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
+- (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab;
 
 @end
 
@@ -163,7 +164,7 @@ static const int kNoTab = -1;
     bool foreground = options & ADD_SELECTED;
     // Force app tabs to be pinned.
     bool pin = contents.isApp || options & ADD_PINNED;
-    index = tabStripModel_->ConstrainInsertionIndex(index, pin);
+    index = [self constrainInsertionIndex:index miniTab:pin];
     
     // In tab dragging situations, if the last tab in the window was detached
     // then the user aborted the drag, we will have the |closing_all_| member
@@ -335,6 +336,11 @@ static const int kNoTab = -1;
     self.selectedIndex = toIndex;
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                       TabSelectedAt(last_selected_contents, new_contents, self.selectedIndex, userGesture));
+}
+
+- (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab
+{
+    return miniTab ? MIN(MAX(0, index), [self indexOfFirstNonMiniTab]) : MIN(self.count, MAX(index, [self indexOfFirstNonMiniTab]));
 }
 
 // Model Order Controller Functions

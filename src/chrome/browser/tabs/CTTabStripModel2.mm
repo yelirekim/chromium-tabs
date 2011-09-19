@@ -271,7 +271,11 @@ static const int kNoTab = -1;
 
 - (void) closeAllTabs
 {
-    tabStripModel_->CloseAllTabs();
+    NSMutableArray* closing_tabs = [NSMutableArray array];
+    for (int i = self.count - 1; i >= 0; --i) {
+        [closing_tabs addObject:[NSNumber numberWithInt:i]];
+    }
+    tabStripModel_->InternalCloseTabs(closing_tabs, CLOSE_CREATE_HISTORICAL_TAB);
 }
 
 - (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options

@@ -117,15 +117,6 @@ bool CTTabStripModel::HasObserver(CTTabStripModelObserver* observer) {
     return observers_.HasObserver(observer);
 }
 //DONE
-bool CTTabStripModel::ContainsIndex(int index) const {
-    return index >= 0 && index < count();
-}
-//DONE
-bool CTTabStripModel::IsTabPinned(int index) const {
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    return data->pinned;
-}
-//DONE
 bool CTTabStripModel::IsPhantomTab(int index) const {
     return false;
 }

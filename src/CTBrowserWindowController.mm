@@ -39,6 +39,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     CTTabStripModelObserverBridge *tabStripObserver_;
     BOOL initializing_; // true if the instance is initializing
     id ob1;
+    id ob2;
 }
 
 @synthesize tabStripController = tabStripController_;
@@ -148,6 +149,16 @@ static CTBrowserWindowController* _currentMain = nil; // weak
                                   atIndex:index
                              inForeground:foreground];
     }];
+    
+    ob2 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabClosingNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        NSDictionary* userInfo = notification.userInfo;
+        CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+        NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+        [contents tabWillCloseInBrowser:browser_ atIndex:index];
+        if (contents.isSelected) {
+            [self updateToolbarWithContents:nil shouldRestoreState:NO];
+        }
+    }];
   return self;
 }
 
@@ -183,6 +194,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   //fullscreenController_.reset();
 
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob2];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     toolbarController_ = nil;
@@ -919,14 +931,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   assert(newContents != oldContents);
   [self updateToolbarWithContents:newContents
                shouldRestoreState:!!oldContents];
-}
-
-
-- (void)tabClosingWithContents:(CTTabContents*)contents
-                       atIndex:(NSInteger)index {
-  [contents tabWillCloseInBrowser:browser_ atIndex:index];
-  if (contents.isSelected)
-    [self updateToolbarWithContents:nil shouldRestoreState:NO];
 }
 
 

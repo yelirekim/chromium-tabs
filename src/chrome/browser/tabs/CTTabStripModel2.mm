@@ -481,8 +481,11 @@ static const int kNoTab = -1;
 
 - (void) _closeTabAtIndex:(NSInteger)index contents:(CTTabContents*)contents history:(BOOL)createHistory
 {
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabClosingAt(contents, index));
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              contents, kCTTabContentsUserInfoKey,
+                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabClosingNotification object:self userInfo:userInfo];
     
     if (createHistory) {
         [tabStripModel_->delegate_ createHistoricalTab:contents];

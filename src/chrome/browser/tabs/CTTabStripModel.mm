@@ -75,27 +75,11 @@ void CTTabStripModelObserver::TabStripEmpty() {}
 
 void CTTabStripModelObserver::TabStripModelDeleted() {}
 
-///////////////////////////////////////////////////////////////////////////////
-// CTTabStripModelDelegate, public:
-
-/*bool CTTabStripModelDelegate::CanCloseTab() const {
- return true;
- }*/
-
-///////////////////////////////////////////////////////////////////////////////
-// TabStripModel, public:
-
 CTTabStripModel::CTTabStripModel(NSObject<CTTabStripModelDelegate>* delegate)
 : selected_index_(kNoTab),
 closing_all_(false),
 order_controller_(NULL) {
-    delegate_ = delegate; // weak
-    // TODO replace with nsnotificationcenter?
-    /*registrar_.Add(this,
-     NotificationType::TAB_CONTENTS_DESTROYED,
-     NotificationService::AllSources());
-     registrar_.Add(this,
-     NotificationType::EXTENSION_UNLOADED);*/
+    delegate_ = delegate;
     order_controller_ = new CTTabStripModelOrderController(this);
     contents_data_ = [NSMutableArray array];
 }
@@ -104,18 +88,7 @@ CTTabStripModel::~CTTabStripModel() {
     FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
                       TabStripModelDeleted());
     
-    delegate_ = NULL; // weak
-    
-    // Before deleting any phantom tabs remove our notification observers so that
-    // we don't attempt to notify our delegate or do any processing.
-    //TODO: replace with nsnotificationcenter unregs
-    //registrar_.RemoveAll();
-    
-    // Phantom tabs still have valid TabConents that we own and need to delete.
-    /*for (int i = count() - 1; i >= 0; --i) {
-     if (IsPhantomTab(i))
-     delete contents_data_[i]->contents;
-     }*/
+    delegate_ = NULL;
     
     delete order_controller_;
 }
@@ -129,11 +102,6 @@ void CTTabStripModel::RemoveObserver(CTTabStripModelObserver* observer) {
 }
 //DONE
 bool CTTabStripModel::HasNonPhantomTabs() const {
-    /*for (int i = 0; i < count(); i++) {
-     if (!IsPhantomTab(i))
-     return true;
-     }
-     return false;*/
     return !!count();
 }
 //DONE
@@ -184,12 +152,6 @@ CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
     return removed_contents;
 }
 //DONE
-CTTabContents* CTTabStripModel::GetTabContentsAt(int index) const {
-    if (ContainsIndex(index))
-        return GetContentsAt(index);
-    return NULL;
-}
-//DONE
 int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const {
     int index = 0;
     for (TabContentsData* data in contents_data_) {
@@ -207,8 +169,6 @@ bool CTTabStripModel::IsTabPinned(int index) const {
 }
 //DONE
 bool CTTabStripModel::IsPhantomTab(int index) const {
-    /*return IsTabPinned(index) &&
-     GetTabContentsAt(index)->controller().needs_reload();*/
     return false;
 }
 

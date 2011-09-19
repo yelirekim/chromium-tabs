@@ -338,7 +338,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     CTBrowserWindowController* dragBWC = (CTBrowserWindowController*)dragController;
     int index = [dragBWC->tabStripController_ modelIndexForTabView:view];
     CTTabContents* contents =
-        [dragBWC->browser_ tabStripModel]->GetTabContentsAt(index);
+        [dragBWC->browser_.tabStripModel2 tabContentsAtIndex:index];
     // The tab contents may have gone away if given a window.close() while it
     // is being dragged. If so, bail, we've got nothing to drop.
     if (!contents)

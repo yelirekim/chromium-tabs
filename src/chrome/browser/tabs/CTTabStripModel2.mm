@@ -25,6 +25,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 - (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
 - (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab;
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
+- (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options;
 
 @end
 
@@ -135,7 +136,7 @@ static const int kNoTab = -1;
 {
     NSMutableArray* closing_tabs = [NSMutableArray array];
     [closing_tabs addObject:[NSNumber numberWithInt:index]];
-    return tabStripModel_->InternalCloseTabs(closing_tabs, options);
+    return [self _closeTabsatIndices:closing_tabs options:options];
 }
 
 - (NSInteger) indexOfFirstNonMiniTab
@@ -247,7 +248,7 @@ static const int kNoTab = -1;
     for (int i = self.count - 1; i >= 0; --i) {
         [closing_tabs addObject:[NSNumber numberWithInt:i]];
     }
-    tabStripModel_->InternalCloseTabs(closing_tabs, CLOSE_CREATE_HISTORICAL_TAB);
+    [self _closeTabsatIndices:closing_tabs options:CLOSE_CREATE_HISTORICAL_TAB];
 }
 
 - (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options
@@ -466,6 +467,42 @@ static const int kNoTab = -1;
         index = (index + self.count + delta) % self.count;
     } while (index != self.selectedIndex && [self isPhantomTabAtIndex:index]);
     [self selectTabContentsAtIndex:index userGesture:YES];
+}
+
+- (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options
+{
+    bool retval = true;
+    
+    // We now return to our regularly scheduled shutdown procedure.
+    for (size_t i = 0; i < indices.count; ++i) {
+        int index = [[indices objectAtIndex:i] intValue];
+        CTTabContents* detached_contents = tabStripModel_->GetContentsAt(index);
+        [detached_contents closingOfTabDidStart:nil]; // TODO notification
+        
+        if (![tabStripModel_->delegate_ canCloseContentsAt:index]) {
+            retval = false;
+            continue;
+        }
+        
+        // Update the explicitly closed state. If the unload handlers cancel the
+        // close the state is reset in CTBrowser. We don't update the explicitly
+        // closed state if already marked as explicitly closed as unload handlers
+        // call back to this if the close is allowed.
+        if (!detached_contents.closedByUserGesture) {
+            detached_contents.closedByUserGesture = options & CLOSE_USER_GESTURE;
+        }
+        
+        //if (delegate_->RunUnloadListenerBeforeClosing(detached_contents)) {
+        if ([tabStripModel_->delegate_ runUnloadListenerBeforeClosing:detached_contents]) {
+            retval = false;
+            continue;
+        }
+        
+        tabStripModel_->InternalCloseTab(detached_contents, index,
+                         (options & CLOSE_CREATE_HISTORICAL_TAB) != 0);
+    }
+    
+    return retval;
 }
 
 #pragma mark -

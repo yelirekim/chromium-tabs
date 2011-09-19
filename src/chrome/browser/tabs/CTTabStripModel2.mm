@@ -27,6 +27,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
 - (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options;
 - (void) _closeTabAtIndex:(NSInteger)index contents:(CTTabContents*)contents history:(BOOL)createHistory;
+- (CTTabContents*) _contentsAtIndex:(NSInteger)index;
 
 @end
 
@@ -98,8 +99,7 @@ static const int kNoTab = -1;
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index
 {
     if ([self containsIndex:index]) {
-        TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
-        return data->contents;
+        return [self _contentsAtIndex:index];
     }
     return nil;
 }
@@ -452,7 +452,7 @@ static const int kNoTab = -1;
     
     for (size_t i = 0; i < indices.count; ++i) {
         int index = [[indices objectAtIndex:i] intValue];
-        CTTabContents* detached_contents = tabStripModel_->GetContentsAt(index);
+        CTTabContents* detached_contents = [self _contentsAtIndex:index];
         [detached_contents closingOfTabDidStart:nil]; // TODO notification
         
         if (![tabStripModel_->delegate_ canCloseContentsAt:index]) {
@@ -485,6 +485,12 @@ static const int kNoTab = -1;
     }
     
     [self detachTabContentsAtIndex:index];
+}
+
+- (CTTabContents*) _contentsAtIndex:(NSInteger)index
+{
+    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    return data->contents;
 }
 
 #pragma mark -

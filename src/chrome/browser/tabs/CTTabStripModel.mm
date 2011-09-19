@@ -121,17 +121,6 @@ bool CTTabStripModel::ContainsIndex(int index) const {
     return index >= 0 && index < count();
 }
 //DONE
-int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const {
-    int index = 0;
-    for (TabContentsData* data in contents_data_) {
-        if (data->contents == contents) {
-            return index;
-        }
-        index++;
-    }
-    return kNoTab;
-}
-//DONE
 bool CTTabStripModel::IsTabPinned(int index) const {
     TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->pinned;
@@ -139,15 +128,5 @@ bool CTTabStripModel::IsTabPinned(int index) const {
 //DONE
 bool CTTabStripModel::IsPhantomTab(int index) const {
     return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// TabStripModel, private:
-//DONE
-CTTabContents* CTTabStripModel::GetContentsAt(int index) const {
-    assert(ContainsIndex(index));
-    //<< "Failed to find: " << index << " in: " << count() << " entries.";
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    return data->contents;
 }
 

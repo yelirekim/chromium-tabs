@@ -511,13 +511,13 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 // put into a different tab strip, such as during a drop on another window.
 - (void)detachTabView:(NSView*)view {
   int index = [tabStripController_ modelIndexForTabView:view];
-  [browser_ tabStripModel]->DetachTabContentsAt(index);
+    [browser_.tabStripModel2 detachTabContentsAtIndex:index];
 }
 
 
 - (NSInteger)numberOfTabs {
   // count() includes pinned tabs (both live and phantom).
-  return [browser_ tabStripModel]->count();
+  return browser_.tabStripModel2.count;
 }
 
 
@@ -527,12 +527,12 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 
 - (int)selectedTabIndex {
-  return [browser_ tabStripModel]->selected_index();
+  return [browser_.tabStripModel2 selectedIndex];
 }
 
 
 - (CTTabContents*)selectedTabContents {
-  return [browser_ tabStripModel]->GetSelectedTabContents();
+  return [browser_.tabStripModel2 selectedTabContents];
 }
 
 

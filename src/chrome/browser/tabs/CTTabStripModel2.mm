@@ -111,6 +111,14 @@ static const int kNoTab = -1;
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents
 {
     return tabStripModel_->GetIndexOfTabContents(tabContents);
+    int index = 0;
+    for (TabContentsData* data in tabStripModel_->contents_data_) {
+        if (data->contents == tabContents) {
+            return index;
+        }
+        index++;
+    }
+    return kNoTab;
 }
 
 - (CTTabContents*) selectedTabContents

@@ -101,7 +101,11 @@ static const int kNoTab = -1;
 
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index
 {
-    return tabStripModel_->GetTabContentsAt(index);
+    if ([self containsIndex:index]) {
+        TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+        return data->contents;
+    }
+    return nil;
 }
 
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents

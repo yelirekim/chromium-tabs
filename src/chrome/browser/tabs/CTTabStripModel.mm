@@ -121,37 +121,6 @@ bool CTTabStripModel::ContainsIndex(int index) const {
     return index >= 0 && index < count();
 }
 //DONE
-CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
-    if (contents_data_.count == 0)
-        return NULL;
-    
-    assert(ContainsIndex(index));
-    
-    CTTabContents* removed_contents = GetContentsAt(index);
-    int next_selected_index =
-    order_controller_->DetermineNewSelectedIndex(index, true);
-    [contents_data_ removeObjectAtIndex:index];
-    next_selected_index = IndexOfNextNonPhantomTab(next_selected_index, -1);
-    if (!HasNonPhantomTabs())
-        closing_all_ = true;
-    TabStripModelObservers::Iterator iter(observers_);
-    while (CTTabStripModelObserver* obs = iter.GetNext()) {
-        obs->TabDetachedAt(removed_contents, index);
-        if (!HasNonPhantomTabs())
-            obs->TabStripEmpty();
-    }
-    if (HasNonPhantomTabs()) {
-        if (index == selected_index_) {
-            ChangeSelectedContentsFrom(removed_contents, next_selected_index, false);
-        } else if (index < selected_index_) {
-            // The selected tab didn't change, but its position shifted; update our
-            // index to continue to point at it.
-            --selected_index_;
-        }
-    }
-    return removed_contents;
-}
-//DONE
 int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const {
     int index = 0;
     for (TabContentsData* data in contents_data_) {
@@ -180,44 +149,5 @@ CTTabContents* CTTabStripModel::GetContentsAt(int index) const {
     //<< "Failed to find: " << index << " in: " << count() << " entries.";
     TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->contents;
-}
-//DONE
-void CTTabStripModel::ChangeSelectedContentsFrom(
-                                                 CTTabContents* old_contents, int to_index, bool user_gesture) {
-    assert(ContainsIndex(to_index));
-    CTTabContents* new_contents = GetContentsAt(to_index);
-    if (old_contents == new_contents)
-        return;
-    
-    CTTabContents* last_selected_contents = old_contents;
-    if (last_selected_contents) {
-        FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                          TabDeselectedAt(last_selected_contents, selected_index_));
-    }
-    
-    selected_index_ = to_index;
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabSelectedAt(last_selected_contents, new_contents, selected_index_,
-                                    user_gesture));
-}
-//DONE
-int CTTabStripModel::IndexOfNextNonPhantomTab(int index,
-                                              int ignore_index) {
-    if (index == kNoTab)
-        return kNoTab;
-    
-    if (empty())
-        return index;
-    
-    index = std::min(count() - 1, std::max(0, index));
-    int start = index;
-    do {
-        if (index != ignore_index && !IsPhantomTab(index))
-            return index;
-        index = (index + 1) % count();
-    } while (index != start);
-    
-    // All phantom tabs.
-    return start;
 }
 

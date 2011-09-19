@@ -7,7 +7,6 @@
 #import <algorithm>
 
 #import "stl_util-inl.h"
-#import "CTTabStripModelOrderController.h"
 #import "CTPageTransition.h"
 #import "CTTabContents.h"
 
@@ -77,10 +76,8 @@ void CTTabStripModelObserver::TabStripModelDeleted() {}
 
 CTTabStripModel::CTTabStripModel(NSObject<CTTabStripModelDelegate>* delegate)
 : selected_index_(kNoTab),
-closing_all_(false),
-order_controller_(NULL) {
+closing_all_(false) {
     delegate_ = delegate;
-    order_controller_ = new CTTabStripModelOrderController(this);
     contents_data_ = [NSMutableArray array];
 }
 
@@ -89,8 +86,6 @@ CTTabStripModel::~CTTabStripModel() {
                       TabStripModelDeleted());
     
     delegate_ = NULL;
-    
-    delete order_controller_;
 }
 //DONE
 void CTTabStripModel::AddObserver(CTTabStripModelObserver* observer) {
@@ -99,18 +94,6 @@ void CTTabStripModel::AddObserver(CTTabStripModelObserver* observer) {
 //DONE
 void CTTabStripModel::RemoveObserver(CTTabStripModelObserver* observer) {
     observers_.RemoveObserver(observer);
-}
-//DONE
-bool CTTabStripModel::HasNonPhantomTabs() const {
-    return !!count();
-}
-//DONE
-void CTTabStripModel::SetInsertionPolicy(InsertionPolicy policy) {
-    order_controller_->set_insertion_policy(policy);
-}
-//DONE
-InsertionPolicy CTTabStripModel::insertion_policy() const {
-    return order_controller_->insertion_policy();
 }
 //DONE
 bool CTTabStripModel::HasObserver(CTTabStripModelObserver* observer) {

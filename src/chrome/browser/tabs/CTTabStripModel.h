@@ -24,7 +24,6 @@
 //class NavigationController;
 //class Profile;
 //class SiteInstance;
-class CTTabStripModelOrderController;
 class CTTabStripModel;
 
 // Enumeration of the possible values supplied to TabChangedAt.
@@ -228,11 +227,6 @@ class CTTabStripModel /*: public NotificationObserver*/ {
   // changes which notifies observers, which can use this as an optimization to
   // avoid doing meaningless or unhelpful work.
   bool closing_all() const { return closing_all_; }
-
-  // Access the order controller. Exposed only for unit tests.
-  CTTabStripModelOrderController* order_controller() const {
-    return order_controller_;
-  }
 
   // Sets the insertion policy. Default is INSERT_AFTER.
   void SetInsertionPolicy(InsertionPolicy policy);
@@ -511,10 +505,6 @@ class CTTabStripModel /*: public NotificationObserver*/ {
     
     
     NSMutableArray* contents_data_;
-    
-    // An object that determines where new Tabs should be inserted and where
-    // selection should move when a Tab is closed.
-    CTTabStripModelOrderController* order_controller_;
     
     // The index of the CTTabContents in |contents_| that is currently selected.
     int selected_index_;

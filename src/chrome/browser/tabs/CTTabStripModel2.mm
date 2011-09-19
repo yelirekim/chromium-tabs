@@ -19,6 +19,11 @@ extern NSString* const kCTTabContentsUserInfoKey = @"kCTTabContentsUserInfoKey";
 extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
 extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
 
+@interface CTTabStripModel2 (Private)
+
+- (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex;
+
+@end
 
 @interface CTTabStripModel2 (OrderController)
 
@@ -34,6 +39,8 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
     CTTabStripModel* tabStripModel_;
     ObserverList<CTTabStripModelObserver> observers_;
 }
+
+static const int kNoTab = -1;
 
 - (id) initWithPointer:(CTTabStripModel*)tabStripModel
 {
@@ -212,7 +219,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
     CTTabContents* removed_contents = [self tabContentsAtIndex:index];
     int next_selected_index = [self determineNewSelectedIndexByRemovingIndex:index isRemove:YES];
     [contents_data_ removeObjectAtIndex:index];
-    next_selected_index = tabStripModel_->IndexOfNextNonPhantomTab(next_selected_index, -1);
+    next_selected_index = [self indexOfNextNonPhantomTabFromIndex:next_selected_index ignoreIndex:-1];
     if (![self hasNonPhantomTabs]) {
         tabStripModel_->closing_all_ = true;
     }
@@ -232,6 +239,30 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
         }
     }
     return removed_contents;
+}
+
+// Private functions
+
+- (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex
+{
+    if (index == kNoTab) {
+        return kNoTab;
+    }
+    
+    if (self.count == 0) {
+        return index;
+    }
+    
+    index = MIN(self.count - 1, MAX(0, index));
+    int start = index;
+    do {
+        if (index != ignoreIndex && ![self isPhantomTabAtIndex:index])
+            return index;
+        index = (index + 1) % self.count;
+    } while (index != start);
+    
+    // All phantom tabs.
+    return start;
 }
 
 // Model Order Controller Functions

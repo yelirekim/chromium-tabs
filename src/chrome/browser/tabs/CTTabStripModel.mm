@@ -197,32 +197,6 @@ void CTTabStripModel::TabContentsWasDestroyed(CTTabContents *contents) {
 
 ///////////////////////////////////////////////////////////////////////////////
 // TabStripModel, private:
-
-bool CTTabStripModel::IsNewTabAtEndOfTabStrip(CTTabContents* contents) const {
-    return !contents || contents == GetContentsAt(count() - 1);
-    /*return LowerCaseEqualsASCII(contents->GetURL().spec(),
-     chrome::kChromeUINewTabURL) &&
-     contents == GetContentsAt(count() - 1) &&
-     contents->controller().entry_count() == 1;*/
-}
-
-void CTTabStripModel::InternalCloseTab(CTTabContents* contents,
-                                       int index,
-                                       bool create_historical_tabs) {
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabClosingAt(contents, index));
-    
-    // Ask the delegate to save an entry for this tab in the historical tab
-    // database if applicable.
-    if (create_historical_tabs) {
-        [delegate_ createHistoricalTab:contents];
-        //delegate_->CreateHistoricalTab(contents);
-    }
-    
-    // Deleting the CTTabContents will call back to us via NotificationObserver
-    // and detach it.
-    [contents destroy:this];
-}
 //DONE
 CTTabContents* CTTabStripModel::GetContentsAt(int index) const {
     assert(ContainsIndex(index));

@@ -140,7 +140,9 @@ static const int kNoTab = -1;
 
 - (BOOL) closeTabContentsAtIndex:(NSInteger)index options:(NSInteger)options
 {
-    return tabStripModel_->CloseTabContentsAt(index, options);
+    NSMutableArray* closing_tabs = [NSMutableArray array];
+    [closing_tabs addObject:[NSNumber numberWithInt:index]];
+    return tabStripModel_->InternalCloseTabs(closing_tabs, options);
 }
 
 - (NSInteger) indexOfFirstNonMiniTab

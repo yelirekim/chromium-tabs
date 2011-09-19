@@ -6,47 +6,11 @@
 
 #import <algorithm>
 
-//#import "command_line.h"
 #import "stl_util-inl.h"
-//#import "string_CTUtil.h"
-//#import "build/build_config.h" // included in precompiled header
-//#import "chrome/browser/bookmarks/bookmark_model.h"
-//#import "chrome/browser/browser_shutdown.h"
-//#import "chrome/browser/defaults.h"
-//#import "chrome/browser/extensions/extensions_service.h"
-//#import "chrome/browser/metrics/user_metrics.h"
-//#import "chrome/browser/profile.h"
-//#import "chrome/browser/renderer_host/render_process_host.h"
-//#import "chrome/browser/sessions/tab_restore_service.h"
 #import "CTTabStripModelOrderController.h"
 #import "CTPageTransition.h"
-//#import "chrome/browser/tab_contents/navigation_controller.h"
-//#import "chrome/browser/tab_contents/tab_contents.h"
-//#import "chrome/browser/tab_contents/tab_contents_delegate.h"
-//#import "chrome/browser/tab_contents/tab_contents_view.h"
-//#import "chrome/common/chrome_switches.h"
-//#import "chrome/common/extensions/extension.h"
-//#import "chrome/common/notification_service.h"
-//#import "chrome/common/url_constants.h"
-
 #import "CTTabContents.h"
 
-namespace {
-    
-    // Returns true if the specified transition is one of the types that cause the
-    // opener relationships for the tab in which the transition occured to be
-    // forgotten. This is generally any navigation that isn't a link click (i.e.
-    // any navigation that can be considered to be the start of a new task distinct
-    // from what had previously occurred in that tab).
-    bool ShouldForgetOpenersForTransition(CTPageTransition transition) {
-        return transition == CTPageTransitionTyped ||
-        transition == CTPageTransitionAutoBookmark ||
-        transition == CTPageTransitionGenerated ||
-        transition == CTPageTransitionKeyword ||
-        transition == CTPageTransitionStartPage;
-    }
-    
-}  // namespace
 
 @implementation TabContentsData
 
@@ -189,80 +153,6 @@ bool CTTabStripModel::ContainsIndex(int index) const {
     return index >= 0 && index < count();
 }
 //DONE
-void CTTabStripModel::InsertTabContentsAt(int index,
-                                          CTTabContents* contents,
-                                          int add_types) {
-    bool foreground = add_types & ADD_SELECTED;
-    // Force app tabs to be pinned.
-    bool pin = contents.isApp || add_types & ADD_PINNED;
-    index = ConstrainInsertionIndex(index, pin);
-    
-    // In tab dragging situations, if the last tab in the window was detached
-    // then the user aborted the drag, we will have the |closing_all_| member
-    // set (see DetachTabContentsAt) which will mess with our mojo here. We need
-    // to clear this bit.
-    closing_all_ = false;
-    
-    // Have to get the selected contents before we monkey with |contents_|
-    // otherwise we run into problems when we try to change the selected contents
-    // since the old contents and the new contents will be the same...
-    CTTabContents* selected_contents = GetSelectedTabContents();
-    TabContentsData* data = [[TabContentsData alloc] init];
-    data->contents = contents;
-    data->pinned = pin;
-    if ((add_types & ADD_INHERIT_GROUP) && selected_contents) {
-        if (foreground) {
-            // Forget any existing relationships, we don't want to make things too
-            // confusing by having multiple groups active at the same time.
-            ForgetAllOpeners();
-        }
-        // Anything opened by a link we deem to have an opener.
-        //data->SetGroup(&selected_contents->controller());
-    } else if ((add_types & ADD_INHERIT_OPENER) && selected_contents) {
-        if (foreground) {
-            // Forget any existing relationships, we don't want to make things too
-            // confusing by having multiple groups active at the same time.
-            ForgetAllOpeners();
-        }
-        //data->opener = &selected_contents->controller();
-    }
-    
-    [contents_data_ insertObject:data atIndex:index];
-    
-    if (index <= selected_index_) {
-        // If a tab is inserted before the current selected index,
-        // then |selected_index| needs to be incremented.
-        ++selected_index_;
-    }
-    
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabInsertedAt(contents, index, foreground));
-    
-    if (foreground)
-        ChangeSelectedContentsFrom(selected_contents, index, false);
-}
-//DONE
-void CTTabStripModel::ReplaceTabContentsAt(int index,
-                                           CTTabContents* new_contents,
-                                           CTTabReplaceType type) {
-    CTTabContents* old_contents =
-    ReplaceTabContentsAtImpl(index, new_contents, type);
-    [old_contents destroy:this];
-}
-
-/*void TabStripModel::ReplaceNavigationControllerAt(
- int index, NavigationController* controller) {
- // This appears to be OK with no flicker since no redraw event
- // occurs between the call to add an aditional tab and one to close
- // the previous tab.
- InsertTabContentsAt(
- index + 1, controller->tab_contents(),
- ADD_SELECTED | ADD_INHERIT_GROUP);
- std::vector<int> closing_tabs;
- closing_tabs.push_back(index);
- InternalCloseTabs(closing_tabs, CLOSE_NONE);
- }*/
-//DONE
 CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
     if (contents_data_.count == 0)
         return NULL;
@@ -301,23 +191,6 @@ void CTTabStripModel::SelectTabContentsAt(int index, bool user_gesture) {
         DLOG("[ChromiumTabs] internal inconsistency: !ContainsIndex(index) in %s",
              __PRETTY_FUNCTION__);
     }
-}
-//DONE
-void CTTabStripModel::MoveTabContentsAt(int index, int to_position,
-                                        bool select_after_move) {
-    assert(ContainsIndex(index));
-    if (index == to_position)
-        return;
-    
-    int first_non_mini_tab = IndexOfFirstNonMiniTab();
-    if ((index < first_non_mini_tab && to_position >= first_non_mini_tab) ||
-        (to_position < first_non_mini_tab && index >= first_non_mini_tab)) {
-        // This would result in mini tabs mixed with non-mini tabs. We don't allow
-        // that.
-        return;
-    }
-    
-    MoveTabContentsAtImpl(index, to_position, select_after_move);
 }
 //DONE
 CTTabContents* CTTabStripModel::GetSelectedTabContents() const {
@@ -384,108 +257,6 @@ bool CTTabStripModel::TabsAreLoading() const {
     }
     return false;
 }
-
-/*NavigationController* TabStripModel::GetOpenerOfTabContentsAt(int index) {
- assert(ContainsIndex(index));
- return contents_data_.at(index)->opener;
- }*/
-
-/*int TabStripModel::GetIndexOfNextTabContentsOpenedBy(
- const NavigationController* opener, int start_index, bool use_group) const {
- assert(opener);
- assert(ContainsIndex(start_index));
- 
- // Check tabs after start_index first.
- for (int i = start_index + 1; i < count(); ++i) {
- if (OpenerMatches(contents_data_[i], opener, use_group) &&
- !IsPhantomTab(i)) {
- return i;
- }
- }
- // Then check tabs before start_index, iterating backwards.
- for (int i = start_index - 1; i >= 0; --i) {
- if (OpenerMatches(contents_data_[i], opener, use_group) &&
- !IsPhantomTab(i)) {
- return i;
- }
- }
- return kNoTab;
- }*/
-
-/*int TabStripModel::GetIndexOfFirstTabContentsOpenedBy(
- const NavigationController* opener,
- int start_index) const {
- assert(opener);
- assert(ContainsIndex(start_index));
- 
- for (int i = 0; i < start_index; ++i) {
- if (contents_data_[i]->opener == opener && !IsPhantomTab(i))
- return i;
- }
- return kNoTab;
- }*/
-
-/*int TabStripModel::GetIndexOfLastTabContentsOpenedBy(
- const NavigationController* opener, int start_index) const {
- assert(opener);
- assert(ContainsIndex(start_index));
- 
- TabContentsDataVector::const_iterator end =
- contents_data_.begin() + start_index;
- TabContentsDataVector::const_iterator iter = contents_data_.end();
- TabContentsDataVector::const_iterator next;
- for (; iter != end; --iter) {
- next = iter - 1;
- if (next == end)
- break;
- if ((*next)->opener == opener &&
- !IsPhantomTab(static_cast<int>(next - contents_data_.begin()))) {
- return static_cast<int>(next - contents_data_.begin());
- }
- }
- return kNoTab;
- }*/
-
-void CTTabStripModel::TabNavigating(CTTabContents* contents,
-                                    CTPageTransition transition) {
-    if (ShouldForgetOpenersForTransition(transition)) {
-        // Don't forget the openers if this tab is a New Tab page opened at the
-        // end of the TabStrip (e.g. by pressing Ctrl+T). Give the user one
-        // navigation of one of these transition types before resetting the
-        // opener relationships (this allows for the use case of opening a new
-        // tab to do a quick look-up of something while viewing a tab earlier in
-        // the strip). We can make this heuristic more permissive if need be.
-        if (!IsNewTabAtEndOfTabStrip(contents)) {
-            // If the user navigates the current tab to another page in any way
-            // other than by clicking a link, we want to pro-actively forget all
-            // TabStrip opener relationships since we assume they're beginning a
-            // different task by reusing the current tab.
-            ForgetAllOpeners();
-            // In this specific case we also want to reset the group relationship,
-            // since it is now technically invalid.
-            //ForgetGroup(contents);
-        }
-    }
-}
-
-void CTTabStripModel::ForgetAllOpeners() {
-    // Forget all opener memories so we don't do anything weird with tab
-    // re-selection ordering.
-    // Does nothing
-}
-
-/*void TabStripModel::ForgetGroup(CTTabContents* contents) {
- int index = GetIndexOfTabContents(contents);
- assert(ContainsIndex(index));
- contents_data_.at(index)->SetGroup(NULL);
- contents_data_.at(index)->ForgetOpener();
- }
- 
- bool TabStripModel::ShouldResetGroupOnSelect(CTTabContents* contents) const {
- int index = GetIndexOfTabContents(contents);
- assert(ContainsIndex(index));
- return contents_data_.at(index)->reset_group_on_select;
- }*/
 
 void CTTabStripModel::SetTabBlocked(int index, bool blocked) {
     assert(ContainsIndex(index));
@@ -571,122 +342,6 @@ int CTTabStripModel::IndexOfFirstNonMiniTab() const {
     }
     // No mini-tabs.
     return count();
-}
-//DONE
-int CTTabStripModel::ConstrainInsertionIndex(int index, bool mini_tab) {
-    return mini_tab ? std::min(std::max(0, index), IndexOfFirstNonMiniTab()) :
-    std::min(count(), std::max(index, IndexOfFirstNonMiniTab()));
-}
-
-int CTTabStripModel::IndexOfFirstNonPhantomTab() const {
-    /*for (int i = 0; i < count(); ++i) {
-     if (!IsPhantomTab(i))
-     return i;
-     }*/
-    return count() ? 0 : kNoTab;
-}
-
-int CTTabStripModel::GetNonPhantomTabCount() const {
-    /*int tabs = 0;
-     for (int i = 0; i < count(); ++i) {
-     if (!IsPhantomTab(i))
-     ++tabs;
-     }
-     return tabs;*/
-    return count();
-}
-
-int CTTabStripModel::AddTabContents(CTTabContents* contents,
-                                    int index,
-                                    CTPageTransition transition,
-                                    int add_types) {
-    // If the newly-opened tab is part of the same task as the parent tab, we want
-    // to inherit the parent's "group" attribute, so that if this tab is then
-    // closed we'll jump back to the parent tab.
-    bool inherit_group = (add_types & ADD_INHERIT_GROUP) == ADD_INHERIT_GROUP;
-    
-    if (transition == CTPageTransitionLink &&
-        (add_types & ADD_FORCE_INDEX) == 0) {
-        // We assume tabs opened via link clicks are part of the same task as their
-        // parent.  Note that when |force_index| is true (e.g. when the user
-        // drag-and-drops a link to the tab strip), callers aren't really handling
-        // link clicks, they just want to score the navigation like a link click in
-        // the history backend, so we don't inherit the group in this case.
-        index = order_controller_->DetermineInsertionIndex(
-                                                           contents, transition, add_types & ADD_SELECTED);
-        inherit_group = true;
-    } else {
-        // For all other types, respect what was passed to us, normalizing -1s and
-        // values that are too large.
-        if (index < 0 || index > count())
-            index = order_controller_->DetermineInsertionIndexForAppending();
-    }
-    
-    if (transition == CTPageTransitionTyped && index == count()) {
-        // Also, any tab opened at the end of the TabStrip with a "TYPED"
-        // transition inherit group as well. This covers the cases where the user
-        // creates a New Tab (e.g. Ctrl+T, or clicks the New Tab button), or types
-        // in the address bar and presses Alt+Enter. This allows for opening a new
-        // Tab to quickly look up something. When this Tab is closed, the old one
-        // is re-selected, not the next-adjacent.
-        inherit_group = true;
-    }
-    InsertTabContentsAt(
-                        index, contents,
-                        add_types | (inherit_group ? ADD_INHERIT_GROUP : 0));
-    // Reset the index, just in case insert ended up moving it on us.
-    index = GetIndexOfTabContents(contents);
-    
-    /*if (inherit_group && transition == CTPageTransitionTyped)
-     contents_data_.at(index)->reset_group_on_select = true;*/
-    
-    // TODO(sky): figure out why this is here and not in InsertTabContentsAt. When
-    // here we seem to get failures in startup perf tests.
-    // Ensure that the new TabContentsView begins at the same size as the
-    // previous TabContentsView if it existed.  Otherwise, the initial WebKit
-    // layout will be performed based on a width of 0 pixels, causing a
-    // very long, narrow, inaccurate layout.  Because some scripts on pages (as
-    // well as WebKit's anchor link location calculation) are run on the
-    // initial layout and not recalculated later, we need to ensure the first
-    // layout is performed with sane view dimensions even when we're opening a
-    // new background tab.
-    /*if (CTTabContents* old_contents = GetSelectedTabContents()) {
-     if ((add_types & ADD_SELECTED) == 0) {
-     contents->view()->SizeContents(old_contents->view()->GetContainerSize());
-     // We need to hide the contents or else we get and execute paints for
-     // background tabs. With enough background tabs they will steal the
-     // backing store of the visible tab causing flashing. See bug 20831.
-     contents->HideContents();
-     }
-     }*/
-    
-    return index;
-}
-
-void CTTabStripModel::CloseSelectedTab() {
-    CloseTabContentsAt(selected_index_, CLOSE_CREATE_HISTORICAL_TAB);
-}
-//DONE
-void CTTabStripModel::SelectNextTab() {
-    SelectRelativeTab(true);
-}
-//DONE
-void CTTabStripModel::SelectPreviousTab() {
-    SelectRelativeTab(false);
-}
-//DONE
-void CTTabStripModel::SelectLastTab() {
-    SelectTabContentsAt(count() - 1, true);
-}
-//DONE
-void CTTabStripModel::MoveTabNext() {
-    int new_index = std::min(selected_index_ + 1, count() - 1);
-    MoveTabContentsAt(selected_index_, new_index, true);
-}
-//DONE
-void CTTabStripModel::MoveTabPrevious() {
-    int new_index = std::max(selected_index_ - 1, 0);
-    MoveTabContentsAt(selected_index_, new_index, true);
 }
 
 // Context menu functions.
@@ -856,51 +511,6 @@ void CTTabStripModel::TabContentsWasDestroyed(CTTabContents *contents) {
     }
 }
 
-/*void TabStripModel::Observe(NotificationType type,
- const NotificationSource& source,
- const NotificationDetails& details) {
- switch (type.value) {
- case NotificationType::TAB_CONTENTS_DESTROYED: {
- // Sometimes, on qemu, it seems like a CTTabContents object can be destroyed
- // while we still have a reference to it. We need to break this reference
- // here so we don't crash later.
- int index = GetIndexOfTabContents(Source<CTTabContents>(source).ptr());
- if (index != TabStripModel::kNoTab) {
- // Note that we only detach the contents here, not close it - it's
- // already been closed. We just want to undo our bookkeeping.
- if (ShouldMakePhantomOnClose(index)) {
- // We don't actually allow pinned tabs to close. Instead they become
- // phantom.
- MakePhantom(index);
- } else {
- DetachTabContentsAt(index);
- }
- }
- break;
- }
- 
- case NotificationType::EXTENSION_UNLOADED: {
- Extension* extension = Details<Extension>(details).ptr();
- // Iterate backwards as we may remove items while iterating.
- for (int i = count() - 1; i >= 0; i--) {
- CTTabContents* contents = GetTabContentsAt(i);
- if (contents->extension_app() == extension) {
- // The extension an app tab was created from has been nuked. Delete
- // the CTTabContents. Deleting a CTTabContents results in a notification
- // of type TAB_CONTENTS_DESTROYED; we do the necessary cleanup in
- // handling that notification.
- 
- InternalCloseTab(contents, i, false);
- }
- }
- break;
- }
- 
- default:
- NOTREACHED();
- }
- }*/
-
 ///////////////////////////////////////////////////////////////////////////////
 // TabStripModel, private:
 
@@ -915,38 +525,6 @@ bool CTTabStripModel::IsNewTabAtEndOfTabStrip(CTTabContents* contents) const {
 bool CTTabStripModel::InternalCloseTabs(NSArray* indices,
                                         uint32 close_types) {
     bool retval = true;
-    
-    // We only try the fast shutdown path if the whole browser process is *not*
-    // shutting down. Fast shutdown during browser termination is handled in
-    // BrowserShutdown.
-    /*if (browser_shutdown::GetShutdownType() == browser_shutdown::NOT_VALID) {
-     // Construct a map of processes to the number of associated tabs that are
-     // closing.
-     std::map<RenderProcessHost*, size_t> processes;
-     for (size_t i = 0; i < indices.size(); ++i) {
-     if (!delegate_->CanCloseContentsAt(indices[i])) {
-     retval = false;
-     continue;
-     }
-     
-     CTTabContents* detached_contents = GetContentsAt(indices[i]);
-     RenderProcessHost* process = detached_contents->GetRenderProcessHost();
-     std::map<RenderProcessHost*, size_t>::iterator iter =
-     processes.find(process);
-     if (iter == processes.end()) {
-     processes[process] = 1;
-     } else {
-     iter->second++;
-     }
-     }
-     
-     // Try to fast shutdown the tabs that can close.
-     for (std::map<RenderProcessHost*, size_t>::iterator iter =
-     processes.begin();
-     iter != processes.end(); ++iter) {
-     iter->first->FastShutdownForPageCount(iter->second);
-     }
-     }*/
     
     // We now return to our regularly scheduled shutdown procedure.
     for (size_t i = 0; i < indices.count; ++i) {
@@ -1080,29 +658,6 @@ bool CTTabStripModel::ShouldMakePhantomOnClose(int index) {
     return false;
 }
 
-/*void TabStripModel::MakePhantom(int index) {
- // MakePhantom is called when the CTTabContents is being destroyed so we don't
- // need to do anything with the returned value from ReplaceTabContentsAtImpl.
- ReplaceTabContentsAtImpl(index, GetContentsAt(index)->CloneAndMakePhantom(),
- REPLACE_MADE_PHANTOM);
- 
- if (selected_index_ == index && HasNonPhantomTabs()) {
- // Change the selection, otherwise we're going to force the phantom tab
- // to become selected.
- // NOTE: we must do this after the call to Replace otherwise browser's
- // TabSelectedAt will send out updates for the old CTTabContents which we've
- // already told observers has been closed (we sent out TabClosing at).
- int new_selected_index =
- order_controller_->DetermineNewSelectedIndex(index, false);
- new_selected_index = IndexOfNextNonPhantomTab(new_selected_index,
- index);
- SelectTabContentsAt(new_selected_index, true);
- }
- 
- if (!HasNonPhantomTabs())
- FOR_EACH_OBSERVER(TabStripModelObserver, observers_, TabStripEmpty());
- }*/
-
 
 void CTTabStripModel::MoveTabContentsAtImpl(int index, int to_position,
                                             bool select_after_move) {
@@ -1122,13 +677,6 @@ void CTTabStripModel::MoveTabContentsAtImpl(int index, int to_position,
     FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
                       TabMoved(moved_data->contents, index, to_position));
 }
-
-// static
-/*bool TabStripModel::OpenerMatches(const TabContentsData* data,
- const NavigationController* opener,
- bool use_group) {
- return data->opener == opener || (use_group && data->group == opener);
- }*/
 //DONE
 CTTabContents* CTTabStripModel::ReplaceTabContentsAtImpl(
                                                          int index,

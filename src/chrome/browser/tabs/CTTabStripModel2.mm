@@ -207,22 +207,6 @@ static const int kNoTab = -1;
     TabContentsData* data = [[TabContentsData alloc] init];
     data->contents = contents;
     data->pinned = pin;
-    if ((options & ADD_INHERIT_GROUP) && selected_contents) {
-        if (foreground) {
-            // Forget any existing relationships, we don't want to make things too
-            // confusing by having multiple groups active at the same time.
-            tabStripModel_->ForgetAllOpeners();
-        }
-        // Anything opened by a link we deem to have an opener.
-        //data->SetGroup(&selected_contents->controller());
-    } else if ((options & ADD_INHERIT_OPENER) && selected_contents) {
-        if (foreground) {
-            // Forget any existing relationships, we don't want to make things too
-            // confusing by having multiple groups active at the same time.
-            tabStripModel_->ForgetAllOpeners();
-        }
-        //data->opener = &selected_contents->controller();
-    }
     
     [tabStripModel_->contents_data_ insertObject:data atIndex:index];
     

@@ -22,6 +22,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 @interface CTTabStripModel2 (Private)
 
 - (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex;
+- (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
 
 @end
 
@@ -90,6 +91,11 @@ static const int kNoTab = -1;
 - (NSInteger) selectedIndex
 {
     return tabStripModel_->selected_index();
+}
+
+- (void) setSelectedIndex:(NSInteger)selectedIndex
+{
+    tabStripModel_->selected_index_ = selectedIndex;
 }
 
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index
@@ -231,7 +237,7 @@ static const int kNoTab = -1;
     }
     if ([self hasNonPhantomTabs]) {
         if (index == tabStripModel_->selected_index_) {
-            tabStripModel_->ChangeSelectedContentsFrom(removed_contents, next_selected_index, false);
+            [self changeSelectedContentsFrom:removed_contents toIndex:next_selected_index userGesture:NO];
         } else if (index < tabStripModel_->selected_index_) {
             // The selected tab didn't change, but its position shifted; update our
             // index to continue to point at it.
@@ -263,6 +269,24 @@ static const int kNoTab = -1;
     
     // All phantom tabs.
     return start;
+}
+
+- (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture
+{
+    assert([self containsIndex:toIndex]);
+    CTTabContents* new_contents = [self tabContentsAtIndex:toIndex];
+    if (old_contents == new_contents)
+        return;
+    
+    CTTabContents* last_selected_contents = old_contents;
+    if (last_selected_contents) {
+        FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                          TabDeselectedAt(last_selected_contents, self.selectedIndex));
+    }
+    
+    self.selectedIndex = toIndex;
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabSelectedAt(last_selected_contents, new_contents, self.selectedIndex, userGesture));
 }
 
 // Model Order Controller Functions

@@ -39,6 +39,7 @@ class CTTabStripModelObserver;
 @interface CTTabStripModel2 : NSObject
 
 @property (nonatomic) InsertionPolicy insertionPolicy;
+@property (nonatomic) NSInteger selectedIndex;
 
 - (id) initWithPointer:(CTTabStripModel*)tabStripModel;
 
@@ -47,7 +48,6 @@ class CTTabStripModelObserver;
 - (BOOL) hasNonPhantomTabs;
 - (BOOL) hasObserver:(CTTabStripModelObserver*)observer;
 - (NSInteger) count;
-- (NSInteger) selectedIndex;
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index;
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents;
 - (CTTabContents*) selectedTabContents;

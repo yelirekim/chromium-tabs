@@ -449,8 +449,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   // Propagate the tab pinned state of the new tab (which is the only tab in
   // this new window).
-  [newBrowser tabStripModel]->SetTabPinned(0, isPinned);
-
+    [newBrowser.tabStripModel2 setTabPinnedAtIndex:0 pinned:isPinned];
+                                                                 
   // Force the added tab to the right size (remove stretching.)
   tabRect.size.height = [CTTabStripController defaultTabHeight];
 

@@ -24,6 +24,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 - (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex;
 - (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
 - (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab;
+- (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
 
 @end
 
@@ -182,22 +183,7 @@ static const int kNoTab = -1;
         return;
     }
     
-    TabContentsData* moved_data = [tabStripModel_->contents_data_ objectAtIndex:fromIndex];
-    [tabStripModel_->contents_data_ removeObjectAtIndex:fromIndex];
-    [tabStripModel_->contents_data_ insertObject:moved_data atIndex:toIndex];
-    
-    // if !select_after_move, keep the same tab selected as was selected before.
-    int selectedIndex = self.selectedIndex;
-    if (selectedAfterMove || fromIndex == selectedIndex) {
-        self.selectedIndex = toIndex;
-    } else if (fromIndex < selectedIndex && toIndex >= selectedIndex) {
-        self.selectedIndex--;
-    } else if (fromIndex > selectedIndex && toIndex <= selectedIndex) {
-        self.selectedIndex++;
-    }
-    
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabMoved(moved_data->contents, fromIndex, toIndex));
+    [self _moveTabContentsFromIndex:fromIndex toIndex:toIndex selectAfterMove:selectedAfterMove];
 }
 
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options
@@ -349,6 +335,46 @@ static const int kNoTab = -1;
     return removed_contents;
 }
 
+- (void) setTabPinnedAtIndex:(NSInteger)index pinned:(BOOL)pinned
+{
+    assert([self containsIndex:index]);
+    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    if (data->pinned == pinned)
+        return;
+    
+    if ([self isAppTabAtIndex:index]) {
+        if (!pinned) {
+            // App tabs should always be pinned.
+            NOTREACHED();
+            return;
+        }
+        // Changing the pinned state of an app tab doesn't effect it's mini-tab
+        // status.
+        data->pinned = pinned;
+    } else {
+        // The tab is not an app tab, it's position may have to change as the
+        // mini-tab state is changing.
+        int non_mini_tab_index = [self indexOfFirstNonMiniTab];
+        data->pinned = pinned;
+        if (pinned && index != non_mini_tab_index) {
+            [self _moveTabContentsFromIndex:index toIndex:non_mini_tab_index selectAfterMove:NO];
+            return;  // Don't send TabPinnedStateChanged notification.
+        } else if (!pinned && index + 1 != non_mini_tab_index) {
+            [self _moveTabContentsFromIndex:index toIndex:non_mini_tab_index - 1 selectAfterMove:NO];
+            return;  // Don't send TabPinnedStateChanged notification.
+        }
+        
+        FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                          TabMiniStateChanged(data->contents,
+                                              index));
+    }
+    
+    // else: the tab was at the boundary and it's position doesn't need to change.
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabPinnedStateChanged(data->contents,
+                                            index));
+}
+
 #pragma mark -
 #pragma mark Private Functions
 
@@ -395,6 +421,26 @@ static const int kNoTab = -1;
 - (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab
 {
     return miniTab ? MIN(MAX(0, index), [self indexOfFirstNonMiniTab]) : MIN(self.count, MAX(index, [self indexOfFirstNonMiniTab]));
+}
+     
+- (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
+{
+    TabContentsData* moved_data = [tabStripModel_->contents_data_ objectAtIndex:fromIndex];
+    [tabStripModel_->contents_data_ removeObjectAtIndex:fromIndex];
+    [tabStripModel_->contents_data_ insertObject:moved_data atIndex:toIndex];
+
+    // if !select_after_move, keep the same tab selected as was selected before.
+    int selectedIndex = self.selectedIndex;
+    if (selectedAfterMove || fromIndex == selectedIndex) {
+        self.selectedIndex = toIndex;
+    } else if (fromIndex < selectedIndex && toIndex >= selectedIndex) {
+        self.selectedIndex--;
+    } else if (fromIndex > selectedIndex && toIndex <= selectedIndex) {
+        self.selectedIndex++;
+    }
+
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                   TabMoved(moved_data->contents, fromIndex, toIndex));
 }
 
 #pragma mark -

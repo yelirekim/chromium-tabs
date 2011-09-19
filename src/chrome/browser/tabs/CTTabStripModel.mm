@@ -189,13 +189,6 @@ bool CTTabStripModel::ContainsIndex(int index) const {
     return index >= 0 && index < count();
 }
 //DONE
-void CTTabStripModel::AppendTabContents(CTTabContents* contents, bool foreground) {
-    int index = order_controller_->DetermineInsertionIndexForAppending();
-    InsertTabContentsAt(index, contents,
-                        foreground ? (ADD_INHERIT_GROUP | ADD_SELECTED) :
-                        ADD_NONE);
-}
-//DONE
 void CTTabStripModel::InsertTabContentsAt(int index,
                                           CTTabContents* contents,
                                           int add_types) {

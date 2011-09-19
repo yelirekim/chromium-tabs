@@ -269,7 +269,6 @@ static const int kNoTab = -1;
 
 - (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options
 {
-    return tabStripModel_->AddTabContents(contents, index, pageTransition, options);
     bool inherit_group = (options & ADD_INHERIT_GROUP) == ADD_INHERIT_GROUP;
     
     if (pageTransition == CTPageTransitionLink && (options & ADD_FORCE_INDEX) == 0) {

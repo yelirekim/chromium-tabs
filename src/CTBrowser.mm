@@ -346,17 +346,6 @@
     [browser.tabStripModel2 appendTabContents:contents foreground:YES];
     [browser loadingStateDidChange:contents];
     
-    // Orig impl:
-    //browser->set_override_bounds(new_window_bounds);
-    //browser->set_maximized_state(
-    //    maximize ? MAXIMIZED_STATE_MAXIMIZED : MAXIMIZED_STATE_UNMAXIMIZED);
-    //browser->CreateBrowserWindow();
-    //browser->tabstrip_model()->AppendTabContents(contents, true);
-    
-    // Make sure the loading state is updated correctly, otherwise the throbber
-    // won't start if the page is loading.
-    //browser->LoadingStateChanged(contents);
-    
     return browser;
 }
 

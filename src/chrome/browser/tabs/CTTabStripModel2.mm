@@ -296,7 +296,8 @@ static const int kNoTab = -1;
     return removed_contents;
 }
 
-// Private functions
+#pragma mark -
+#pragma mark Private Functions
 
 - (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex
 {
@@ -343,7 +344,8 @@ static const int kNoTab = -1;
     return miniTab ? MIN(MAX(0, index), [self indexOfFirstNonMiniTab]) : MIN(self.count, MAX(index, [self indexOfFirstNonMiniTab]));
 }
 
-// Model Order Controller Functions
+#pragma mark -
+#pragma mark Model Order Controller Functions
 
 - (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents pageTransition:(CTPageTransition)transition foreground:(BOOL)foreground
 {

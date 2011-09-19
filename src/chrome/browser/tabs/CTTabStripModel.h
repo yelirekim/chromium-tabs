@@ -137,6 +137,14 @@ class CTTabStripModelObserver {
   virtual ~CTTabStripModelObserver() {}
 };
 
+@interface TabContentsData : NSObject {
+@public
+    CTTabContents* contents;
+    BOOL pinned;
+    BOOL blocked;
+}
+@end
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -584,14 +592,6 @@ class CTTabStripModel /*: public NotificationObserver*/ {
                              int to_position,
                              bool select_after_move);
 
-  // Returns true if the tab represented by the specified data has an opener
-  // that matches the specified one. If |use_group| is true, then this will
-  // fall back to check the group relationship as well.
-  struct TabContentsData;
-  //static bool OpenerMatches(const TabContentsData* data,
-  //                          const NavigationController* opener,
-  //                          bool use_group);
-
   // Does the work for ReplaceTabContentsAt returning the old CTTabContents.
   // The caller owns the returned CTTabContents.
   CTTabContents* ReplaceTabContentsAtImpl(
@@ -601,64 +601,6 @@ class CTTabStripModel /*: public NotificationObserver*/ {
 
   // Our delegate.
   NSObject<CTTabStripModelDelegate>* delegate_;
-
-  // A hunk of data representing a CTTabContents and (optionally) the
-  // NavigationController that spawned it. This memory only sticks around while
-  // the CTTabContents is in the current TabStripModel, unless otherwise
-  // specified in code.
-  struct TabContentsData {
-    explicit TabContentsData(CTTabContents* a_contents)
-        : contents(a_contents),
-          //reset_group_on_select(false),
-          pinned(false),
-          blocked(false) {
-      //SetGroup(NULL);
-    }
-
-    // Create a relationship between this CTTabContents and other CTTabContentses.
-    // Used to identify which CTTabContents to select next after one is closed.
-    //void SetGroup(NavigationController* a_group) {
-    //  group = a_group;
-    //  opener = a_group;
-    //}
-
-    // Forget the opener relationship so that when this CTTabContents is closed
-    // unpredictable re-selection does not occur.
-    void ForgetOpener() {
-      //opener = NULL;
-    }
-
-    CTTabContents* contents; // weak
-    // We use NavigationControllers here since they more closely model the
-    // "identity" of a Tab, CTTabContents can change depending on the URL loaded
-    // in the Tab.
-    // The group is used to model a set of tabs spawned from a single parent
-    // tab. This value is preserved for a given tab as long as the tab remains
-    // navigated to the link it was initially opened at or some navigation from
-    // that page (i.e. if the user types or visits a bookmark or some other
-    // navigation within that tab, the group relationship is lost). This
-    // property can safely be used to implement features that depend on a
-    // logical group of related tabs.
-    //NavigationController* group;
-    // The owner models the same relationship as group, except it is more
-    // easily discarded, e.g. when the user switches to a tab not part of the
-    // same group. This property is used to determine what tab to select next
-    // when one is closed.
-    //NavigationController* opener;
-    // True if our group should be reset the moment selection moves away from
-    // this Tab. This is the case for tabs opened in the foreground at the end
-    // of the TabStrip while viewing another Tab. If these tabs are closed
-    // before selection moves elsewhere, their opener is selected. But if
-    // selection shifts to _any_ tab (including their opener), the group
-    // relationship is reset to avoid confusing close sequencing.
-    //bool reset_group_on_select;
-
-    // Is the tab pinned?
-    bool pinned;
-
-    // Is the tab interaction blocked by a modal dialog?
-    bool blocked;
-  };
 
   // A scoped container for notification registries.
   //NotificationRegistrar registrar_;

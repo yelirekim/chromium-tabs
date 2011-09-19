@@ -537,7 +537,6 @@ class CTTabStripModel /*: public NotificationObserver*/ {
     typedef ObserverList<CTTabStripModelObserver> TabStripModelObservers;
     TabStripModelObservers observers_;
 
- private:
   // We cannot be constructed without a delegate.
   CTTabStripModel();
 

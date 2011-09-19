@@ -219,7 +219,13 @@ static const int kNoTab = -1;
 
 - (void) replaceTabContentsAtIndex:(NSInteger)index withContents:contents replaceType:(CTTabReplaceType)replaceType
 {
-    tabStripModel_->ReplaceTabContentsAt(index, contents, replaceType);
+    assert([self containsIndex:index]);
+    CTTabContents* old_contents = [self tabContentsAtIndex:index];
+    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    data->contents = contents;
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabReplacedAt(old_contents, contents, index, replaceType));
+    [old_contents destroy:nil];
 }
 
 - (void) closeAllTabs

@@ -168,7 +168,22 @@ static const int kNoTab = -1;
         return;
     }
     
-    tabStripModel_->MoveTabContentsAtImpl(fromIndex, toIndex, selectedAfterMove);
+    TabContentsData* moved_data = [tabStripModel_->contents_data_ objectAtIndex:fromIndex];
+    [tabStripModel_->contents_data_ removeObjectAtIndex:fromIndex];
+    [tabStripModel_->contents_data_ insertObject:moved_data atIndex:toIndex];
+    
+    // if !select_after_move, keep the same tab selected as was selected before.
+    int selectedIndex = self.selectedIndex;
+    if (selectedAfterMove || fromIndex == selectedIndex) {
+        self.selectedIndex = toIndex;
+    } else if (fromIndex < selectedIndex && toIndex >= selectedIndex) {
+        self.selectedIndex--;
+    } else if (fromIndex > selectedIndex && toIndex <= selectedIndex) {
+        self.selectedIndex++;
+    }
+    
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabMoved(moved_data->contents, fromIndex, toIndex));
 }
 
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options

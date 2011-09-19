@@ -129,6 +129,7 @@ order_controller_(NULL) {
      registrar_.Add(this,
      NotificationType::EXTENSION_UNLOADED);*/
     order_controller_ = new CTTabStripModelOrderController(this);
+    contents_data_ = [NSMutableArray array];
 }
 
 CTTabStripModel::~CTTabStripModel() {
@@ -148,7 +149,6 @@ CTTabStripModel::~CTTabStripModel() {
      delete contents_data_[i]->contents;
      }*/
     
-    STLDeleteContainerPointers(contents_data_.begin(), contents_data_.end());
     delete order_controller_;
 }
 
@@ -229,7 +229,7 @@ void CTTabStripModel::InsertTabContentsAt(int index,
         //data->opener = &selected_contents->controller();
     }
     
-    contents_data_.insert(contents_data_.begin() + index, data);
+    [contents_data_ insertObject:[NSValue valueWithPointer:data] atIndex:index];
     
     if (index <= selected_index_) {
         // If a tab is inserted before the current selected index,
@@ -266,7 +266,7 @@ void CTTabStripModel::ReplaceTabContentsAt(int index,
  }*/
 
 CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
-    if (contents_data_.empty())
+    if (contents_data_.count == 0)
         return NULL;
     
     assert(ContainsIndex(index));
@@ -274,8 +274,7 @@ CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
     CTTabContents* removed_contents = GetContentsAt(index);
     int next_selected_index =
     order_controller_->DetermineNewSelectedIndex(index, true);
-    delete contents_data_.at(index);
-    contents_data_.erase(contents_data_.begin() + index);
+    [contents_data_ removeObjectAtIndex:index];
     next_selected_index = IndexOfNextNonPhantomTab(next_selected_index, -1);
     if (!HasNonPhantomTabs())
         closing_all_ = true;
@@ -335,10 +334,11 @@ CTTabContents* CTTabStripModel::GetTabContentsAt(int index) const {
 
 int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const {
     int index = 0;
-    TabContentsDataVector::const_iterator iter = contents_data_.begin();
-    for (; iter != contents_data_.end(); ++iter, ++index) {
-        if ((*iter)->contents == contents)
+    for (NSValue* value in contents_data_) {
+        TabContentsData* data = (TabContentsData*) [value pointerValue];
+        if (data->contents == contents) {
             return index;
+        }
     }
     return kNoTab;
 }
@@ -379,10 +379,11 @@ bool CTTabStripModel::CloseTabContentsAt(int index, uint32 close_types) {
 }
 
 bool CTTabStripModel::TabsAreLoading() const {
-    TabContentsDataVector::const_iterator iter = contents_data_.begin();
-    for (; iter != contents_data_.end(); ++iter) {
-        if ((*iter)->contents.isLoading)
+    for (NSValue* value in contents_data_) {
+        TabContentsData* data = (TabContentsData*) [value pointerValue];
+        if (data->contents.isLoading) {
             return true;
+        }
     }
     return false;
 }
@@ -473,9 +474,10 @@ void CTTabStripModel::TabNavigating(CTTabContents* contents,
 void CTTabStripModel::ForgetAllOpeners() {
     // Forget all opener memories so we don't do anything weird with tab
     // re-selection ordering.
-    TabContentsDataVector::const_iterator iter = contents_data_.begin();
-    for (; iter != contents_data_.end(); ++iter)
-        (*iter)->ForgetOpener();
+    for (NSValue* value in contents_data_) {
+        TabContentsData* data = (TabContentsData*) [value pointerValue];
+        data->ForgetOpener();
+    }
 }
 
 /*void TabStripModel::ForgetGroup(CTTabContents* contents) {
@@ -493,17 +495,19 @@ void CTTabStripModel::ForgetAllOpeners() {
 
 void CTTabStripModel::SetTabBlocked(int index, bool blocked) {
     assert(ContainsIndex(index));
-    if (contents_data_[index]->blocked == blocked)
+    TabContentsData* data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    if (data->blocked == blocked)
         return;
-    contents_data_[index]->blocked = blocked;
+    data->blocked = blocked;
     FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabBlockedStateChanged(contents_data_[index]->contents,
+                      TabBlockedStateChanged(data->contents,
                                              index));
 }
 
 void CTTabStripModel::SetTabPinned(int index, bool pinned) {
     assert(ContainsIndex(index));
-    if (contents_data_[index]->pinned == pinned)
+    TabContentsData* data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    if (data->pinned == pinned)
         return;
     
     if (IsAppTab(index)) {
@@ -514,12 +518,12 @@ void CTTabStripModel::SetTabPinned(int index, bool pinned) {
         }
         // Changing the pinned state of an app tab doesn't effect it's mini-tab
         // status.
-        contents_data_[index]->pinned = pinned;
+        data->pinned = pinned;
     } else {
         // The tab is not an app tab, it's position may have to change as the
         // mini-tab state is changing.
         int non_mini_tab_index = IndexOfFirstNonMiniTab();
-        contents_data_[index]->pinned = pinned;
+        data->pinned = pinned;
         if (pinned && index != non_mini_tab_index) {
             MoveTabContentsAtImpl(index, non_mini_tab_index, false);
             return;  // Don't send TabPinnedStateChanged notification.
@@ -530,19 +534,20 @@ void CTTabStripModel::SetTabPinned(int index, bool pinned) {
         
         
         FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                          TabMiniStateChanged(contents_data_[index]->contents,
+                          TabMiniStateChanged(data->contents,
                                               index));
     }
     
     // else: the tab was at the boundary and it's position doesn't need to
     // change.
     FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabPinnedStateChanged(contents_data_[index]->contents,
+                      TabPinnedStateChanged(data->contents,
                                             index));
 }
 
 bool CTTabStripModel::IsTabPinned(int index) const {
-    return contents_data_[index]->pinned;
+    TabContentsData* data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    return data->pinned;
 }
 
 bool CTTabStripModel::IsMiniTab(int index) const {
@@ -561,11 +566,12 @@ bool CTTabStripModel::IsPhantomTab(int index) const {
 }
 
 bool CTTabStripModel::IsTabBlocked(int index) const {
-    return contents_data_[index]->blocked;
+    TabContentsData* data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    return data->blocked;
 }
 
 int CTTabStripModel::IndexOfFirstNonMiniTab() const {
-    for (size_t i = 0; i < contents_data_.size(); ++i) {
+    for (size_t i = 0; i < contents_data_.count; ++i) {
         if (!IsMiniTab(static_cast<int>(i)))
             return static_cast<int>(i);
     }
@@ -1000,7 +1006,8 @@ void CTTabStripModel::InternalCloseTab(CTTabContents* contents,
 CTTabContents* CTTabStripModel::GetContentsAt(int index) const {
     assert(ContainsIndex(index));
     //<< "Failed to find: " << index << " in: " << count() << " entries.";
-    return contents_data_.at(index)->contents;
+    TabContentsData* data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    return data->contents;
 }
 
 void CTTabStripModel::ChangeSelectedContentsFrom(
@@ -1025,7 +1032,7 @@ void CTTabStripModel::ChangeSelectedContentsFrom(
 void CTTabStripModel::SelectRelativeTab(bool next) {
     // This may happen during automated testing or if a user somehow buffers
     // many key accelerators.
-    if (contents_data_.empty())
+    if (contents_data_.count == 0)
         return;
     
     // Skip pinned-app-phantom tabs when iterating.
@@ -1105,9 +1112,9 @@ bool CTTabStripModel::ShouldMakePhantomOnClose(int index) {
 
 void CTTabStripModel::MoveTabContentsAtImpl(int index, int to_position,
                                             bool select_after_move) {
-    TabContentsData* moved_data = contents_data_.at(index);
-    contents_data_.erase(contents_data_.begin() + index);
-    contents_data_.insert(contents_data_.begin() + to_position, moved_data);
+    TabContentsData* moved_data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    [contents_data_ removeObjectAtIndex:index];
+    [contents_data_ insertObject:[NSValue valueWithPointer:moved_data] atIndex:to_position];
     
     // if !select_after_move, keep the same tab selected as was selected before.
     if (select_after_move || index == selected_index_) {
@@ -1135,7 +1142,8 @@ CTTabContents* CTTabStripModel::ReplaceTabContentsAtImpl(
                                                          CTTabReplaceType type) {
     assert(ContainsIndex(index));
     CTTabContents* old_contents = GetContentsAt(index);
-    contents_data_[index]->contents = new_contents;
+    TabContentsData* data = (TabContentsData*) [[contents_data_ objectAtIndex:index] pointerValue];
+    data->contents = new_contents;
     FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
                       TabReplacedAt(old_contents, new_contents, index, type));
     return old_contents;

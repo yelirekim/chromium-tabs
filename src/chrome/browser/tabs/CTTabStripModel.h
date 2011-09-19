@@ -201,8 +201,8 @@ class CTTabStripModel /*: public NotificationObserver*/ {
   void RemoveObserver(CTTabStripModelObserver* observer);
 
   // Retrieve the number of CTTabContentses/emptiness of the TabStripModel.
-  int count() const { return static_cast<int>(contents_data_.size()); }
-  bool empty() const { return contents_data_.empty(); }
+  int count() const { return static_cast<int>(contents_data_.count); }
+  bool empty() const { return contents_data_.count == 0; }
 
   // Returns true if there are any non-phantom tabs. When there are no
   // non-phantom tabs the delegate is notified by way of TabStripEmpty and the
@@ -643,9 +643,7 @@ class CTTabStripModel /*: public NotificationObserver*/ {
     bool blocked;
   };
 
-  // The CTTabContents data currently hosted within this TabStripModel.
-  typedef std::vector<TabContentsData*> TabContentsDataVector;
-  TabContentsDataVector contents_data_;
+  NSMutableArray* contents_data_;
 
   // The index of the CTTabContents in |contents_| that is currently selected.
   int selected_index_;

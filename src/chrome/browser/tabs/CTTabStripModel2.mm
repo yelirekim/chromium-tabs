@@ -158,7 +158,17 @@ static const int kNoTab = -1;
 
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
 {
-    tabStripModel_->MoveTabContentsAt(fromIndex, toIndex, selectedAfterMove);
+    assert([self containsIndex:toIndex]);
+    if (fromIndex == toIndex)
+        return;
+    
+    int first_non_mini_tab = [self indexOfFirstNonMiniTab];
+    if ((fromIndex < first_non_mini_tab && toIndex >= first_non_mini_tab) || (toIndex < first_non_mini_tab && fromIndex >= first_non_mini_tab)) {
+        // This would result in mini tabs mixed with non-mini tabs. We don't allow that.
+        return;
+    }
+    
+    tabStripModel_->MoveTabContentsAtImpl(fromIndex, toIndex, selectedAfterMove);
 }
 
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options

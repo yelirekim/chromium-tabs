@@ -253,7 +253,9 @@ static const int kNoTab = -1;
 
 - (void) updateTabContentsStateAtIndex:(NSInteger)index changeType:(CTTabChangeType)changeType
 {
-    tabStripModel_->UpdateTabContentsStateAt(index, changeType);
+    assert([self containsIndex:index]);
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabChangedAt([self tabContentsAtIndex:index], index, changeType));
 }
 
 - (void) replaceTabContentsAtIndex:(NSInteger)index withContents:contents replaceType:(CTTabReplaceType)replaceType

@@ -359,7 +359,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
     // Before the tab is detached from its originating tab strip, store the
     // pinned state so that it can be maintained between the windows.
-    bool isPinned = [dragBWC->browser_ tabStripModel]->IsTabPinned(index);
+    bool isPinned = [dragBWC->browser_.tabStripModel2 isTabPinnedAtIndex:index];
 
     // Now that we have enough information about the tab, we can remove it from
     // the dragging window. We need to do this *before* we add it to the new

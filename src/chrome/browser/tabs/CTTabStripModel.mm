@@ -225,48 +225,10 @@ int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const 
  return kNoTab;
  }*/
 //DONE
-void CTTabStripModel::UpdateTabContentsStateAt(int index,
-                                               CTTabChangeType change_type) {
-    assert(ContainsIndex(index));
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabChangedAt(GetContentsAt(index), index, change_type));
-}
-//DONE
-void CTTabStripModel::CloseAllTabs() {
-    // Set state so that observers can adjust their behavior to suit this
-    // specific condition when CloseTabContentsAt causes a flurry of
-    // Close/Detach/Select notifications to be sent.
-    closing_all_ = true;
-    NSMutableArray* closing_tabs = [NSMutableArray array];
-    for (int i = count() - 1; i >= 0; --i)
-        [closing_tabs addObject:[NSNumber numberWithInt:i]];
-    InternalCloseTabs(closing_tabs, CLOSE_CREATE_HISTORICAL_TAB);
-}
-//DONE
 bool CTTabStripModel::CloseTabContentsAt(int index, uint32 close_types) {
     NSMutableArray* closing_tabs = [NSMutableArray array];
     [closing_tabs addObject:[NSNumber numberWithInt:index]];
     return InternalCloseTabs(closing_tabs, close_types);
-}
-
-bool CTTabStripModel::TabsAreLoading() const {
-    for (TabContentsData* data in contents_data_) {
-        if (data->contents.isLoading) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void CTTabStripModel::SetTabBlocked(int index, bool blocked) {
-    assert(ContainsIndex(index));
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    if (data->blocked == blocked)
-        return;
-    data->blocked = blocked;
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabBlockedStateChanged(data->contents,
-                                             index));
 }
 
 void CTTabStripModel::SetTabPinned(int index, bool pinned) {
@@ -328,11 +290,6 @@ bool CTTabStripModel::IsPhantomTab(int index) const {
     /*return IsTabPinned(index) &&
      GetTabContentsAt(index)->controller().needs_reload();*/
     return false;
-}
-
-bool CTTabStripModel::IsTabBlocked(int index) const {
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    return data->blocked;
 }
 //DONE
 int CTTabStripModel::IndexOfFirstNonMiniTab() const {

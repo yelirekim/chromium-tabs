@@ -16,8 +16,10 @@ extern NSString* const kCTTabStripEmptyNotification = @"kCTTabStripEmptyNotifica
 extern NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelDeletedNotification";
 
 extern NSString* const kCTTabContentsUserInfoKey = @"kCTTabContentsUserInfoKey";
+extern NSString* const kCTTabNewContentsUserInfoKey = @"kCTTabNewContentsUserInfoKey";
 extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
 extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
+extern NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
 
 @interface CTTabStripModel2 (Private)
 
@@ -409,8 +411,13 @@ static const int kNoTab = -1;
     }
     
     self.selectedIndex = toIndex;
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabSelectedAt(last_selected_contents, new_contents, self.selectedIndex, userGesture));
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              new_contents, kCTTabNewContentsUserInfoKey,
+                              [NSNumber numberWithInt:self.selectedIndex], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithBool:userGesture], kCTTabUserGestureUserInfoKey,
+                              last_selected_contents, kCTTabContentsUserInfoKey,
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabSelectedNotification object:self userInfo:userInfo];
 }
 
 - (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab

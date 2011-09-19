@@ -92,6 +92,7 @@ private:
 - (void)setNewTabButtonHoverState:(BOOL)showHover;
 - (CTTabController*)newTab;
 - (void)setTabTitle:(NSViewController*)tab withContents:(CTTabContents*)contents;
+- (void)swapInTabAtIndex:(NSInteger)modelIndex;
 @end
 
 
@@ -203,6 +204,7 @@ private:
     BOOL mouseInside_;
     
     id ob1;
+    id ob2;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -348,6 +350,47 @@ private:
              postNotificationName:kTabStripNumberOfTabsChanged
              object:self];
         }];
+        
+        ob2 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabSelectedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            CTTabContents* newContents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
+            NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            
+            NSInteger index = [self indexFromModelIndex:modelIndex];
+            
+            if (oldContents) {
+                int oldModelIndex = [tabStripModel2_ indexOfTabContents:oldContents];
+                if (oldModelIndex != -1) {  // When closing a tab, the old tab may be gone.
+                    NSInteger oldIndex = [self indexFromModelIndex:oldModelIndex];
+                    CTTabContentsController* oldController = [tabContentsArray_ objectAtIndex:oldIndex];
+                    [oldController willResignSelectedTab];
+                }
+            }
+            
+            int i = 0;
+            for (CTTabController* current in tabArray_) {
+                [current setSelected:(i == index) ? YES : NO];
+                ++i;
+            }
+            
+            CTTabContentsController *newController =
+            [tabContentsArray_ objectAtIndex:index];
+            [newController willBecomeSelectedTab];
+            
+            [self layoutTabs];
+            
+            [self swapInTabAtIndex:modelIndex];
+            
+            if (newContents) {
+                newContents.isVisible = oldContents.isVisible;
+                newContents.isSelected = YES;
+            }
+            if (oldContents) {
+                oldContents.isVisible = NO;
+                oldContents.isSelected = NO;
+            }
+        }];
     }
     return self;
 }
@@ -363,6 +406,7 @@ private:
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob2];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -732,45 +776,6 @@ private:
     if (!titleString || ![titleString length])
         titleString = L10n(@"New Tab");
     [tab setTitle:titleString];
-}
-
-- (void)tabSelectedWithContents:(CTTabContents*)newContents
-               previousContents:(CTTabContents*)oldContents
-                        atIndex:(NSInteger)modelIndex
-                    userGesture:(bool)wasUserGesture {
-    NSInteger index = [self indexFromModelIndex:modelIndex];
-    
-    if (oldContents) {
-        int oldModelIndex = [tabStripModel2_ indexOfTabContents:oldContents];
-        if (oldModelIndex != -1) {  // When closing a tab, the old tab may be gone.
-            NSInteger oldIndex = [self indexFromModelIndex:oldModelIndex];
-            CTTabContentsController* oldController = [tabContentsArray_ objectAtIndex:oldIndex];
-            [oldController willResignSelectedTab];
-        }
-    }
-    
-    int i = 0;
-    for (CTTabController* current in tabArray_) {
-        [current setSelected:(i == index) ? YES : NO];
-        ++i;
-    }
-    
-    CTTabContentsController *newController =
-    [tabContentsArray_ objectAtIndex:index];
-    [newController willBecomeSelectedTab];
-    
-    [self layoutTabs];
-    
-    [self swapInTabAtIndex:modelIndex];
-    
-    if (newContents) {
-        newContents.isVisible = oldContents.isVisible;
-        newContents.isSelected = YES;
-    }
-    if (oldContents) {
-        oldContents.isVisible = NO;
-        oldContents.isSelected = NO;
-    }
 }
 
 - (void)removeTab:(CTTabController*)controller {

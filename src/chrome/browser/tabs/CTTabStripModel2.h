@@ -93,5 +93,6 @@ extern NSString* const kCTTabStripEmptyNotification;
 extern NSString* const kCTTabStripModelDeletedNotification;
 
 extern NSString* const kCTTabContentsUserInfoKey;
+extern NSString* const kCTTabNewContentsUserInfoKey;
 extern NSString* const kCTTabIndexUserInfoKey;
 extern NSString* const kCTTabForegroundUserInfoKey;

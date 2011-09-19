@@ -40,6 +40,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     BOOL initializing_; // true if the instance is initializing
     id ob1;
     id ob2;
+    id ob3;
 }
 
 @synthesize tabStripController = tabStripController_;
@@ -159,6 +160,15 @@ static CTBrowserWindowController* _currentMain = nil; // weak
             [self updateToolbarWithContents:nil shouldRestoreState:NO];
         }
     }];
+    
+    ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabSelectedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        NSDictionary* userInfo = notification.userInfo;
+        CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+        CTTabContents* newContents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
+        assert(newContents != oldContents);
+        [self updateToolbarWithContents:newContents
+                     shouldRestoreState:nil != oldContents];
+    }];
   return self;
 }
 
@@ -195,6 +205,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
     [[NSNotificationCenter defaultCenter] removeObserver:ob2];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob3];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     toolbarController_ = nil;
@@ -922,17 +933,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 // the model's state rather than the UI state. This means that when for instance
 // tabSelectedWithContents:... is called, the view is not yet on screen, so
 // doing things like restoring focus is not possible.
-
-// Note: this is called _before_ the view is on screen
-- (void)tabSelectedWithContents:(CTTabContents*)newContents
-               previousContents:(CTTabContents*)oldContents
-                        atIndex:(NSInteger)index
-                    userGesture:(bool)wasUserGesture {
-  assert(newContents != oldContents);
-  [self updateToolbarWithContents:newContents
-               shouldRestoreState:!!oldContents];
-}
-
 
 - (void)tabReplacedWithContents:(CTTabContents*)contents
                     oldContents:(CTTabContents*)oldContents

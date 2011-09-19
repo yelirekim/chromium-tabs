@@ -277,6 +277,25 @@ static const int kNoTab = -1;
 - (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options
 {
     return tabStripModel_->AddTabContents(contents, index, pageTransition, options);
+    bool inherit_group = (options & ADD_INHERIT_GROUP) == ADD_INHERIT_GROUP;
+    
+    if (pageTransition == CTPageTransitionLink && (options & ADD_FORCE_INDEX) == 0) {
+        index = [self determineInsertionIndexForContents:contents pageTransition:pageTransition foreground:options & ADD_SELECTED];
+        inherit_group = true;
+    } else {
+        if (index < 0 || index > self.count)
+            index = [self determineInsertionIndexForAppending];
+        }
+    
+    if (pageTransition == CTPageTransitionTyped && index == self.count) {
+        inherit_group = true;
+    }
+    [self insertTabContents:contents atIndex:index options:options | (inherit_group ? ADD_INHERIT_GROUP : 0)];
+    
+    // Reset the index, just in case insert ended up moving it on us.
+    index = [self indexOfTabContents:contents];
+    
+    return index;
 }
 
 - (void) selectNextTab

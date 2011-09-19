@@ -184,19 +184,6 @@ CTTabContents* CTTabStripModel::DetachTabContentsAt(int index) {
     return removed_contents;
 }
 //DONE
-void CTTabStripModel::SelectTabContentsAt(int index, bool user_gesture) {
-    if (ContainsIndex(index)) {
-        ChangeSelectedContentsFrom(GetSelectedTabContents(), index, user_gesture);
-    } else {
-        DLOG("[ChromiumTabs] internal inconsistency: !ContainsIndex(index) in %s",
-             __PRETTY_FUNCTION__);
-    }
-}
-//DONE
-CTTabContents* CTTabStripModel::GetSelectedTabContents() const {
-    return GetTabContentsAt(selected_index_);
-}
-//DONE
 CTTabContents* CTTabStripModel::GetTabContentsAt(int index) const {
     if (ContainsIndex(index))
         return GetContentsAt(index);
@@ -213,111 +200,16 @@ int CTTabStripModel::GetIndexOfTabContents(const CTTabContents* contents) const 
     }
     return kNoTab;
 }
-
-/*int TabStripModel::GetIndexOfController(
- const NavigationController* controller) const {
- int index = 0;
- TabContentsDataVector::const_iterator iter = contents_data_.begin();
- for (; iter != contents_data_.end(); ++iter, ++index) {
- if (&(*iter)->contents->controller() == controller)
- return index;
- }
- return kNoTab;
- }*/
-//DONE
-bool CTTabStripModel::CloseTabContentsAt(int index, uint32 close_types) {
-    NSMutableArray* closing_tabs = [NSMutableArray array];
-    [closing_tabs addObject:[NSNumber numberWithInt:index]];
-    return InternalCloseTabs(closing_tabs, close_types);
-}
-
-void CTTabStripModel::SetTabPinned(int index, bool pinned) {
-    assert(ContainsIndex(index));
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    if (data->pinned == pinned)
-        return;
-    
-    if (IsAppTab(index)) {
-        if (!pinned) {
-            // App tabs should always be pinned.
-            NOTREACHED();
-            return;
-        }
-        // Changing the pinned state of an app tab doesn't effect it's mini-tab
-        // status.
-        data->pinned = pinned;
-    } else {
-        // The tab is not an app tab, it's position may have to change as the
-        // mini-tab state is changing.
-        int non_mini_tab_index = IndexOfFirstNonMiniTab();
-        data->pinned = pinned;
-        if (pinned && index != non_mini_tab_index) {
-            MoveTabContentsAtImpl(index, non_mini_tab_index, false);
-            return;  // Don't send TabPinnedStateChanged notification.
-        } else if (!pinned && index + 1 != non_mini_tab_index) {
-            MoveTabContentsAtImpl(index, non_mini_tab_index - 1, false);
-            return;  // Don't send TabPinnedStateChanged notification.
-        }
-        
-        
-        FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                          TabMiniStateChanged(data->contents,
-                                              index));
-    }
-    
-    // else: the tab was at the boundary and it's position doesn't need to
-    // change.
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabPinnedStateChanged(data->contents,
-                                            index));
-}
 //DONE
 bool CTTabStripModel::IsTabPinned(int index) const {
     TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->pinned;
 }
 //DONE
-bool CTTabStripModel::IsMiniTab(int index) const {
-    return IsTabPinned(index) || IsAppTab(index);
-}
-//DONE
-bool CTTabStripModel::IsAppTab(int index) const {
-    CTTabContents* contents = GetTabContentsAt(index);
-    return contents && contents.isApp;
-}
-//DONE
 bool CTTabStripModel::IsPhantomTab(int index) const {
     /*return IsTabPinned(index) &&
      GetTabContentsAt(index)->controller().needs_reload();*/
     return false;
-}
-//DONE
-int CTTabStripModel::IndexOfFirstNonMiniTab() const {
-    for (size_t i = 0; i < contents_data_.count; ++i) {
-        if (!IsMiniTab(static_cast<int>(i)))
-            return static_cast<int>(i);
-    }
-    // No mini-tabs.
-    return count();
-}
-
-NSArray* CTTabStripModel::GetIndicesClosedByCommand(
-                                                            int index,
-                                                            ContextMenuCommand id) const {
-    assert(ContainsIndex(index));
-    
-    // NOTE: some callers assume indices are sorted in reverse order.
-    NSMutableArray* indices = [NSMutableArray array];
-    
-    if (id != CommandCloseTabsToRight && id != CommandCloseOtherTabs)
-        return indices;
-    
-    int start = (id == CommandCloseTabsToRight) ? index + 1 : 0;
-    for (int i = count() - 1; i >= start; --i) {
-        if (i != index && !IsMiniTab(i))
-            [indices addObject:[NSNumber numberWithInt:i]];
-    }
-    return indices;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -432,21 +324,6 @@ void CTTabStripModel::ChangeSelectedContentsFrom(
                       TabSelectedAt(last_selected_contents, new_contents, selected_index_,
                                     user_gesture));
 }
-
-void CTTabStripModel::SelectRelativeTab(bool next) {
-    // This may happen during automated testing or if a user somehow buffers
-    // many key accelerators.
-    if (contents_data_.count == 0)
-        return;
-    
-    // Skip pinned-app-phantom tabs when iterating.
-    int index = selected_index_;
-    int delta = next ? 1 : -1;
-    do {
-        index = (index + count() + delta) % count();
-    } while (index != selected_index_ && IsPhantomTab(index));
-    SelectTabContentsAt(index, true);
-}
 //DONE
 int CTTabStripModel::IndexOfNextNonPhantomTab(int index,
                                               int ignore_index) {
@@ -468,57 +345,3 @@ int CTTabStripModel::IndexOfNextNonPhantomTab(int index,
     return start;
 }
 
-const bool kPhantomTabsEnabled = false;
-
-bool CTTabStripModel::ShouldMakePhantomOnClose(int index) {
-    if (kPhantomTabsEnabled && IsTabPinned(index) && !IsPhantomTab(index) &&
-        !closing_all_) {
-        if (!IsAppTab(index))
-            return true;  // Always make non-app tabs go phantom.
-        
-        //ExtensionsService* extension_service = profile()->GetExtensionsService();
-        //if (!extension_service)
-        return false;
-        
-        //Extension* extension_app = GetTabContentsAt(index)->extension_app();
-        //assert(extension_app);
-        
-        // Only allow the tab to be made phantom if the extension still exists.
-        //return extension_service->GetExtensionById(extension_app->id(),
-        //                                           false) != NULL;
-    }
-    return false;
-}
-
-
-void CTTabStripModel::MoveTabContentsAtImpl(int index, int to_position,
-                                            bool select_after_move) {
-    TabContentsData* moved_data = [contents_data_ objectAtIndex:index];
-    [contents_data_ removeObjectAtIndex:index];
-    [contents_data_ insertObject:moved_data atIndex:to_position];
-    
-    // if !select_after_move, keep the same tab selected as was selected before.
-    if (select_after_move || index == selected_index_) {
-        selected_index_ = to_position;
-    } else if (index < selected_index_ && to_position >= selected_index_) {
-        selected_index_--;
-    } else if (index > selected_index_ && to_position <= selected_index_) {
-        selected_index_++;
-    }
-    
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabMoved(moved_data->contents, index, to_position));
-}
-//DONE
-CTTabContents* CTTabStripModel::ReplaceTabContentsAtImpl(
-                                                         int index,
-                                                         CTTabContents* new_contents,
-                                                         CTTabReplaceType type) {
-    assert(ContainsIndex(index));
-    CTTabContents* old_contents = GetContentsAt(index);
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    data->contents = new_contents;
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, observers_,
-                      TabReplacedAt(old_contents, new_contents, index, type));
-    return old_contents;
-}

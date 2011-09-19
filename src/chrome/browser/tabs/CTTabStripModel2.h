@@ -73,6 +73,7 @@ class CTTabStripModelObserver;
 - (void) appendTabContents:(CTTabContents*)contents foreground:(BOOL)foreground;
 - (CTTabContents*) detachTabContentsAtIndex:(NSInteger)index;
 - (void) setTabPinnedAtIndex:(NSInteger)index pinned:(BOOL)pinned;
+- (void) closeSelectedTab;
 
 @end
 

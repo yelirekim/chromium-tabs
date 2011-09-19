@@ -34,6 +34,7 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 - (NSInteger) determineInsertionIndexForAppending;
 - (NSInteger) determineNewSelectedIndexByRemovingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove;
 - (NSInteger) validIndexForIndex:(NSInteger)index removingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove;
+- (void) selectRelativeTab:(BOOL)next;
 
 @end
 
@@ -300,27 +301,29 @@ static const int kNoTab = -1;
 
 - (void) selectNextTab
 {
-    tabStripModel_->SelectNextTab();
+    [self selectRelativeTab:YES];
 }
 
 - (void) selectPreviousTab
 {
-    tabStripModel_->SelectPreviousTab();
+    [self selectRelativeTab:NO];
 }
 
 - (void) moveTabNext
 {
-    tabStripModel_->MoveTabNext();
+    int new_index = MIN(self.selectedIndex + 1, self.count - 1);
+    [self moveTabContentsFromIndex:self.selectedIndex toIndex:new_index selectAfterMove:YES];
 }
 
 - (void) moveTabPrevious
 {
-    tabStripModel_->MoveTabPrevious();
+    int new_index = MAX(self.selectedIndex - 1, 0);
+    [self moveTabContentsFromIndex:self.selectedIndex toIndex:new_index selectAfterMove:YES];
 }
 
 - (void) selectLastTab
 {
-    tabStripModel_->SelectLastTab();
+    [self selectTabContentsAtIndex:self.count - 1 userGesture:YES];
 }
 
 - (void) appendTabContents:(CTTabContents*)contents foreground:(BOOL)foreground
@@ -402,6 +405,11 @@ static const int kNoTab = -1;
                                             index));
 }
 
+- (void) closeSelectedTab
+{
+    [self closeTabContentsAtIndex:self.selectedIndex options:CLOSE_CREATE_HISTORICAL_TAB];
+}
+
 #pragma mark -
 #pragma mark Private Functions
 
@@ -468,6 +476,22 @@ static const int kNoTab = -1;
 
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                    TabMoved(moved_data->contents, fromIndex, toIndex));
+}
+
+- (void) selectRelativeTab:(BOOL)next
+{
+    // This may happen during automated testing or if a user somehow buffers
+    // many key accelerators.
+    if (tabStripModel_->contents_data_.count == 0)
+        return;
+    
+    // Skip pinned-app-phantom tabs when iterating.
+    int index = self.selectedIndex;
+    int delta = next ? 1 : -1;
+    do {
+        index = (index + self.count + delta) % self.count;
+    } while (index != self.selectedIndex && [self isPhantomTabAtIndex:index]);
+    [self selectTabContentsAtIndex:index userGesture:YES];
 }
 
 #pragma mark -

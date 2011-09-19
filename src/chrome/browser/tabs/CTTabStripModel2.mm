@@ -160,7 +160,55 @@ static const int kNoTab = -1;
 
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options
 {
-    tabStripModel_->InsertTabContentsAt(index, contents, options);
+    bool foreground = options & ADD_SELECTED;
+    // Force app tabs to be pinned.
+    bool pin = contents.isApp || options & ADD_PINNED;
+    index = tabStripModel_->ConstrainInsertionIndex(index, pin);
+    
+    // In tab dragging situations, if the last tab in the window was detached
+    // then the user aborted the drag, we will have the |closing_all_| member
+    // set (see DetachTabContentsAt) which will mess with our mojo here. We need
+    // to clear this bit.
+    tabStripModel_->closing_all_ = false;
+    
+    // Have to get the selected contents before we monkey with |contents_|
+    // otherwise we run into problems when we try to change the selected contents
+    // since the old contents and the new contents will be the same...
+    CTTabContents* selected_contents = [self selectedTabContents];
+    TabContentsData* data = [[TabContentsData alloc] init];
+    data->contents = contents;
+    data->pinned = pin;
+    if ((options & ADD_INHERIT_GROUP) && selected_contents) {
+        if (foreground) {
+            // Forget any existing relationships, we don't want to make things too
+            // confusing by having multiple groups active at the same time.
+            tabStripModel_->ForgetAllOpeners();
+        }
+        // Anything opened by a link we deem to have an opener.
+        //data->SetGroup(&selected_contents->controller());
+    } else if ((options & ADD_INHERIT_OPENER) && selected_contents) {
+        if (foreground) {
+            // Forget any existing relationships, we don't want to make things too
+            // confusing by having multiple groups active at the same time.
+            tabStripModel_->ForgetAllOpeners();
+        }
+        //data->opener = &selected_contents->controller();
+    }
+    
+    [tabStripModel_->contents_data_ insertObject:data atIndex:index];
+    
+    if (index <= self.selectedIndex) {
+        // If a tab is inserted before the current selected index,
+        // then |selected_index| needs to be incremented.
+        ++self.selectedIndex;
+    }
+    
+    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
+                      TabInsertedAt(contents, index, foreground));
+    
+    if (foreground) {
+        [self changeSelectedContentsFrom:selected_contents toIndex:index userGesture:NO];
+    }
 }
 
 - (void) updateTabContentsStateAtIndex:(NSInteger)index changeType:(CTTabChangeType)changeType

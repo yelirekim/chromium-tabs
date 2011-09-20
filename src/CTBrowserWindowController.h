@@ -18,9 +18,6 @@
 @property(strong, readonly, nonatomic) CTBrowser *browser;
 @property(readonly, nonatomic) BOOL isFullscreen;
 
-+ (CTBrowserWindowController*)mainBrowserWindowController;
-+ (CTBrowserWindowController*)browserWindowControllerForWindow:(NSWindow*)window;
-+ (CTBrowserWindowController*)browserWindowControllerForView:(NSView*)view;
 + (CTBrowserWindowController*)browserWindowController;
 
 - (id)initWithWindowNibPath:(NSString *)windowNibPath browser:(CTBrowser*)browser;

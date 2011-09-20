@@ -66,21 +66,6 @@
     return [[self alloc] init];
 }
 
-+ (CTBrowserWindowController*)browserWindowControllerForWindow:(NSWindow*)window {
-    while (window) {
-        id controller = [window windowController];
-        if ([controller isKindOfClass:[CTBrowserWindowController class]]) {
-            return (CTBrowserWindowController*)controller;
-        }
-        window = [window parentWindow];
-    }
-    return nil;
-}
-
-+ (CTBrowserWindowController*)browserWindowControllerForView:(NSView*)view {
-    return [CTBrowserWindowController browserWindowControllerForWindow:[view window]];
-}
-
 - (void)dealloc {
     if (overlayWindow_) {
         [self setUseOverlay:NO];

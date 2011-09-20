@@ -24,7 +24,6 @@ typedef enum {
 
 -(id)init;
 
--(CTToolbarController *)createToolbarController;
 -(CTTabContentsController*)createTabContentsControllerWithContents:(CTTabContents*)contents;
 -(CTTabContents*)createBlankTabBasedOn:(CTTabContents*)baseContents;
 -(CTTabContents*)addBlankTabAtIndex:(int)index inForeground:(BOOL)foreground;

@@ -5,7 +5,6 @@
 #import "CTTabStripController.h"
 #import "CTTabView.h"
 #import "CTTabStripView.h"
-#import "CTToolbarController.h"
 #import "FastResizeView.h"
 
 @interface NSWindow (ThingsThatMightBeImplemented)
@@ -39,7 +38,6 @@ static CTBrowserWindowController* _currentMain = nil;
 }
 
 @synthesize tabStripController = tabStripController_;
-@synthesize toolbarController = toolbarController_;
 @synthesize browser = browser_;
 
 + (CTBrowserWindowController*)browserWindowController {
@@ -80,11 +78,6 @@ static CTBrowserWindowController* _currentMain = nil;
         
         tabStripController_ = [[CTTabStripController alloc] initWithView:self.tabStripView switchView:self.tabContentArea browser:browser_];
         
-        toolbarController_ = [browser_ createToolbarController];
-        if (toolbarController_) {
-            [[[self window] contentView] addSubview:[toolbarController_ view]];
-        }
-        
         [self setShouldCloseDocument:YES];
         
         [self layoutSubviews];
@@ -109,9 +102,6 @@ static CTBrowserWindowController* _currentMain = nil;
             CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
             NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             [contents tabWillCloseInBrowser:browser_ atIndex:index];
-            if (contents.isSelected) {
-                [self updateToolbarWithContents:nil shouldRestoreState:NO];
-            }
         }];
         
         ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabSelectedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
@@ -119,8 +109,6 @@ static CTBrowserWindowController* _currentMain = nil;
             CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
             CTTabContents* newContents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
             assert(newContents != oldContents);
-            [self updateToolbarWithContents:newContents
-                         shouldRestoreState:nil != oldContents];
         }];
         
         ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabReplacedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
@@ -129,9 +117,6 @@ static CTBrowserWindowController* _currentMain = nil;
             CTTabContents* contents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
             NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             [contents tabReplaced:oldContents inBrowser:browser_ atIndex:index];
-            if ([self selectedTabIndex] == index) {
-                [self updateToolbarWithContents:contents shouldRestoreState:!!oldContents];
-            }
         }];
         
         ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
@@ -139,9 +124,6 @@ static CTBrowserWindowController* _currentMain = nil;
             CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
             NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             [contents tabDidDetachFromBrowser:browser_ atIndex:index];
-            if (contents.isSelected) {
-                [self updateToolbarWithContents:nil shouldRestoreState:NO];
-            }
         }];
         
         ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
@@ -179,20 +161,10 @@ static CTBrowserWindowController* _currentMain = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:ob5];
     [[NSNotificationCenter defaultCenter] removeObserver:ob6];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    toolbarController_ = nil;
 }
 
 - (BOOL)isFullscreen {
     return NO;
-}
-
-- (BOOL)hasToolbar {
-    return nil != toolbarController_;
-}
-
-- (void)updateToolbarWithContents:(CTTabContents*)contents shouldRestoreState:(BOOL)shouldRestore {
-    [toolbarController_ updateToolbarWithContents:contents shouldRestoreState:shouldRestore];
 }
 
 - (void)synchronizeWindowTitleWithDocumentName {
@@ -430,33 +402,12 @@ static CTBrowserWindowController* _currentMain = nil;
     assert(maxY >= minY);
     assert(maxY <= NSMaxY(contentBounds) + yOffset);
     
-    if ([self hasToolbar]) {
-        maxY = [self layoutToolbarAtMinX:minX maxY:maxY width:width];
-    }
-    
     if (isFullscreen) {
         maxY = NSMaxY(contentBounds);
     }
     
     NSRect contentAreaRect = NSMakeRect(minX, minY, width, maxY - minY);
     [self layoutTabContentArea:contentAreaRect];
-    
-    if (toolbarController_) {
-        [toolbarController_ setDividerOpacity:0.4];
-    }
-}
-
-- (CGFloat)layoutToolbarAtMinX:(CGFloat)minX maxY:(CGFloat)maxY width:(CGFloat)width {
-    assert([self hasToolbar]);
-    NSView* toolbarView = [toolbarController_ view];
-    NSRect toolbarFrame = [toolbarView frame];
-    assert(![toolbarView isHidden]);
-    toolbarFrame.origin.x = minX;
-    toolbarFrame.origin.y = maxY - NSHeight(toolbarFrame);
-    toolbarFrame.size.width = width;
-    maxY -= NSHeight(toolbarFrame);
-    [toolbarView setFrame:toolbarFrame];
-    return maxY;
 }
 
 -(void)willStartTearingTab {

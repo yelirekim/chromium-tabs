@@ -4,7 +4,6 @@
 #import "CTPageTransition.h"
 #import "CTBrowserWindowController.h"
 #import "CTTabContentsController.h"
-#import "CTToolbarController.h"
 #import "CTBrowserCommand.h"
 #import "CTTabContents.h"
 
@@ -22,11 +21,6 @@
         tabStripModel2_ = [[CTTabStripModel2 alloc] initWithDelegate:self];
     }
     return self;
-}
-
--(CTToolbarController *)createToolbarController {
-    // subclasses could override this -- returning nil means no toolbar
-    return [[CTToolbarController alloc] initWithBrowser:self];
 }
 
 -(CTTabContentsController*)createTabContentsControllerWithContents:(CTTabContents*)contents {

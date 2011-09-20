@@ -61,12 +61,8 @@
 		3A928BE01226F81600DA7E43 /* CTTabStripController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE21222D25400F1BB78 /* CTTabStripController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A928BE11226F81600DA7E43 /* CTTabWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286F8D1222CAA000F1BB78 /* CTTabWindowController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A928D0C12282DE500DA7E43 /* MyTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A928D0B12282DE500DA7E43 /* MyTabContents.m */; };
-		3A929008122947A800DA7E43 /* CTToolbarView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A929006122947A800DA7E43 /* CTToolbarView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A929009122947A800DA7E43 /* CTToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A929007122947A800DA7E43 /* CTToolbarView.m */; };
 		3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */; };
-		3A92904612294F1900DA7E43 /* CTToolbarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92904412294F1900DA7E43 /* CTToolbarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A92904712294F1900DA7E43 /* CTToolbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92904512294F1900DA7E43 /* CTToolbarController.m */; };
 		3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A92907512295BC400DA7E43 /* Toolbar.xib */; };
 		3A9291981229BEB600DA7E43 /* CTPageTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921DB1221AA4B006D8305 /* CTPageTransition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE71222D53500F1BB78 /* ThrobberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -181,12 +177,8 @@
 		3A928BBB1226F0AA00DA7E43 /* MyBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBrowser.m; sourceTree = "<group>"; };
 		3A928D0A12282DE500DA7E43 /* MyTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTabContents.h; sourceTree = "<group>"; };
 		3A928D0B12282DE500DA7E43 /* MyTabContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTabContents.m; sourceTree = "<group>"; };
-		3A929006122947A800DA7E43 /* CTToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTToolbarView.h; sourceTree = "<group>"; };
-		3A929007122947A800DA7E43 /* CTToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTToolbarView.m; sourceTree = "<group>"; };
 		3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+CTThemed.h"; sourceTree = "<group>"; };
 		3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+CTThemed.m"; sourceTree = "<group>"; };
-		3A92904412294F1900DA7E43 /* CTToolbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTToolbarController.h; sourceTree = "<group>"; };
-		3A92904512294F1900DA7E43 /* CTToolbarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTToolbarController.m; sourceTree = "<group>"; };
 		3A92907512295BC400DA7E43 /* Toolbar.xib */ = {isa = PBXFileReference; explicitFileType = file.xib; path = Toolbar.xib; sourceTree = "<group>"; };
 		3AA71889122479CE005022BE /* CTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowser.h; sourceTree = "<group>"; };
 		3AA7188A122479CE005022BE /* CTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowser.m; sourceTree = "<group>"; };
@@ -242,10 +234,6 @@
 				3A1CF96012235704008A3B8C /* CTBrowserWindowController.m */,
 				3AEE19521222DDEB009DA438 /* CTTabContents.h */,
 				3AEE19531222DDEB009DA438 /* CTTabContents.m */,
-				3A929006122947A800DA7E43 /* CTToolbarView.h */,
-				3A929007122947A800DA7E43 /* CTToolbarView.m */,
-				3A92904412294F1900DA7E43 /* CTToolbarController.h */,
-				3A92904512294F1900DA7E43 /* CTToolbarController.m */,
 				3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */,
 				3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */,
 				3A3ED6741225CE7A009E2908 /* third_party */,
@@ -470,9 +458,7 @@
 				3A3EDAD01225FACA009E2908 /* CTTabStripModelDelegate.h in Headers */,
 				3A3EDAD21225FACA009E2908 /* CTBrowserCommand.h in Headers */,
 				3A3EDAD41225FACA009E2908 /* CTBrowserWindowController.h in Headers */,
-				3A929008122947A800DA7E43 /* CTToolbarView.h in Headers */,
 				3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */,
-				3A92904612294F1900DA7E43 /* CTToolbarController.h in Headers */,
 				3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */,
 				3A9291A51229BEE900DA7E43 /* BackgroundGradientView.h in Headers */,
 				3A9291A61229BEE900DA7E43 /* HoverButton.h in Headers */,
@@ -614,9 +600,7 @@
 				3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */,
 				3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */,
 				3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */,
-				3A929009122947A800DA7E43 /* CTToolbarView.m in Sources */,
 				3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */,
-				3A92904712294F1900DA7E43 /* CTToolbarController.m in Sources */,
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
 				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */,

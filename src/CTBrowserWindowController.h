@@ -3,7 +3,6 @@
 #import "CTTabWindowController.h"
 
 @class CTTabStripController;
-@class CTToolbarController;
 
 @interface NSDocumentController (CTBrowserWindowControllerAdditions)
 
@@ -14,10 +13,8 @@
 @interface CTBrowserWindowController : CTTabWindowController
 
 @property(strong, readonly, nonatomic) CTTabStripController *tabStripController;
-@property(strong, readonly, nonatomic) CTToolbarController *toolbarController;
 @property(strong, readonly, nonatomic) CTBrowser *browser;
 @property(readonly, nonatomic) BOOL isFullscreen;
-@property(readonly, nonatomic) BOOL hasToolbar;
 
 + (CTBrowserWindowController*)mainBrowserWindowController;
 + (CTBrowserWindowController*)browserWindowControllerForWindow:(NSWindow*)window;
@@ -36,7 +33,6 @@
 
 - (CTTabContents*)selectedTabContents;
 - (int)selectedTabIndex;
-- (void)updateToolbarWithContents:(CTTabContents*)tab shouldRestoreState:(BOOL)shouldRestore;
 - (void)activate;
 - (void)focusTabContents;
 - (void)layoutTabContentArea:(NSRect)frame;

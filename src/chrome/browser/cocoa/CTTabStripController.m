@@ -15,7 +15,6 @@
 #import "CTTabView.h"
 #import "ThrobberView.h"
 #import "CTTabStripModel.h"
-#import "GTMNSAnimation+Duration.h"
 #import "CTBrowserCommand.h"
 
 NSString* const kTabStripNumberOfTabsChanged = @"kTabStripNumberOfTabsChanged";
@@ -640,8 +639,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     NSRect enclosingRect = NSZeroRect;
     if (animate) {
         [NSAnimationContext beginGrouping];
-        [[NSAnimationContext currentContext] gtm_setDuration:kAnimationDuration
-                                                   eventMask:NSLeftMouseUpMask];
+        [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     }
     
     if (doUpdate)
@@ -878,8 +876,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     NSRect newFrame = [tabView frame];
     newFrame = NSOffsetRect(newFrame, 0, -newFrame.size.height);
     [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] gtm_setDuration:kAnimationDuration
-                                               eventMask:NSLeftMouseUpMask];
+    [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     [[tabView animator] setFrame:newFrame];
     [NSAnimationContext endGrouping];
 }

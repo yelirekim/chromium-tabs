@@ -33,7 +33,7 @@ typedef enum {
 
 @class CTTabContents;
 
-@interface CTTabStripModel2 : NSObject
+@interface CTTabStripModel : NSObject
 
 @property (nonatomic) InsertionPolicy insertionPolicy;
 @property (nonatomic) NSInteger selectedIndex;

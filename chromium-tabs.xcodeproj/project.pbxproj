@@ -77,8 +77,8 @@
 		A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
 		A25493C313F414FA0027474A /* HoverButton+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493C213F414F90027474A /* HoverButton+Private.h */; };
-		A2CD3AD213F48C9A00954A59 /* CTTabStripModel2.h in Headers */ = {isa = PBXBuildFile; fileRef = A2CD3AD013F48C9900954A59 /* CTTabStripModel2.h */; };
-		A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */ = {isa = PBXBuildFile; fileRef = A2CD3AD113F48C9900954A59 /* CTTabStripModel2.m */; };
+		A2CD3AD213F48C9A00954A59 /* CTTabStripModel.h in Headers */ = {isa = PBXBuildFile; fileRef = A2CD3AD013F48C9900954A59 /* CTTabStripModel.h */; };
+		A2CD3AD313F48C9A00954A59 /* CTTabStripModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A2CD3AD113F48C9900954A59 /* CTTabStripModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,8 +185,8 @@
 		A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMFadeTruncatingTextFieldCell.m; sourceTree = "<group>"; };
 		A25493BF13F4117D0027474A /* CTBrowser+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CTBrowser+Private.h"; sourceTree = "<group>"; };
 		A25493C213F414F90027474A /* HoverButton+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HoverButton+Private.h"; sourceTree = "<group>"; };
-		A2CD3AD013F48C9900954A59 /* CTTabStripModel2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripModel2.h; sourceTree = "<group>"; };
-		A2CD3AD113F48C9900954A59 /* CTTabStripModel2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabStripModel2.m; sourceTree = "<group>"; };
+		A2CD3AD013F48C9900954A59 /* CTTabStripModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripModel.h; sourceTree = "<group>"; };
+		A2CD3AD113F48C9900954A59 /* CTTabStripModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabStripModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -394,8 +394,8 @@
 		3AEE19401222DC5B009DA438 /* tabs */ = {
 			isa = PBXGroup;
 			children = (
-				A2CD3AD013F48C9900954A59 /* CTTabStripModel2.h */,
-				A2CD3AD113F48C9900954A59 /* CTTabStripModel2.m */,
+				A2CD3AD013F48C9900954A59 /* CTTabStripModel.h */,
+				A2CD3AD113F48C9900954A59 /* CTTabStripModel.m */,
 			);
 			path = tabs;
 			sourceTree = "<group>";
@@ -453,7 +453,7 @@
 				A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */,
 				A25493C313F414FA0027474A /* HoverButton+Private.h in Headers */,
 				A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */,
-				A2CD3AD213F48C9A00954A59 /* CTTabStripModel2.h in Headers */,
+				A2CD3AD213F48C9A00954A59 /* CTTabStripModel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,7 +583,7 @@
 				3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */,
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
-				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */,
+				A2CD3AD313F48C9A00954A59 /* CTTabStripModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

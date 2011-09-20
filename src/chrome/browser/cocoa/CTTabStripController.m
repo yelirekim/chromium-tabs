@@ -14,7 +14,7 @@
 #import "CTTabViewController.h"
 #import "CTTabView.h"
 #import "ThrobberView.h"
-#import "CTTabStripModel2.h"
+#import "CTTabStripModel.h"
 #import "GTMNSAnimation+Duration.h"
 #import "CTBrowserCommand.h"
 
@@ -138,7 +138,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     NewTabButton* newTabButton_;  // weak, obtained from the nib.
     NSTrackingArea* newTabTrackingArea_;
     CTBrowser *browser_;  // weak
-    CTTabStripModel2* tabStripModel2_;
+    CTTabStripModel* tabStripModel2_;
     BOOL newTabButtonShowingHoverImage_;
     NSMutableArray* tabContentsArray_;
     NSMutableArray* tabArray_;

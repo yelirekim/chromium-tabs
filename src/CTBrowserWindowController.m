@@ -1,6 +1,6 @@
 #import "CTBrowserWindowController.h"
 #import "CTBrowser+Private.h"
-#import "CTTabStripModel2.h"
+#import "CTTabStripModel.h"
 #import "CTTabContents.h"
 #import "CTTabStripController.h"
 #import "CTTabView.h"
@@ -227,7 +227,7 @@ static CTBrowserWindowController* _currentMain = nil;
 
 
 -(IBAction)closeTab:(id)sender {
-    CTTabStripModel2 *tabStripModel2 = browser_.tabStripModel2;
+    CTTabStripModel *tabStripModel2 = browser_.tabStripModel2;
     [tabStripModel2 closeTabContentsAtIndex:[tabStripModel2 selectedIndex] options:CLOSE_CREATE_HISTORICAL_TAB];
 }
 
@@ -286,7 +286,7 @@ static CTBrowserWindowController* _currentMain = nil;
 - (CTTabWindowController*)detachTabToNewWindow:(CTTabView*)tabView {
     NSDisableScreenUpdates();
     @try {
-        CTTabStripModel2 *tabStripModel2 = [browser_ tabStripModel2];
+        CTTabStripModel *tabStripModel2 = [browser_ tabStripModel2];
         
         int index = [tabStripController_ modelIndexForTabView:tabView];
         CTTabContents* contents = [tabStripModel2 tabContentsAtIndex:index];

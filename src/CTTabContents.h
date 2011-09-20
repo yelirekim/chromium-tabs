@@ -1,6 +1,6 @@
 
 @class CTBrowser;
-@class CTTabStripModel2;
+@class CTTabStripModel;
 
 extern NSString* const CTTabContentsDidCloseNotification;
 
@@ -27,7 +27,7 @@ extern NSString* const CTTabContentsDidCloseNotification;
 - (void)makeKeyAndOrderFront:(id)sender;
 - (BOOL)becomeFirstResponder;
 
--(void)closingOfTabDidStart:(CTTabStripModel2*)model;
+-(void)closingOfTabDidStart:(CTTabStripModel*)model;
 - (void)tabDidInsertIntoBrowser:(CTBrowser*)browser atIndex:(NSInteger)index inForeground:(bool)foreground;
 - (void)tabReplaced:(CTTabContents*)oldContents inBrowser:(CTBrowser*)browser atIndex:(NSInteger)index;
 - (void)tabWillCloseInBrowser:(CTBrowser*)browser atIndex:(NSInteger)index;

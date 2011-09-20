@@ -1,5 +1,5 @@
 #import "CTTabContents.h"
-#import "CTTabStripModel2.h"
+#import "CTTabStripModel.h"
 #import "CTBrowser.h"
 
 NSString* const CTTabContentsDidCloseNotification =
@@ -158,7 +158,7 @@ NSString* const CTTabContentsDidCloseNotification =
 #pragma mark -
 #pragma mark Callbacks
 
--(void)closingOfTabDidStart:(CTTabStripModel2*)closeInitiatedByTabStripModel {
+-(void)closingOfTabDidStart:(CTTabStripModel*)closeInitiatedByTabStripModel {
     [[NSNotificationCenter defaultCenter] postNotificationName:CTTabContentsDidCloseNotification object:self];
 }
 

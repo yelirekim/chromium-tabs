@@ -1,4 +1,4 @@
-#import "CTTabStripModel2.h"
+#import "CTTabStripModel.h"
 #import "CTTabContents.h"
 
 NSString* const kCTTabInsertedNotification = @"kCTTabInsertedNotification";
@@ -35,7 +35,7 @@ const int kNoTab = -1;
 
 @end
 
-@interface CTTabStripModel2 (Private)
+@interface CTTabStripModel (Private)
 
 - (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex;
 - (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
@@ -47,7 +47,7 @@ const int kNoTab = -1;
 
 @end
 
-@interface CTTabStripModel2 (OrderController)
+@interface CTTabStripModel (OrderController)
 
 - (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents foreground:(BOOL)foreground;
 - (NSInteger) determineInsertionIndexForAppending;
@@ -58,7 +58,7 @@ const int kNoTab = -1;
 @end
 
 
-@implementation CTTabStripModel2 {
+@implementation CTTabStripModel {
     NSMutableArray* contents_data_;
     BOOL closing_all_;
     NSObject<CTTabStripModelDelegate>* delegate_;

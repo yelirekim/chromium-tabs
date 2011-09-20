@@ -6,7 +6,7 @@ typedef enum {
   CTWindowOpenDispositionNewBackgroundTab,
 } CTWindowOpenDisposition;
 
-@class CTTabStripModel2;
+@class CTTabStripModel;
 @class CTBrowserWindowController;
 @class CTTabContentsController;
 @class CTToolbarController;
@@ -16,7 +16,7 @@ typedef enum {
 
 @interface CTBrowser : NSObject <CTTabStripModelDelegate> 
 
-@property(retain, readonly, nonatomic) CTTabStripModel2* tabStripModel2;
+@property(retain, readonly, nonatomic) CTTabStripModel* tabStripModel2;
 @property(strong, readonly, nonatomic, retain) CTBrowserWindowController* windowController;
 @property(strong, readonly, nonatomic) NSWindow* window;
 

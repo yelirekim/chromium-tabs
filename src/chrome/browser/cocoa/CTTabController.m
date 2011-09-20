@@ -51,7 +51,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
 + (CGFloat)appTabWidth { return 66; }
 
 - (CTTabView*)tabView {
-  return static_cast<CTTabView*>([self view]);
+  return (CTTabView*)[self view];
 }
 
 - (id)init {
@@ -87,7 +87,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
 // mark ourselves as needing a redraw.
 - (void)internalSetSelected:(BOOL)selected {
   selected_ = selected;
-  CTTabView* tabView = static_cast<CTTabView*>([self view]);
+  CTTabView* tabView = (CTTabView*)[self view];
   assert([tabView isKindOfClass:[CTTabView class]]);
   [tabView setState:selected];
   [tabView cancelAlert];
@@ -137,7 +137,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
 - (void)setTitle:(NSString*)title {
   [[self view] setToolTip:title];
   if ([self mini] && ![self selected]) {
-    CTTabView* tabView = static_cast<CTTabView*>([self view]);
+    CTTabView* tabView = (CTTabView*)[self view];
     assert([tabView isKindOfClass:[CTTabView class]]);
     [tabView startAlert];
   }

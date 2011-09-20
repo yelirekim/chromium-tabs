@@ -48,9 +48,12 @@ extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
 @implementation CTTabStripModel2 {
     CTTabStripModel* tabStripModel_;
+    NSMutableArray* contents_data_;
+    BOOL closing_all_;
 }
 
 @synthesize insertionPolicy = insertionPolicy_;
+@synthesize selectedIndex = selectedIndex_;
 
 static const int kNoTab = -1;
 
@@ -58,6 +61,7 @@ static const int kNoTab = -1;
 {
     if (nil != (self = [super init])) {
         tabStripModel_ = tabStripModel;
+        contents_data_ = [NSMutableArray array];
     }
     return self;
 }
@@ -69,17 +73,7 @@ static const int kNoTab = -1;
 
 - (NSInteger) count
 {
-    return tabStripModel_->count();
-}
-
-- (NSInteger) selectedIndex
-{
-    return tabStripModel_->selected_index();
-}
-
-- (void) setSelectedIndex:(NSInteger)selectedIndex
-{
-    tabStripModel_->selected_index_ = selectedIndex;
+    return contents_data_.count;
 }
 
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index
@@ -93,7 +87,7 @@ static const int kNoTab = -1;
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents
 {
     int index = 0;
-    for (TabContentsData* data in tabStripModel_->contents_data_) {
+    for (TabContentsData* data in contents_data_) {
         if (data->contents == tabContents) {
             return index;
         }
@@ -128,7 +122,7 @@ static const int kNoTab = -1;
 
 - (NSInteger) indexOfFirstNonMiniTab
 {
-    for (size_t i = 0; i < tabStripModel_->contents_data_.count; ++i) {
+    for (size_t i = 0; i < contents_data_.count; ++i) {
         if (![self isMiniTabAtIndex:i]) {
             return i;
         }
@@ -143,7 +137,7 @@ static const int kNoTab = -1;
 
 - (BOOL) isTabPinnedAtIndex:(NSInteger)index
 {
-    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->pinned;
 }
 
@@ -179,14 +173,14 @@ static const int kNoTab = -1;
     bool pin = contents.isApp || options & ADD_PINNED;
     index = [self constrainInsertionIndex:index miniTab:pin];
     
-    tabStripModel_->closing_all_ = false;
+    closing_all_ = false;
     
     CTTabContents* selected_contents = [self selectedTabContents];
     TabContentsData* data = [[TabContentsData alloc] init];
     data->contents = contents;
     data->pinned = pin;
     
-    [tabStripModel_->contents_data_ insertObject:data atIndex:index];
+    [contents_data_ insertObject:data atIndex:index];
     
     if (index <= self.selectedIndex) {
         ++self.selectedIndex;
@@ -219,7 +213,7 @@ static const int kNoTab = -1;
 {
     assert([self containsIndex:index]);
     CTTabContents* old_contents = [self tabContentsAtIndex:index];
-    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    TabContentsData* data = [contents_data_ objectAtIndex:index];
     data->contents = contents;
     
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -298,7 +292,6 @@ static const int kNoTab = -1;
 
 - (CTTabContents*) detachTabContentsAtIndex:(NSInteger)index
 {
-    NSMutableArray* contents_data_ = tabStripModel_->contents_data_;
     if (contents_data_.count == 0)
         return nil;
     
@@ -309,7 +302,7 @@ static const int kNoTab = -1;
     [contents_data_ removeObjectAtIndex:index];
     next_selected_index = [self indexOfNextNonPhantomTabFromIndex:next_selected_index ignoreIndex:-1];
     if (![self hasNonPhantomTabs]) {
-        tabStripModel_->closing_all_ = true;
+        closing_all_ = true;
     }
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               removed_contents, kCTTabContentsUserInfoKey,
@@ -320,10 +313,10 @@ static const int kNoTab = -1;
         [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabStripEmptyNotification object:self userInfo:nil];
     }
     if ([self hasNonPhantomTabs]) {
-        if (index == tabStripModel_->selected_index_) {
+        if (index == selectedIndex_) {
             [self changeSelectedContentsFrom:removed_contents toIndex:next_selected_index userGesture:NO];
-        } else if (index < tabStripModel_->selected_index_) {
-            --tabStripModel_->selected_index_;
+        } else if (index < selectedIndex_) {
+            --selectedIndex_;
         }
     }
     return removed_contents;
@@ -332,7 +325,7 @@ static const int kNoTab = -1;
 - (void) setTabPinnedAtIndex:(NSInteger)index pinned:(BOOL)pinned
 {
     assert([self containsIndex:index]);
-    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    TabContentsData* data = [contents_data_ objectAtIndex:index];
     if (data->pinned == pinned)
         return;
     
@@ -416,9 +409,9 @@ static const int kNoTab = -1;
      
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
 {
-    TabContentsData* moved_data = [tabStripModel_->contents_data_ objectAtIndex:fromIndex];
-    [tabStripModel_->contents_data_ removeObjectAtIndex:fromIndex];
-    [tabStripModel_->contents_data_ insertObject:moved_data atIndex:toIndex];
+    TabContentsData* moved_data = [contents_data_ objectAtIndex:fromIndex];
+    [contents_data_ removeObjectAtIndex:fromIndex];
+    [contents_data_ insertObject:moved_data atIndex:toIndex];
 
     int selectedIndex = self.selectedIndex;
     if (selectedAfterMove || fromIndex == selectedIndex) {
@@ -439,7 +432,7 @@ static const int kNoTab = -1;
 
 - (void) selectRelativeTab:(BOOL)next
 {
-    if (tabStripModel_->contents_data_.count == 0)
+    if (contents_data_.count == 0)
         return;
     
     int index = self.selectedIndex;
@@ -496,7 +489,7 @@ static const int kNoTab = -1;
 
 - (CTTabContents*) _contentsAtIndex:(NSInteger)index
 {
-    TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
+    TabContentsData* data = [contents_data_ objectAtIndex:index];
     return data->contents;
 }
 

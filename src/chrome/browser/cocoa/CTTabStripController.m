@@ -8,7 +8,6 @@
 #import "CTTabContents.h"
 #import "CTBrowser.h"
 #import "CTUtil.h"
-#import "NSImage+CTAdditions.h"
 
 #import "NewTabButton.h"
 #import "CTTabStripView.h"
@@ -171,10 +170,11 @@ const NSTimeInterval kAnimationDuration = 0.125;
 @synthesize indentForControls = indentForControls_;
 
 + (void)initialize {
-    kNewTabHoverImage = [NSImage imageInAppOrCTFrameworkNamed:@"newtab_h"];
-    kNewTabImage = [NSImage imageInAppOrCTFrameworkNamed:@"newtab"];
-    kNewTabPressedImage = [NSImage imageInAppOrCTFrameworkNamed:@"newtab_p"];
-    kDefaultIconImage = [NSImage imageInAppOrCTFrameworkNamed:@"default-icon"];
+    NSBundle* bundle = [NSBundle bundleForClass:self];
+    kNewTabHoverImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"newtab_h" ofType:@"pdf"]];
+    kNewTabImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"newtab" ofType:@"pdf"]];
+    kNewTabPressedImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"newtab_p" ofType:@"pdf"]];
+    kDefaultIconImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"default-icon" ofType:@"pdf"]];
 }
 
 - (id)initWithView:(CTTabStripView*)view switchView:(NSView*)switchView browser:(CTBrowser*)browser {
@@ -903,14 +903,12 @@ const NSTimeInterval kAnimationDuration = 0.125;
     static NSImage* throbberLoadingImage = nil;
     static NSImage* sadFaviconImage = nil;
     if (throbberWaitingImage == nil) {
-        throbberWaitingImage =
-        [NSImage imageInAppOrCTFrameworkNamed:@"throbber_waiting"];
+        NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+        throbberWaitingImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"throbber_waiting" ofType:@"png"]];
         assert(throbberWaitingImage);
-        throbberLoadingImage =
-        [NSImage imageInAppOrCTFrameworkNamed:@"throbber"];
+        throbberLoadingImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"throbber" ofType:@"png"]];
         assert(throbberLoadingImage);
-        sadFaviconImage =
-        [NSImage imageInAppOrCTFrameworkNamed:@"sadfavicon"];
+        sadFaviconImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"sadfavicon" ofType:@"png"]];
         assert(sadFaviconImage);
     }
     

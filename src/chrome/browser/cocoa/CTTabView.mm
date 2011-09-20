@@ -117,7 +117,7 @@ const CGFloat kRapidCloseDist = 2.5;
     // resetDragControllers clears this cache.
     //
     // TODO(davidben): When 10.5 becomes unsupported, remove this.
-    std::map<CGWindowID, int> workspaceIDCache_;
+    NSMutableDictionary* workspaceIDCache_;
     
     CTTabWindowController* targetController_;  // weak. Controller being targeted
     NSCellStateValue state_;
@@ -132,6 +132,7 @@ const CGFloat kRapidCloseDist = 2.5;
   self = [super initWithFrame:frame];
   if (self) {
     [self setShowsDivider:NO];
+      workspaceIDCache_ = [NSMutableDictionary dictionary];
     // TODO(alcor): register for theming
   }
   return self;
@@ -265,7 +266,7 @@ const CGFloat kRapidCloseDist = 2.5;
   sourceController_ = nil;
   sourceWindow_ = nil;
   targetController_ = nil;
-  workspaceIDCache_.clear();
+  [workspaceIDCache_ removeAllObjects];
 }
 
 // Sets whether the window background should be visible or invisible when
@@ -1016,10 +1017,10 @@ const CGFloat kRapidCloseDist = 2.5;
 - (int)getWorkspaceID:(NSWindow*)window useCache:(BOOL)useCache {
   CGWindowID windowID = [window windowNumber];
   if (useCache) {
-    std::map<CGWindowID, int>::iterator iter =
-        workspaceIDCache_.find(windowID);
-    if (iter != workspaceIDCache_.end())
-      return iter->second;
+      NSNumber* workspace = [workspaceIDCache_ objectForKey:[NSNumber numberWithInt:windowID]];
+      if (workspace) {
+          return [workspace intValue];
+      }
   }
 
   int workspace = -1;
@@ -1051,7 +1052,7 @@ const CGFloat kRapidCloseDist = 2.5;
     }
   }
   if (useCache) {
-    workspaceIDCache_[windowID] = workspace;
+      [workspaceIDCache_ setObject:[NSNumber numberWithInt:workspace] forKey:[NSNumber numberWithInt:windowID]];
   }
     CFRelease(windowIDs);
     CFRelease(descriptions);

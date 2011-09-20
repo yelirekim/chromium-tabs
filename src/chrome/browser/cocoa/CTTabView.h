@@ -9,8 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import <ApplicationServices/ApplicationServices.h>
 
-#import <map>
-
 #import "BackgroundGradientView.h"
 #import "HoverCloseButton.h"
 

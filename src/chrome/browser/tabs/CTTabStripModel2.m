@@ -1,4 +1,5 @@
 #import "CTTabStripModel2.h"
+#import "CTTabContents.h"
 
 NSString* const kCTTabInsertedNotification = @"kCTTabInsertedNotification";
 NSString* const kCTTabClosingNotification = @"kCTTabClosingNotification";

@@ -11,9 +11,7 @@
 #import "CTTabContents.h"
 
 
-@implementation TabContentsData
 
-@end
 
 ///////////////////////////////////////////////////////////////////////////////
 // TabStripModelObserver, public:

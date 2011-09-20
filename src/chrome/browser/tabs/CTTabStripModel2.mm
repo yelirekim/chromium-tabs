@@ -1,5 +1,4 @@
 #import "CTTabStripModel2.h"
-#import "CTTabStripModel.h"
 
 extern NSString* const kCTTabInsertedNotification = @"kCTTabInsertedNotification";
 extern NSString* const kCTTabClosingNotification = @"kCTTabClosingNotification";
@@ -22,6 +21,18 @@ extern NSString* const kCTTabToIndexUserInfoKey = @"kCTTabToIndexUserInfoKey";
 extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
 extern NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
 extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
+
+@interface TabContentsData : NSObject {
+@public
+    CTTabContents* contents;
+    BOOL pinned;
+    BOOL blocked;
+}
+@end
+
+@implementation TabContentsData
+
+@end
 
 @interface CTTabStripModel2 (Private)
 
@@ -527,7 +538,7 @@ static const int kNoTab = -1;
     CTTabContents* parentOpener = [[self tabContentsAtIndex:removing_index] parentOpener];
     if (parentOpener) {
         int index = [self indexOfTabContents:parentOpener];
-        if (index != CTTabStripModel::kNoTab)
+        if (index != kNoTab)
             return [self validIndexForIndex:index removingIndex:removing_index isRemove:is_remove];
     }
     

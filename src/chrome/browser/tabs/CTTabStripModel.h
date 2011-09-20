@@ -136,13 +136,7 @@ class CTTabStripModelObserver {
   virtual ~CTTabStripModelObserver() {}
 };
 
-@interface TabContentsData : NSObject {
-@public
-    CTTabContents* contents;
-    BOOL pinned;
-    BOOL blocked;
-}
-@end
+
 
 
 ////////////////////////////////////////////////////////////////////////////////

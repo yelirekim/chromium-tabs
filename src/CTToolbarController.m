@@ -10,42 +10,36 @@
 @end
 
 @implementation CTToolbarController {
-    CTBrowser* browser_;  // weak, one per window
-    // Tracking area for mouse enter/exit/moved in the toolbar.
+    CTBrowser* browser_;
     NSTrackingArea* trackingArea_;
 }
 
 - (id)initWithBrowser:(CTBrowser*)browser {
-    self = [self initWithNibName:@"Toolbar" bundle:[NSBundle bundleForClass:[self class]]];
-  assert(self);
-  browser_ = browser; // weak
-  return self;
+    if (nil != (self = [self initWithNibName:@"Toolbar" bundle:[NSBundle bundleForClass:[self class]]])) {
+        browser_ = browser;
+    }
+    return self;
 }
 
-
-- (void)updateToolbarWithContents:(CTTabContents*)contents
-               shouldRestoreState:(BOOL)shouldRestore {
-  // subclasses should implement this
+- (void)updateToolbarWithContents:(CTTabContents*)contents shouldRestoreState:(BOOL)shouldRestore {
+    // subclasses should implement this
 }
-
 
 - (void)setDividerOpacity:(CGFloat)opacity {
-  BackgroundGradientView* view = [self backgroundGradientView];
-  [view setShowsDivider:(opacity > 0 ? YES : NO)];
-  if ([view isKindOfClass:[CTToolbarView class]]) {
-    CTToolbarView* toolbarView = (CTToolbarView*)view;
-    [toolbarView setDividerOpacity:opacity];
-  }
+    BackgroundGradientView* view = [self backgroundGradientView];
+    [view setShowsDivider:(opacity > 0 ? YES : NO)];
+    if ([view isKindOfClass:[CTToolbarView class]]) {
+        CTToolbarView* toolbarView = (CTToolbarView*)view;
+        [toolbarView setDividerOpacity:opacity];
+    }
 }
 
 #pragma mark -
 #pragma mark Private
 
-// (Private) Returns the backdrop to the toolbar.
 - (BackgroundGradientView*)backgroundGradientView {
-  // We really do mean |[super view]| see our override of |-view|.
-  assert([[super view] isKindOfClass:[BackgroundGradientView class]]);
-  return (BackgroundGradientView*)[super view];
+    assert([[super view] isKindOfClass:[BackgroundGradientView class]]);
+    return (BackgroundGradientView*)[super view];
 }
 
 

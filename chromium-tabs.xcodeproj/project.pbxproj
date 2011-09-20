@@ -74,9 +74,6 @@
 		3A92904712294F1900DA7E43 /* CTToolbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92904512294F1900DA7E43 /* CTToolbarController.m */; };
 		3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A92907512295BC400DA7E43 /* Toolbar.xib */; };
 		3A9291981229BEB600DA7E43 /* CTPageTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921DB1221AA4B006D8305 /* CTPageTransition.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A92919B1229BEE900DA7E43 /* basictypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA331225E911009E2908 /* basictypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A92919D1229BEE900DA7E43 /* observer_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA351225E911009E2908 /* observer_list.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291A21229BEE900DA7E43 /* stl_util-inl.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA3A1225E911009E2908 /* stl_util-inl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE71222D53500F1BB78 /* ThrobberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A51229BEE900DA7E43 /* BackgroundGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3927111221C596006D8305 /* BackgroundGradientView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A61229BEE900DA7E43 /* HoverButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921ED1221AF58006D8305 /* HoverButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -181,9 +178,6 @@
 		3A3ED97D1225E116009E2908 /* ChromiumTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.h; sourceTree = "<group>"; };
 		3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChromiumTabs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A3ED9841225E27E009E2908 /* ChromiumTabs-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChromiumTabs-Info.plist"; sourceTree = "<group>"; };
-		3A3EDA331225E911009E2908 /* basictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basictypes.h; sourceTree = "<group>"; };
-		3A3EDA351225E911009E2908 /* observer_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = observer_list.h; sourceTree = "<group>"; };
-		3A3EDA3A1225E911009E2908 /* stl_util-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "stl_util-inl.h"; sourceTree = "<group>"; };
 		3A3EDA701225EBBB009E2908 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3A3EDA711225EBBB009E2908 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3A3EDA731225EBBB009E2908 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -274,7 +268,6 @@
 				3A92904512294F1900DA7E43 /* CTToolbarController.m */,
 				3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */,
 				3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */,
-				3A3EDA321225E911009E2908 /* base */,
 				3A3ED6741225CE7A009E2908 /* third_party */,
 				3A3921D81221AA4B006D8305 /* chrome */,
 			);
@@ -433,16 +426,6 @@
 			path = molokocacao;
 			sourceTree = "<group>";
 		};
-		3A3EDA321225E911009E2908 /* base */ = {
-			isa = PBXGroup;
-			children = (
-				3A3EDA331225E911009E2908 /* basictypes.h */,
-				3A3EDA351225E911009E2908 /* observer_list.h */,
-				3A3EDA3A1225E911009E2908 /* stl_util-inl.h */,
-			);
-			path = base;
-			sourceTree = "<group>";
-		};
 		3A3EDA6E1225EBBB009E2908 /* examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -505,9 +488,6 @@
 				3A929008122947A800DA7E43 /* CTToolbarView.h in Headers */,
 				3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */,
 				3A92904612294F1900DA7E43 /* CTToolbarController.h in Headers */,
-				3A92919B1229BEE900DA7E43 /* basictypes.h in Headers */,
-				3A92919D1229BEE900DA7E43 /* observer_list.h in Headers */,
-				3A9291A21229BEE900DA7E43 /* stl_util-inl.h in Headers */,
 				3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */,
 				3A9291A51229BEE900DA7E43 /* BackgroundGradientView.h in Headers */,
 				3A9291A61229BEE900DA7E43 /* HoverButton.h in Headers */,

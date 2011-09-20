@@ -83,7 +83,6 @@ extern NSString* const kCTTabChangedNotification;
 extern NSString* const kCTTabReplacedNotification;
 extern NSString* const kCTTabPinnedStateChangedNotification;
 extern NSString* const kCTTabMiniStateChangedNotification;
-extern NSString* const kCTTabBlockedStateChangedNotification;
 extern NSString* const kCTTabStripEmptyNotification;
 extern NSString* const kCTTabStripModelDeletedNotification;
 

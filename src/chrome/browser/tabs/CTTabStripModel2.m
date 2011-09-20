@@ -10,7 +10,6 @@ NSString* const kCTTabChangedNotification = @"kCTTabChangedNotification";
 NSString* const kCTTabReplacedNotification = @"kCTTabReplacedNotification";
 NSString* const kCTTabPinnedStateChangedNotification = @"kCTTabPinnedStateChangedNotification";
 NSString* const kCTTabMiniStateChangedNotification = @"kCTTabMiniStateChangedNotification";
-NSString* const kCTTabBlockedStateChangedNotification = @"kCTTabBlockedStateChangedNotification";
 NSString* const kCTTabStripEmptyNotification = @"kCTTabStripEmptyNotification";
 NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelDeletedNotification";
 
@@ -28,7 +27,6 @@ const int kNoTab = -1;
 @public
     CTTabContents* contents;
     BOOL pinned;
-    BOOL blocked;
 }
 @end
 

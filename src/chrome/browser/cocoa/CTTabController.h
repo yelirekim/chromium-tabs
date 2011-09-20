@@ -10,12 +10,12 @@
 #import "HoverCloseButton.h"
 
 // The loading/waiting state of the tab.
-enum CTTabLoadingState {
+typedef enum {
   CTTabLoadingStateDone,
   CTTabLoadingStateLoading,
   CTTabLoadingStateWaiting,
   CTTabLoadingStateCrashed,
-};
+} CTTabLoadingState;
 
 @class CTTabView;
 @protocol CTTabControllerTarget;

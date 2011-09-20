@@ -28,9 +28,6 @@ static CFTypeRef GetValueFromDictionary(CFDictionaryRef dict,
   return value;
 }
 
-
-namespace {
-
 // Constants for inset and control points for tab shape.
 const CGFloat kInsetMultiplier = 2.0/3.0;
 const CGFloat kControlPoint1Multiplier = 1.0/3.0;
@@ -56,8 +53,6 @@ const NSTimeInterval kTearDuration = 0.333;
 // has moved less than the threshold, we want to close the tab.
 const CGFloat kRapidCloseDist = 2.5;
 
-}  // namespace
-
 @interface CTTabView(Private)
 
 - (void)resetLastGlowUpdateTime;
@@ -80,7 +75,7 @@ const CGFloat kRapidCloseDist = 2.5;
     NSTrackingArea* closeTrackingArea_;
     
     BOOL isMouseInside_;  // Is the mouse hovering over?
-    tabs::AlertState alertState_;
+    AlertState alertState_;
     
     CGFloat hoverAlpha_;  // How strong the hover glow is.
     NSTimeInterval hoverHoldEndTime_;  // When the hover glow will begin dimming.
@@ -217,8 +212,7 @@ const CGFloat kRapidCloseDist = 2.5;
     return NO;
   NSWindowController* controller = [sourceWindow_ windowController];
   if ([controller isKindOfClass:[CTTabWindowController class]]) {
-    CTTabWindowController* realController =
-        static_cast<CTTabWindowController*>(controller);
+    CTTabWindowController* realController = controller;
     return [realController isTabDraggable:self];
   }
   return YES;
@@ -249,8 +243,7 @@ const CGFloat kRapidCloseDist = 2.5;
     }
     NSWindowController* controller = [window windowController];
     if ([controller isKindOfClass:[CTTabWindowController class]]) {
-      CTTabWindowController* realController =
-          static_cast<CTTabWindowController*>(controller);
+      CTTabWindowController* realController = controller;
       if ([realController canReceiveFrom:dragController])
         [targets addObject:controller];
     }
@@ -737,7 +730,7 @@ const CGFloat kRapidCloseDist = 2.5;
   if (selected || hoverAlpha > 0 || alertAlpha > 0) {
     // Draw the selected background / glow overlay.
     [context saveGraphicsState];
-    CGContextRef cgContext = static_cast<CGContextRef>([context graphicsPort]);
+    CGContextRef cgContext = [context graphicsPort];
     CGContextBeginTransparencyLayer(cgContext, 0);
     if (!selected) {
       // The alert glow overlay is like the selected state but at most at most
@@ -839,16 +832,16 @@ const CGFloat kRapidCloseDist = 2.5;
 
 - (void)startAlert {
   // Do not start a new alert while already alerting or while in a decay cycle.
-  if (alertState_ == tabs::kAlertNone) {
-    alertState_ = tabs::kAlertRising;
+  if (alertState_ == kAlertNone) {
+    alertState_ = kAlertRising;
     [self resetLastGlowUpdateTime];
     [self adjustGlowValue];
   }
 }
 
 - (void)cancelAlert {
-  if (alertState_ != tabs::kAlertNone) {
-    alertState_ = tabs::kAlertFalling;
+  if (alertState_ != kAlertNone) {
+    alertState_ = kAlertFalling;
     alertHoldEndTime_ =
         [NSDate timeIntervalSinceReferenceDate] + kGlowUpdateInterval;
     [self resetLastGlowUpdateTime];
@@ -968,28 +961,28 @@ const CGFloat kRapidCloseDist = 2.5;
   }
 
   CGFloat alertAlpha = [self alertAlpha];
-  if (alertState_ == tabs::kAlertRising) {
+  if (alertState_ == kAlertRising) {
     // Increase alert glow until it's 1 ...
     alertAlpha = MIN(alertAlpha + elapsed / kAlertShowDuration, 1);
     [self setAlertAlpha:alertAlpha];
 
     // ... and having reached 1, switch to holding.
     if (alertAlpha >= 1) {
-      alertState_ = tabs::kAlertHolding;
+      alertState_ = kAlertHolding;
       alertHoldEndTime_ = currentTime + kAlertHoldDuration;
       nextUpdate = MIN(kAlertHoldDuration, nextUpdate);
     } else {
       nextUpdate = MIN(kGlowUpdateInterval, nextUpdate);
     }
-  } else if (alertState_ != tabs::kAlertNone) {
+  } else if (alertState_ != kAlertNone) {
     if (alertAlpha > 0) {
       if (currentTime >= alertHoldEndTime_) {
         // Stop holding, then decrease alert glow (until it's 0).
-        if (alertState_ == tabs::kAlertHolding) {
-          alertState_ = tabs::kAlertFalling;
+        if (alertState_ == kAlertHolding) {
+          alertState_ = kAlertFalling;
           nextUpdate = MIN(kGlowUpdateInterval, nextUpdate);
         } else {
-          DCHECK_EQ(tabs::kAlertFalling, alertState_);
+          DCHECK_EQ(kAlertFalling, alertState_);
           alertAlpha = MAX(alertAlpha - elapsed / kAlertHideDuration, 0);
           [self setAlertAlpha:alertAlpha];
           nextUpdate = MIN(kGlowUpdateInterval, nextUpdate);
@@ -1000,7 +993,7 @@ const CGFloat kRapidCloseDist = 2.5;
       }
     } else {
       // Done the alert decay cycle.
-      alertState_ = tabs::kAlertNone;
+      alertState_ = kAlertNone;
     }
   }
 
@@ -1025,12 +1018,11 @@ const CGFloat kRapidCloseDist = 2.5;
 
   int workspace = -1;
   // It's possible to query in bulk, but probably not necessary.
-  CFArrayRef windowIDs = CFArrayCreate(NULL, reinterpret_cast<const void **>(&windowID), 1, NULL);
+  CFArrayRef windowIDs = CFArrayCreate(NULL, (const void**)&windowID, 1, NULL);
   CFArrayRef descriptions = CGWindowListCreateDescriptionFromArray(windowIDs);
   assert(CFArrayGetCount(descriptions) <= 1);
   if (CFArrayGetCount(descriptions) > 0) {
-    CFDictionaryRef dict = static_cast<CFDictionaryRef>(
-        CFArrayGetValueAtIndex(descriptions, 0));
+    CFDictionaryRef dict = CFArrayGetValueAtIndex(descriptions, 0);
     assert(CFGetTypeID(dict) == CFDictionaryGetTypeID());
 
     // Sanity check the ID.

@@ -12,8 +12,6 @@
 #import "BackgroundGradientView.h"
 #import "HoverCloseButton.h"
 
-namespace tabs {
-
 // Nomenclature:
 // Tabs _glow_ under two different circumstances, when they are _hovered_ (by
 // the mouse) and when they are _alerted_ (to show that the tab's title has
@@ -23,14 +21,12 @@ namespace tabs {
 // This is more complicated than a simple on/off since we want to allow the
 // alert glow to go through a full rise-hold-fall cycle to avoid flickering (or
 // always holding).
-enum AlertState {
+typedef enum {
   kAlertNone = 0,  // Obj-C initializes to this.
   kAlertRising,
   kAlertHolding,
   kAlertFalling
-};
-
-}  // namespace tabs
+} AlertState;
 
 @class CTTabController, CTTabWindowController;
 

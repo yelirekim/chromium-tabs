@@ -10,21 +10,6 @@
 @synthesize windowController = windowController_;
 @synthesize tabStripModel2 = tabStripModel2_;
 
-
-/*- (id)retain {
- self = [super retain];
- NSLog(@"%@  did retain  (retainCount: %u)", self, [self retainCount]);
- NSLog(@"%@", [NSThread callStackSymbols]);
- return self;
- }
- 
- - (void)release {
- NSLog(@"%@ will release (retainCount: %u)", self, [self retainCount]);
- NSLog(@"%@", [NSThread callStackSymbols]);
- [super release];
- }*/
-
-
 + (CTBrowser*)browser {
     return [[self alloc] init];
 }
@@ -42,11 +27,9 @@
     return [[CTToolbarController alloc] initWithBrowser:self];
 }
 
--(CTTabContentsController*)createTabContentsControllerWithContents:
-(CTTabContents*)contents {
+-(CTTabContentsController*)createTabContentsControllerWithContents:(CTTabContents*)contents {
     // subclasses could override this
-    return [[CTTabContentsController alloc]
-            initWithContents:contents];
+    return [[CTTabContentsController alloc] initWithContents:contents];
 }
 
 
@@ -57,7 +40,8 @@
     return [windowController_ window];
 }
 
-// TabStripModel convenience helpers
+#pragma mark -
+#pragma mark TabStripModel convenience helpers
 
 -(int)tabCount {
     return [tabStripModel2_ count];
@@ -126,25 +110,10 @@
     [tabStripModel2_ closeAllTabs];
 }
 
-
-#pragma mark -
-#pragma mark UI state
-
-
-/*-(NSRect)savedWindowBounds {
- gfx::Rect restored_bounds = override_bounds_;
- bool maximized;
- WindowSizer::GetBrowserWindowBounds(app_name_, restored_bounds, NULL,
- &restored_bounds, &maximized);
- return restored_bounds;
- }*/
-
-
 #pragma mark -
 #pragma mark Commands
 
 -(void)newWindow {
-    // Create a new browser & window when we start
     Class cls = self.windowController ? [self.windowController class] :
     [CTBrowserWindowController class];
     CTBrowser *browser = [isa browser];
@@ -158,23 +127,17 @@
     [self.windowController close];
 }
 
--(CTTabContents*)addTabContents:(CTTabContents*)contents
-                        atIndex:(int)index
-                   inForeground:(BOOL)foreground {
-    int addTypes = foreground ? (ADD_SELECTED |
-                                 ADD_INHERIT_GROUP)
-    : ADD_NONE;
+-(CTTabContents*)addTabContents:(CTTabContents*)contents atIndex:(int)index inForeground:(BOOL)foreground {
+    int addTypes = foreground ? (ADD_SELECTED | ADD_INHERIT_GROUP) : ADD_NONE;
     index = [tabStripModel2_ addTabContents:contents atIndex:index withPageTransition:CTPageTransitionTyped options:addTypes];
     if ((addTypes & ADD_SELECTED) == 0) {
-        // TabStripModel::AddTabContents invokes HideContents if not foreground.
         contents.isVisible = NO;
     }
     return contents;
 }
 
 
--(CTTabContents*)addTabContents:(CTTabContents*)contents
-                   inForeground:(BOOL)foreground {
+-(CTTabContents*)addTabContents:(CTTabContents*)contents inForeground:(BOOL)foreground {
     return [self addTabContents:contents atIndex:-1 inForeground:foreground];
 }
 
@@ -185,10 +148,8 @@
 
 
 -(CTTabContents*)createBlankTabBasedOn:(CTTabContents*)baseContents {
-    // subclasses should override this to provide a custom CTTabContents type
-    // and/or initialization
-    return [[CTTabContents alloc]
-            initWithBaseTabContents:baseContents];
+    // subclasses should override this to provide a custom CTTabContents type and/or initialization
+    return [[CTTabContents alloc] initWithBaseTabContents:baseContents];
 }
 
 // implementation conforms to CTTabStripModelDelegate
@@ -243,37 +204,15 @@
 }
 
 
--(void)executeCommand:(int)cmd
-      withDisposition:(CTWindowOpenDisposition)disposition {
-    //DLOG_EXPR(cmd); //< useful to debug incoming |cmd| values
-    // No commands are enabled if there is not yet any selected tab.
-    // TODO(pkasting): It seems like we should not need this, because either
-    // most/all commands should not have been enabled yet anyway or the ones that
-    // are enabled should be global, or safe themselves against having no selected
-    // tab.  However, Ben says he tried removing this before and got lots of
-    // crashes, e.g. from Windows sending WM_COMMANDs at random times during
-    // window construction.  This probably could use closer examination someday.
-    if (![self selectedTabContents])
+-(void)executeCommand:(int)cmd withDisposition:(CTWindowOpenDisposition)disposition {
+    if (![self selectedTabContents]) {
         return;
+    }
     
-    // If command execution is blocked then just record the command and return.
-    /*if (block_command_execution_) {
-     // We actually only allow no more than one blocked command, otherwise some
-     // commands maybe lost.
-     DCHECK_EQ(last_blocked_command_id_, -1);
-     last_blocked_command_id_ = id;
-     last_blocked_command_disposition_ = disposition;
-     return;
-     }*/
-    
-    // The order of commands in this switch statement must match the function
-    // declaration order in BrowserCommands.h
+    // The order of commands in this switch statement must match the function declaration order in BrowserCommands.h
     switch (cmd) {
-            // Window management commands
         case CTBrowserCommandNewWindow:            [self newWindow]; break;
-            //case CTBrowserCommandNewIncognitoWindow: break;
         case CTBrowserCommandCloseWindow:          [self closeWindow]; break;
-            //case CTBrowserCommandAlwaysOnTop: break;
         case CTBrowserCommandNewTab:               [self addBlankTab]; break;
         case CTBrowserCommandCloseTab:             [self closeTab]; break;
         case CTBrowserCommandSelectNextTab:       [self selectNextTab]; break;
@@ -291,9 +230,6 @@
         }
         case CTBrowserCommandSelectLastTab:    [self selectLastTab]; break;
         case CTBrowserCommandDuplicateTab:     [self duplicateTab]; break;
-            //case CTBrowserCommandRestoreTab:     break;
-            //case CTBrowserCommandShowAsTab:      break;
-            //case CTBrowserCommandFullscreen:     DLOG("TODO ToggleFullscreenMode();"); break;
         case CTBrowserCommandExit:             [NSApp terminate:self]; break;
         case CTBrowserCommandMoveTabNext:      [self moveTabNext]; break;
         case CTBrowserCommandMoveTabPrevious:  [self moveTabPrevious]; break;
@@ -316,13 +252,6 @@
 
 
 -(CTBrowser*)createNewStripWithContents:(CTTabContents*)contents {
-    //assert(CanSupportWindowFeature(FEATURE_TABSTRIP));
-    
-    //gfx::Rect new_window_bounds = window_bounds;
-    //if (dock_info.GetNewWindowBounds(&new_window_bounds, &maximize))
-    //  dock_info.AdjustOtherWindowBounds();
-    
-    // Create an empty new browser window the same size as the old one.
     CTBrowser* browser = [isa browser];
     [browser.tabStripModel2 appendTabContents:contents foreground:YES];
     [browser loadingStateDidChange:contents];
@@ -330,66 +259,41 @@
     return browser;
 }
 
-// Creates a new CTBrowser object and window containing the specified
-// |contents|, and continues a drag operation that began within the source
-// window's tab strip. |window_bounds| are the bounds of the source window in
-// screen coordinates, used to place the new window, and |tab_bounds| are the
-// bounds of the dragged Tab view in the source window, in screen coordinates,
-// used to place the new Tab in the new window.
--(void)continueDraggingDetachedTab:(CTTabContents*)contents
-                      windowBounds:(const NSRect)windowBounds
-                         tabBounds:(const NSRect)tabBounds {
+-(void)continueDraggingDetachedTab:(CTTabContents*)contents windowBounds:(const NSRect)windowBounds tabBounds:(const NSRect)tabBounds {
     [self doesNotRecognizeSelector:_cmd];
 }
 
 
-// Returns whether some contents can be duplicated.
 -(BOOL)canDuplicateContentsAt:(int)index {
     return NO;
 }
 
-// Duplicates the contents at the provided index and places it into its own
-// window.
 -(void)duplicateContentsAt:(int)index {
     [self doesNotRecognizeSelector:_cmd];
 }
 
-// Called when a drag session has completed and the frame that initiated the
-// the session should be closed.
 -(void)closeFrameAfterDragSession {
-    
 }
 
-// Creates an entry in the historical tab database for the specified
-// CTTabContents.
 -(void)createHistoricalTab:(CTTabContents*)contents {
     
 }
 
-// Runs any unload listeners associated with the specified CTTabContents before
-// it is closed. If there are unload listeners that need to be run, this
-// function returns true and the TabStripModel will wait before closing the
-// CTTabContents. If it returns false, there are no unload listeners and the
-// TabStripModel can close the CTTabContents immediately.
 -(BOOL)runUnloadListenerBeforeClosing:(CTTabContents*)contents {
     return NO;
 }
 
-// Returns true if a tab can be restored.
 -(BOOL)canRestoreTab {
     return NO;
 }
 
-// Restores the last closed tab if CanRestoreTab would return true.
 -(void)restoreTab {
 }
 
-// Returns whether some contents can be closed.
 -(BOOL)canCloseContentsAt:(int)index {
     return YES;
 }
 
-// Returns true if any of the tabs can be closed.
 -(BOOL)canCloseTab {
     return YES;
 }

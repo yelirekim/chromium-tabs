@@ -12,7 +12,7 @@
 
   // Size of the gradient. Empirically determined so that the gradient looks
   // like what the heuristic does when there are just a few tabs.
-  const CGFloat kWindowGradientHeight = 24.0;
+const CGFloat kWindowGradientHeight = 24.0;
 
 // Our browser window does some interesting things to get the behaviors that
 // we want. We replace the standard window controls (zoom, close, miniaturize)

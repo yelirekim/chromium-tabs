@@ -417,13 +417,8 @@ static const int kNoTab = -1;
 {
     assert([self containsIndex:toIndex]);
     CTTabContents* new_contents = [self tabContentsAtIndex:toIndex];
-    if (old_contents == new_contents)
+    if (old_contents == new_contents) {
         return;
-    
-    CTTabContents* last_selected_contents = old_contents;
-    if (last_selected_contents) {
-        FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                          TabDeselectedAt(last_selected_contents, self.selectedIndex));
     }
     
     self.selectedIndex = toIndex;
@@ -431,7 +426,7 @@ static const int kNoTab = -1;
                               new_contents, kCTTabNewContentsUserInfoKey,
                               [NSNumber numberWithInt:self.selectedIndex], kCTTabIndexUserInfoKey,
                               [NSNumber numberWithBool:userGesture], kCTTabUserGestureUserInfoKey,
-                              last_selected_contents, kCTTabContentsUserInfoKey,
+                              old_contents, kCTTabContentsUserInfoKey,
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabSelectedNotification object:self userInfo:userInfo];
 }

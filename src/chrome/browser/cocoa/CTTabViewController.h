@@ -31,7 +31,7 @@ typedef enum {
 // progress. The default in the nib is an image view so nothing special is
 // required if that's all you need.
 
-@interface CTTabController : NSViewController
+@interface CTTabViewController : NSViewController
 
 @property(assign, nonatomic) CTTabLoadingState loadingState;
 
@@ -88,7 +88,7 @@ typedef enum {
 - (void)updateTitleColor;
 @end
 
-@interface CTTabController(TestingAPI)
+@interface CTTabViewController(TestingAPI)
 - (NSString*)toolTip;
 - (CGFloat)iconCapacity;
 - (BOOL)shouldShowIcon;

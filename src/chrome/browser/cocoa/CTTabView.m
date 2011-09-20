@@ -4,7 +4,7 @@
 
 #import "CTTabView.h"
 
-#import "CTTabController.h"
+#import "CTTabViewController.h"
 #import "CTTabWindowController.h"
 #import "CTTabStripView.h"
 #import "NSWindow+CTThemed.h"
@@ -65,7 +65,7 @@ const CGFloat kRapidCloseDist = 2.5;
 @end  // CTTabView(Private)
 
 @implementation CTTabView {
-    IBOutlet CTTabController* tabController_;
+    IBOutlet CTTabViewController* tabController_;
     // TODO(rohitrao): Add this button to a CoreAnimation layer so we can fade it
     // in and out on mouseovers.
     IBOutlet HoverCloseButton* closeButton_;
@@ -360,7 +360,7 @@ const CGFloat kRapidCloseDist = 2.5;
   // strip and then deallocated. This will also result in *us* being
   // deallocated. Both these are bad, so we prevent this by retaining the
   // controller.
-  CTTabController* controller = tabController_;
+  CTTabViewController* controller = tabController_;
 
   // Because we move views between windows, we need to handle the event loop
   // ourselves. Ideally we should use the standard event loop.
@@ -907,10 +907,10 @@ const CGFloat kRapidCloseDist = 2.5;
 
 @implementation CTTabView (TabControllerInterface)
 
-- (void)setController:(CTTabController*)controller {
+- (void)setController:(CTTabViewController*)controller {
   tabController_ = controller;
 }
-- (CTTabController*)controller { return tabController_; }
+- (CTTabViewController*)controller { return tabController_; }
 
 @end  // @implementation CTTabView (TabControllerInterface)
 

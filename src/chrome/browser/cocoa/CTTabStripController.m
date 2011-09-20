@@ -11,7 +11,7 @@
 #import "NewTabButton.h"
 #import "CTTabStripView.h"
 #import "CTTabContentsController.h"
-#import "CTTabController.h"
+#import "CTTabViewController.h"
 #import "CTTabView.h"
 #import "ThrobberView.h"
 #import "CTTabStripModel2.h"
@@ -38,7 +38,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 - (NSInteger)indexForContentsView:(NSView*)view;
 - (void)updateFavIconForContents:(CTTabContents*)contents atIndex:(NSInteger)modelIndex;
 - (void)layoutTabsWithAnimation:(BOOL)animate regenerateSubviews:(BOOL)doUpdate;
-- (void)animationDidStopForController:(CTTabController*)controller finished:(BOOL)finished;
+- (void)animationDidStopForController:(CTTabViewController*)controller finished:(BOOL)finished;
 - (NSInteger)indexFromModelIndex:(NSInteger)index;
 - (NSInteger)numberOfOpenTabs;
 - (NSInteger)numberOfOpenMiniTabs;
@@ -46,11 +46,11 @@ const NSTimeInterval kAnimationDuration = 0.125;
 - (void)mouseMoved:(NSEvent*)event;
 - (void)setTabTrackingAreasEnabled:(BOOL)enabled;
 - (void)setNewTabButtonHoverState:(BOOL)showHover;
-- (CTTabController*)newTab;
+- (CTTabViewController*)newTab;
 - (void)setTabTitle:(NSViewController*)tab withContents:(CTTabContents*)contents;
 - (void)swapInTabAtIndex:(NSInteger)modelIndex;
-- (void)startClosingTabWithAnimation:(CTTabController*)closingTab;
-- (void)removeTab:(CTTabController*)controller;
+- (void)startClosingTabWithAnimation:(CTTabViewController*)closingTab;
+- (void)removeTab:(CTTabViewController*)controller;
 @end
 
 
@@ -94,10 +94,10 @@ const NSTimeInterval kAnimationDuration = 0.125;
 @interface TabCloseAnimationDelegate : NSObject {
 @private
     CTTabStripController* strip_;  // weak; owns us indirectly
-    CTTabController* controller_;  // weak
+    CTTabViewController* controller_;  // weak
 }
 
-- (id)initWithTabStrip:(CTTabStripController*)strip tabController:(CTTabController*)controller;
+- (id)initWithTabStrip:(CTTabStripController*)strip tabController:(CTTabViewController*)controller;
 
 - (void)invalidate;
 - (void)animationDidStop:(CAAnimation*)animation finished:(BOOL)finished;
@@ -106,7 +106,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 @implementation TabCloseAnimationDelegate
 
-- (id)initWithTabStrip:(CTTabStripController*)strip tabController:(CTTabController*)controller {
+- (id)initWithTabStrip:(CTTabStripController*)strip tabController:(CTTabViewController*)controller {
     if (nil != (self = [super init])) {
         assert(strip && controller);
         strip_ = strip;
@@ -285,7 +285,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             [browser_ createTabContentsControllerWithContents:contents];
             [tabContentsArray_ insertObject:contentsController atIndex:index];
             
-            CTTabController* newController = [self newTab];
+            CTTabViewController* newController = [self newTab];
             [newController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
             [newController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
             [newController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
@@ -328,7 +328,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             }
             
             int i = 0;
-            for (CTTabController* current in tabArray_) {
+            for (CTTabViewController* current in tabArray_) {
                 [current setSelected:(i == index) ? YES : NO];
                 ++i;
             }
@@ -362,8 +362,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
             CTTabContentsController* movedTabContentsController = [tabContentsArray_ objectAtIndex:from];
             [tabContentsArray_ removeObjectAtIndex:from];
             [tabContentsArray_ insertObject:movedTabContentsController atIndex:to];
-            CTTabController* movedTabController = [tabArray_ objectAtIndex:from];
-            assert([movedTabController isKindOfClass:[CTTabController class]]);
+            CTTabViewController* movedTabController = [tabArray_ objectAtIndex:from];
+            assert([movedTabController isKindOfClass:[CTTabViewController class]]);
             [tabArray_ removeObjectAtIndex:from];
             [tabArray_ insertObject:movedTabController atIndex:to];
             
@@ -385,7 +385,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
                 return;
             }
             
-            CTTabController* tabController = [tabArray_ objectAtIndex:index];
+            CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
             
             if (change != CTTabChangeTypeLoadingOnly) {
                 [self setTabTitle:tabController withContents:contents];
@@ -408,8 +408,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
             NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             NSInteger index = [self indexFromModelIndex:modelIndex];
             
-            CTTabController* tabController = [tabArray_ objectAtIndex:index];
-            assert([tabController isKindOfClass:[CTTabController class]]);
+            CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
+            assert([tabController isKindOfClass:[CTTabViewController class]]);
             [tabController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
             [tabController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
             [tabController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
@@ -422,7 +422,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             NSInteger index = [self indexFromModelIndex:modelIndex];
             
-            CTTabController* tab = [tabArray_ objectAtIndex:index];
+            CTTabViewController* tab = [tabArray_ objectAtIndex:index];
             if ([tabStripModel2_ count] > 0) {
                 [self startClosingTabWithAnimation:tab];
                 [self layoutTabs];
@@ -441,7 +441,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
         [tabStripView_ removeTrackingArea:trackingArea_];
     
     [newTabButton_ removeTrackingArea:newTabTrackingArea_];
-    for (CTTabController* controller in closingControllers_) {
+    for (CTTabViewController* controller in closingControllers_) {
         NSView* view = [controller view];
         [[[view animationForKey:@"frameOrigin"] delegate] invalidate];
     }
@@ -482,8 +482,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
     }
 }
 
-- (CTTabController*)newTab {
-    CTTabController* controller = [[CTTabController alloc] init];
+- (CTTabViewController*)newTab {
+    CTTabViewController* controller = [[CTTabViewController alloc] init];
     [controller setTarget:self];
     [controller setAction:@selector(selectTab:)];
     [[controller view] setHidden:YES];
@@ -511,7 +511,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
         return index;
     
     NSInteger i = 0;
-    for (CTTabController* controller in tabArray_) {
+    for (CTTabViewController* controller in tabArray_) {
         if ([closingControllers_ containsObject:controller]) {
             assert([(CTTabView*)[controller view] isClosing]);
             ++index;
@@ -525,7 +525,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 - (NSInteger)modelIndexForTabView:(NSView*)view {
     NSInteger index = 0;
-    for (CTTabController* current in tabArray_) {
+    for (CTTabViewController* current in tabArray_) {
         if ([closingControllers_ containsObject:current])
             continue;
         else if ([current view] == view)
@@ -540,7 +540,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     NSInteger i = 0;
     for (CTTabContentsController* current in tabContentsArray_) {
         // If the CTTabController corresponding to |current| is closing, skip it.
-        CTTabController* controller = [tabArray_ objectAtIndex:i];
+        CTTabViewController* controller = [tabArray_ objectAtIndex:i];
         if ([closingControllers_ containsObject:controller]) {
             ++i;
             continue;
@@ -631,11 +631,11 @@ const NSTimeInterval kAnimationDuration = 0.125;
     if (![tabArray_ count])
         return;
     
-    const CGFloat kMaxTabWidth = [CTTabController maxTabWidth];
-    const CGFloat kMinTabWidth = [CTTabController minTabWidth];
-    const CGFloat kMinSelectedTabWidth = [CTTabController minSelectedTabWidth];
-    const CGFloat kMiniTabWidth = [CTTabController miniTabWidth];
-    const CGFloat kAppTabWidth = [CTTabController appTabWidth];
+    const CGFloat kMaxTabWidth = [CTTabViewController maxTabWidth];
+    const CGFloat kMinTabWidth = [CTTabViewController minTabWidth];
+    const CGFloat kMinSelectedTabWidth = [CTTabViewController minSelectedTabWidth];
+    const CGFloat kMiniTabWidth = [CTTabViewController miniTabWidth];
+    const CGFloat kAppTabWidth = [CTTabViewController appTabWidth];
     
     NSRect enclosingRect = NSZeroRect;
     if (animate) {
@@ -683,7 +683,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     CGFloat offset = [self indentForControls];
     NSUInteger i = 0;
     bool hasPlaceholderGap = false;
-    for (CTTabController* tab in tabArray_) {
+    for (CTTabViewController* tab in tabArray_) {
         if ([closingControllers_ containsObject:tab])
             continue;
         
@@ -831,7 +831,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     [tab setTitle:titleString];
 }
 
-- (void)removeTab:(CTTabController*)controller {
+- (void)removeTab:(CTTabViewController*)controller {
     NSUInteger index = [tabArray_ indexOfObject:controller];
     
     [tabContentsArray_ removeObjectAtIndex:index];
@@ -852,13 +852,13 @@ const NSTimeInterval kAnimationDuration = 0.125;
     [tabArray_ removeObjectAtIndex:index];
 }
 
-- (void)animationDidStopForController:(CTTabController*)controller
+- (void)animationDidStopForController:(CTTabViewController*)controller
                              finished:(BOOL)finished {
     [closingControllers_ removeObject:controller];
     [self removeTab:controller];
 }
 
-- (void)startClosingTabWithAnimation:(CTTabController*)closingTab {
+- (void)startClosingTabWithAnimation:(CTTabViewController*)closingTab {
     assert([NSThread isMainThread]);
     [closingControllers_ addObject:closingTab];
     
@@ -914,7 +914,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     
     NSInteger index = [self indexFromModelIndex:modelIndex];
     
-    CTTabController* tabController = [tabArray_ objectAtIndex:index];
+    CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
     
     if ([tabController phantom]) {
         [tabController setPhantom:NO];
@@ -1098,7 +1098,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 - (void)setTabTrackingAreasEnabled:(BOOL)enabled {
     NSNotificationCenter* defaultCenter = [NSNotificationCenter defaultCenter];
-    for (CTTabController* controller in tabArray_) {
+    for (CTTabViewController* controller in tabArray_) {
         CTTabView* tabView = [controller tabView];
         if (enabled) {
             [defaultCenter addObserver:self
@@ -1135,7 +1135,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     NSMutableArray* subviews = [NSMutableArray arrayWithArray:permanentSubviews_];
     
     NSView* selectedTabView = nil;
-    for (CTTabController* tab in [tabArray_ reverseObjectEnumerator]) {
+    for (CTTabViewController* tab in [tabArray_ reverseObjectEnumerator]) {
         NSView* tabView = [tab view];
         if ([tab selected]) {
             assert(!selectedTabView);

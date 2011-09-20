@@ -6,7 +6,7 @@
 #define CHROME_BROWSER_COCOA_TAB_CONTROLLER_TARGET_H_
 #pragma once
 
-@class CTTabController;
+@class CTTabViewController;
 
 // A protocol to be implemented by a CTTabController's target.
 @protocol CTTabControllerTarget

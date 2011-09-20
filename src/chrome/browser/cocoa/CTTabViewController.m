@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE-chromium file.
 
-#import "CTTabController.h"
+#import "CTTabViewController.h"
 #import "CTTabControllerTarget.h"
 #import "CTTabView.h"
 
 static NSString* const kBrowserThemeDidChangeNotification =
   @"BrowserThemeDidChangeNotification";
 
-@implementation CTTabController {
+@implementation CTTabViewController {
     IBOutlet NSView* iconView_;
     IBOutlet NSTextField* titleView_;
     IBOutlet HoverCloseButton* closeButton_;
@@ -159,7 +159,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
     NSRect appIconFrame = [iconView frame];
     appIconFrame.origin = originalIconFrame_.origin;
     // Center the icon.
-    appIconFrame.origin.x = ([CTTabController appTabWidth] -
+    appIconFrame.origin.x = ([CTTabViewController appTabWidth] -
         NSWidth(appIconFrame)) / 2.0;
     [iconView setFrame:appIconFrame];
   } else {

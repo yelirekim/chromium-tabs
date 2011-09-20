@@ -28,7 +28,7 @@ typedef enum {
   kAlertFalling
 } AlertState;
 
-@class CTTabController, CTTabWindowController;
+@class CTTabViewController, CTTabWindowController;
 
 // A view that handles the event tracking (clicking and dragging) for a tab
 // on the tab strip. Relies on an associated CTTabController to provide a
@@ -64,8 +64,8 @@ typedef enum {
 // garbage pointer. To prevent this, the CTTabController uses this interface to
 // clear the |tabController_| pointer when it is dying.
 @interface CTTabView (TabControllerInterface)
-- (void)setController:(CTTabController*)controller;
-- (CTTabController*)controller;
+- (void)setController:(CTTabViewController*)controller;
+- (CTTabViewController*)controller;
 @end
 
 #endif  // CHROME_BROWSER_COCOA_TAB_VIEW_H_

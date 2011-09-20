@@ -7,7 +7,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CTTabContents.h"
 #import "CTBrowser.h"
-#import "CTUtil.h"
 
 #import "NewTabButton.h"
 #import "CTTabStripView.h"

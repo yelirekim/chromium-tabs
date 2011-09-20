@@ -5,7 +5,6 @@
 #import "CTTabController.h"
 #import "CTTabControllerTarget.h"
 #import "CTTabView.h"
-#import "CTUtil.h"
 
 static NSString* const kBrowserThemeDidChangeNotification =
   @"BrowserThemeDidChangeNotification";
@@ -55,7 +54,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
 }
 
 - (id)init {
-  NSBundle *bundle = [CTUtil bundleForResource:@"TabView" ofType:@"nib"];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
   return [self initWithNibName:@"TabView" bundle:bundle];
 }
 

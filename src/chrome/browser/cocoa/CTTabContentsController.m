@@ -4,7 +4,6 @@
 
 #import "CTTabContentsController.h"
 #import "CTTabContents.h"
-#import "CTUtil.h"
 
 @implementation CTTabContentsController {
     CTTabContents* contents_;  // weak
@@ -13,7 +12,7 @@
 
 - (id)initWithContents:(CTTabContents*)contents {
   // subclasses might override this to load a different nib
-  NSBundle *bundle = [CTUtil bundleForResource:@"TabContents" ofType:@"nib"];
+  NSBundle *bundle = [NSBundle bundleForClass:[self class]];
   return [self initWithNibName:@"TabContents" bundle:bundle contents:contents];
 }
 

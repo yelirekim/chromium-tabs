@@ -15,10 +15,8 @@
     NSTrackingArea* trackingArea_;
 }
 
-- (id)initWithNibName:(NSString*)nibName
-               bundle:(NSBundle*)bundle
-              browser:(CTBrowser*)browser {
-  self = [self initWithNibName:nibName bundle:bundle];
+- (id)initWithBrowser:(CTBrowser*)browser {
+    self = [self initWithNibName:@"Toolbar" bundle:[NSBundle bundleForClass:[self class]]];
   assert(self);
   browser_ = browser; // weak
   return self;

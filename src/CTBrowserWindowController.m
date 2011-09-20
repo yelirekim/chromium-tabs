@@ -6,7 +6,6 @@
 #import "CTTabView.h"
 #import "CTTabStripView.h"
 #import "CTToolbarController.h"
-#import "CTUtil.h"
 #import "FastResizeView.h"
 
 @interface NSWindow (ThingsThatMightBeImplemented)
@@ -198,7 +197,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 - (id)initWithBrowser:(CTBrowser *)browser {
   // subclasses could override this to provie a custom nib
-  NSString *windowNibPath = [CTUtil pathForResource:@"BrowserWindow"
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+  NSString *windowNibPath = [bundle pathForResource:@"BrowserWindow"
                                              ofType:@"nib"];
   return [self initWithWindowNibPath:windowNibPath browser:browser];
 }

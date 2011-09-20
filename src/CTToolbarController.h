@@ -19,9 +19,7 @@
 //
 @interface CTToolbarController : NSViewController
 
-- (id)initWithNibName:(NSString*)nibName
-               bundle:(NSBundle*)bundle
-              browser:(CTBrowser*)browser;
+- (id)initWithBrowser:(CTBrowser*)browser;
 
 // Set the opacity of the divider (the line at the bottom) *if* we have a
 // |ToolbarView| (0 means don't show it); no-op otherwise.

@@ -5,7 +5,6 @@
 #import "CTBrowserWindowController.h"
 #import "CTTabContentsController.h"
 #import "CTToolbarController.h"
-#import "CTUtil.h"
 
 @implementation CTBrowser
 @synthesize windowController = windowController_;
@@ -40,10 +39,7 @@
 
 -(CTToolbarController *)createToolbarController {
     // subclasses could override this -- returning nil means no toolbar
-    NSBundle *bundle = [CTUtil bundleForResource:@"Toolbar" ofType:@"nib"];
-    return [[CTToolbarController alloc] initWithNibName:@"Toolbar"
-                                                 bundle:bundle
-                                                browser:self];
+    return [[CTToolbarController alloc] initWithBrowser:self];
 }
 
 -(CTTabContentsController*)createTabContentsControllerWithContents:

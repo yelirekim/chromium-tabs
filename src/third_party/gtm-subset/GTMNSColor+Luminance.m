@@ -141,13 +141,5 @@ const CGFloat kDefaultFade = 0.3;
   return color;
 }
 
-- (BOOL)gtm_isDarkColor {
-  return [self gtm_luminance] < kGTMLuminanceDarkCutoff;
-}
-
-- (NSColor *)gtm_legibleTextColor {
-  return [self gtm_isDarkColor] ? [NSColor whiteColor] : [NSColor blackColor];
-}
-
 @end
 #endif // MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5

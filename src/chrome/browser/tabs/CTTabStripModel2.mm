@@ -18,6 +18,7 @@ extern NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelD
 extern NSString* const kCTTabContentsUserInfoKey = @"kCTTabContentsUserInfoKey";
 extern NSString* const kCTTabNewContentsUserInfoKey = @"kCTTabNewContentsUserInfoKey";
 extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
+extern NSString* const kCTTabToIndexUserInfoKey = @"kCTTabToIndexUserInfoKey";
 extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
 extern NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
 
@@ -440,8 +441,12 @@ static const int kNoTab = -1;
         self.selectedIndex++;
     }
 
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                   TabMoved(moved_data->contents, fromIndex, toIndex));
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              moved_data->contents, kCTTabNewContentsUserInfoKey,
+                              [NSNumber numberWithInt:fromIndex], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInt:toIndex], kCTTabToIndexUserInfoKey,
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabMovedNotification object:self userInfo:userInfo];
 }
 
 - (void) selectRelativeTab:(BOOL)next

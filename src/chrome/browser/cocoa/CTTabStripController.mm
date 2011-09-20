@@ -205,6 +205,7 @@ private:
     
     id ob1;
     id ob2;
+    id ob3;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -391,6 +392,27 @@ private:
                 oldContents.isSelected = NO;
             }
         }];
+        
+        ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabMovedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger modelFrom = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            NSInteger modelTo = [[userInfo valueForKey:kCTTabToIndexUserInfoKey] intValue];
+            NSInteger from = [self indexFromModelIndex:modelFrom];
+            NSInteger to = [self indexFromModelIndex:modelTo];
+            
+            CTTabContentsController* movedTabContentsController = [tabContentsArray_ objectAtIndex:from];
+            [tabContentsArray_ removeObjectAtIndex:from];
+            [tabContentsArray_ insertObject:movedTabContentsController atIndex:to];
+            CTTabController* movedTabController = [tabArray_ objectAtIndex:from];
+            assert([movedTabController isKindOfClass:[CTTabController class]]);
+            [tabArray_ removeObjectAtIndex:from];
+            [tabArray_ insertObject:movedTabController atIndex:to];
+            
+            if ([tabStripModel2_ isMiniTabAtIndex:modelTo] != [movedTabController mini]) {
+                [self tabMiniStateChangedWithContents:contents atIndex:modelTo];
+            }
+        }];
     }
     return self;
 }
@@ -407,6 +429,7 @@ private:
     
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
     [[NSNotificationCenter defaultCenter] removeObserver:ob2];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob3];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

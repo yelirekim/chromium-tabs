@@ -19,7 +19,7 @@
 		3A3ED9C91225E32A009E2908 /* CTTabController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921F21221AF58006D8305 /* CTTabController.mm */; };
 		3A3ED9CA1225E32A009E2908 /* CTTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A39270B1221C566006D8305 /* CTTabView.m */; };
 		3A3ED9CB1225E32A009E2908 /* CTTabWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A286F8E1222CAA000F1BB78 /* CTTabWindowController.m */; };
-		3A3ED9CC1225E32A009E2908 /* CTTabStripView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A286F8C1222CAA000F1BB78 /* CTTabStripView.mm */; };
+		3A3ED9CC1225E32A009E2908 /* CTTabStripView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A286F8C1222CAA000F1BB78 /* CTTabStripView.m */; };
 		3A3ED9CF1225E32A009E2908 /* ThrobberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A286FE81222D53500F1BB78 /* ThrobberView.m */; };
 		3A3ED9D01225E32A009E2908 /* CTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEE19531222DDEB009DA438 /* CTTabContents.m */; };
 		3A3ED9D31225E32A009E2908 /* CTTabContentsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A236D9F1223375D00D21E66 /* CTTabContentsController.m */; };
@@ -141,7 +141,7 @@
 		3A286E8C1222C63D00F1BB78 /* CTTabControllerTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabControllerTarget.h; sourceTree = "<group>"; };
 		3A286EA51222C8EA00F1BB78 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		3A286F8B1222CAA000F1BB78 /* CTTabStripView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripView.h; sourceTree = "<group>"; };
-		3A286F8C1222CAA000F1BB78 /* CTTabStripView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripView.mm; sourceTree = "<group>"; };
+		3A286F8C1222CAA000F1BB78 /* CTTabStripView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabStripView.m; sourceTree = "<group>"; };
 		3A286F8D1222CAA000F1BB78 /* CTTabWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabWindowController.h; sourceTree = "<group>"; };
 		3A286F8E1222CAA000F1BB78 /* CTTabWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabWindowController.m; sourceTree = "<group>"; };
 		3A286F9E1222CDBE00F1BB78 /* BrowserWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BrowserWindow.xib; sourceTree = "<group>"; };
@@ -393,7 +393,7 @@
 				3A236D9E1223375D00D21E66 /* CTTabContentsController.h */,
 				3A236D9F1223375D00D21E66 /* CTTabContentsController.m */,
 				3A286F8B1222CAA000F1BB78 /* CTTabStripView.h */,
-				3A286F8C1222CAA000F1BB78 /* CTTabStripView.mm */,
+				3A286F8C1222CAA000F1BB78 /* CTTabStripView.m */,
 				3A286FE21222D25400F1BB78 /* CTTabStripController.h */,
 				3A286FE31222D25400F1BB78 /* CTTabStripController.mm */,
 				3A286F8D1222CAA000F1BB78 /* CTTabWindowController.h */,
@@ -638,7 +638,7 @@
 				3A3ED9C91225E32A009E2908 /* CTTabController.mm in Sources */,
 				3A3ED9CA1225E32A009E2908 /* CTTabView.m in Sources */,
 				3A3ED9CB1225E32A009E2908 /* CTTabWindowController.m in Sources */,
-				3A3ED9CC1225E32A009E2908 /* CTTabStripView.mm in Sources */,
+				3A3ED9CC1225E32A009E2908 /* CTTabStripView.m in Sources */,
 				3A3ED9CF1225E32A009E2908 /* ThrobberView.m in Sources */,
 				3A3ED9D01225E32A009E2908 /* CTTabContents.m in Sources */,
 				3A3ED9D31225E32A009E2908 /* CTTabContentsController.m in Sources */,

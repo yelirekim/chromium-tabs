@@ -18,8 +18,6 @@
 @class CTTabContents;
 @class CTBrowser;
 
-class CTTabStripModel;
-
 @interface CTTabStripController : NSObject<CTTabControllerTarget>
 
 @property(nonatomic) CGFloat indentForControls;

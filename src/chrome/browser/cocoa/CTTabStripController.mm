@@ -180,7 +180,6 @@ private:
     NewTabButton* newTabButton_;  // weak, obtained from the nib.
     NSTrackingArea* newTabTrackingArea_;
     CTBrowser *browser_;  // weak
-    CTTabStripModel* tabStripModel_;  // weak
     CTTabStripModel2* tabStripModel2_;
     BOOL newTabButtonShowingHoverImage_;
     NSMutableArray* tabContentsArray_;
@@ -225,7 +224,6 @@ private:
         tabStripView_ = view;
         switchView_ = switchView;
         browser_ = browser;
-        tabStripModel_ = [browser_ tabStripModel];
         tabStripModel2_ = [browser_ tabStripModel2];
         
         tabContentsArray_ = [[NSMutableArray alloc] init];

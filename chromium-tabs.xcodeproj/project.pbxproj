@@ -27,7 +27,7 @@
 		3A3ED9D51225E32A009E2908 /* NewTabButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A236DD81223414F00D21E66 /* NewTabButton.m */; };
 		3A3ED9D71225E32A009E2908 /* CTBrowserWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A1CF96012235704008A3B8C /* CTBrowserWindowController.mm */; };
 		3A3ED9D81225E32A009E2908 /* FastResizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A1CF98812235CEE008A3B8C /* FastResizeView.m */; };
-		3A3ED9D91225E32A009E2908 /* CTBrowser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7188A122479CE005022BE /* CTBrowser.mm */; };
+		3A3ED9D91225E32A009E2908 /* CTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7188A122479CE005022BE /* CTBrowser.m */; };
 		3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6821225CE7A009E2908 /* GTMNSAnimation+Duration.m */; };
 		3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */; };
 		3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */; };
@@ -208,7 +208,7 @@
 		3A92904512294F1900DA7E43 /* CTToolbarController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTToolbarController.mm; sourceTree = "<group>"; };
 		3A92907512295BC400DA7E43 /* Toolbar.xib */ = {isa = PBXFileReference; explicitFileType = file.xib; path = Toolbar.xib; sourceTree = "<group>"; };
 		3AA71889122479CE005022BE /* CTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowser.h; sourceTree = "<group>"; };
-		3AA7188A122479CE005022BE /* CTBrowser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowser.mm; sourceTree = "<group>"; };
+		3AA7188A122479CE005022BE /* CTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowser.m; sourceTree = "<group>"; };
 		3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserWindow.h; sourceTree = "<group>"; };
 		3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowserWindow.mm; sourceTree = "<group>"; };
 		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
@@ -261,7 +261,7 @@
 				3A1168D6122543A900757641 /* CTBrowserCommand.h */,
 				3AA71889122479CE005022BE /* CTBrowser.h */,
 				A25493BF13F4117D0027474A /* CTBrowser+Private.h */,
-				3AA7188A122479CE005022BE /* CTBrowser.mm */,
+				3AA7188A122479CE005022BE /* CTBrowser.m */,
 				3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */,
 				3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */,
 				3A1CF95F12235704008A3B8C /* CTBrowserWindowController.h */,
@@ -646,7 +646,7 @@
 				3A3ED9D51225E32A009E2908 /* NewTabButton.m in Sources */,
 				3A3ED9D71225E32A009E2908 /* CTBrowserWindowController.mm in Sources */,
 				3A3ED9D81225E32A009E2908 /* FastResizeView.m in Sources */,
-				3A3ED9D91225E32A009E2908 /* CTBrowser.mm in Sources */,
+				3A3ED9D91225E32A009E2908 /* CTBrowser.m in Sources */,
 				3A3ED9DB1225E32A009E2908 /* GTMNSAnimation+Duration.m in Sources */,
 				3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */,
 				3A3ED9DE1225E32A009E2908 /* NSBezierPath+MCAdditions.m in Sources */,

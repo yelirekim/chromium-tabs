@@ -4,13 +4,13 @@
 #import "CTTabStripModelDelegate.h"
 #import "CTBrowserCommand.h"
 
-enum CTWindowOpenDisposition {
+typedef enum {
   CTWindowOpenDispositionCurrentTab,
   CTWindowOpenDispositionNewForegroundTab,
   CTWindowOpenDispositionNewBackgroundTab,
-};
+} CTWindowOpenDisposition;
 
-class CTTabStripModel;
+@class CTTabStripModel2;
 @class CTBrowserWindowController;
 @class CTTabContentsController;
 @class CTToolbarController;
@@ -21,7 +21,6 @@ class CTTabStripModel;
 @interface CTBrowser : NSObject <CTTabStripModelDelegate> 
 
 // The tab strip model
-@property(readonly, nonatomic) CTTabStripModel* tabStripModel;
 @property(retain, readonly, nonatomic) CTTabStripModel2* tabStripModel2;
 
 // The window controller

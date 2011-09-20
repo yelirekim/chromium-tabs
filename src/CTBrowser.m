@@ -9,7 +9,6 @@
 
 @implementation CTBrowser
 @synthesize windowController = windowController_;
-@synthesize tabStripModel = tabStripModel_;
 @synthesize tabStripModel2 = tabStripModel2_;
 
 

@@ -22,6 +22,8 @@ extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoK
 extern NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
 extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
+extern const int kNoTab = -1;
+
 @interface TabContentsData : NSObject {
 @public
     CTTabContents* contents;
@@ -65,8 +67,6 @@ extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
 @synthesize insertionPolicy = insertionPolicy_;
 @synthesize selectedIndex = selectedIndex_;
-
-static const int kNoTab = -1;
 
 - (id) initWithDelegate:(NSObject<CTTabStripModelDelegate>*)delegate
 {

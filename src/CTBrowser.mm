@@ -1,5 +1,5 @@
 #import "CTBrowser.h"
-#import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 #import "CTTabStripController.h"
 #import "CTPageTransition.h"
 #import "CTBrowserWindowController.h"
@@ -34,24 +34,10 @@
 
 - (id)init {
     if ((self = [super init])) {
-        tabStripModel_ = new CTTabStripModel(self);
         tabStripModel2_ = [[CTTabStripModel2 alloc] initWithDelegate:self];
     }
     return self;
 }
-
-
--(void)dealloc {
-    DLOG("[ChromiumTabs] deallocing browser %@", self);
-    delete tabStripModel_;
-}
-
-
--(void)finalize {
-    delete tabStripModel_;
-    [super finalize];
-}
-
 
 -(CTToolbarController *)createToolbarController {
     // subclasses could override this -- returning nil means no toolbar

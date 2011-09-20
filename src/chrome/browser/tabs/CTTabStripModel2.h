@@ -96,3 +96,5 @@ extern NSString* const kCTTabIndexUserInfoKey;
 extern NSString* const kCTTabToIndexUserInfoKey;
 extern NSString* const kCTTabForegroundUserInfoKey;
 extern NSString* const kCTTabOptionsUserInfoKey;
+
+extern const int kNoTab;

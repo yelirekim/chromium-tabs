@@ -1,6 +1,6 @@
 #pragma once
 #import <Cocoa/Cocoa.h>
-#import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 #import "CTTabStripModelDelegate.h"
 #import "CTBrowserCommand.h"
 

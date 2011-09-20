@@ -1,5 +1,5 @@
 #import "CTTabContents.h"
-#import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 #import "CTBrowser.h"
 
 NSString* const CTTabContentsDidCloseNotification =

@@ -19,7 +19,7 @@
 #import "CTTabController.h"
 #import "CTTabView.h"
 #import "ThrobberView.h"
-#import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 #import "GTMNSAnimation+Duration.h"
 
 NSString* const kTabStripNumberOfTabsChanged = @"kTabStripNumberOfTabsChanged";
@@ -71,7 +71,6 @@ public:
     
 private:
     bool animate_;
-    DISALLOW_COPY_AND_ASSIGN(ScopedNSAnimationContextGroup);
 };
 
 @interface CTTabStripController (Private)
@@ -321,7 +320,7 @@ private:
             NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             BOOL inForeground = [[userInfo objectForKey:kCTTabForegroundUserInfoKey] boolValue];
             assert(contents);
-            assert(modelIndex == CTTabStripModel::kNoTab || [tabStripModel2_ containsIndex:modelIndex]);
+            assert(modelIndex == kNoTab || [tabStripModel2_ containsIndex:modelIndex]);
             
             NSInteger index = [self indexFromModelIndex:modelIndex];
             

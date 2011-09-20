@@ -1,6 +1,6 @@
 #import "CTBrowserWindowController.h"
 #import "CTBrowser+Private.h"
-#import "CTTabStripModel.h"
+#import "CTTabStripModel2.h"
 #import "CTTabContents.h"
 #import "CTTabStripController.h"
 #import "CTTabView.h"

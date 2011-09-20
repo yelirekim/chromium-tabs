@@ -35,44 +35,6 @@ const CGFloat kNewTabButtonOffset = 8.0;
 const CGFloat kIncognitoBadgeTabStripShrink = 18;
 const NSTimeInterval kAnimationDuration = 0.125;
 
-class ScopedNSAnimationContextGroup {
-public:
-    explicit ScopedNSAnimationContextGroup(bool animate)
-    : animate_(animate) {
-        if (animate_) {
-            [NSAnimationContext beginGrouping];
-        }
-    }
-    
-    ~ScopedNSAnimationContextGroup() {
-        if (animate_) {
-            [NSAnimationContext endGrouping];
-        }
-    }
-    
-    void SetCurrentContextDuration(NSTimeInterval duration) {
-        if (animate_) {
-            [[NSAnimationContext currentContext] gtm_setDuration:duration
-                                                       eventMask:NSLeftMouseUpMask];
-        }
-    }
-    
-    void SetCurrentContextShortestDuration() {
-        if (animate_) {
-            // The minimum representable time interval.  This used to stop an
-            // in-progress animation as quickly as possible.
-            const NSTimeInterval kMinimumTimeInterval =
-            std::numeric_limits<NSTimeInterval>::min();
-            // Directly set the duration to be short, avoiding the Steve slowmotion
-            // ettect the gtm_setDuration: provides.
-            [[NSAnimationContext currentContext] setDuration:kMinimumTimeInterval];
-        }
-    }
-    
-private:
-    bool animate_;
-};
-
 @interface CTTabStripController (Private)
 - (void)installTrackingArea;
 - (void)addSubviewToPermanentList:(NSView*)aView;
@@ -679,8 +641,11 @@ private:
     const CGFloat kAppTabWidth = [CTTabController appTabWidth];
     
     NSRect enclosingRect = NSZeroRect;
-    ScopedNSAnimationContextGroup mainAnimationGroup(animate);
-    mainAnimationGroup.SetCurrentContextDuration(kAnimationDuration);
+    if (animate) {
+        [NSAnimationContext beginGrouping];
+        [[NSAnimationContext currentContext] gtm_setDuration:kAnimationDuration
+                                                   eventMask:NSLeftMouseUpMask];
+    }
     
     if (doUpdate)
         [self regenerateSubviewList];
@@ -741,8 +706,10 @@ private:
         }
         
         if (isPlaceholder) {
-            ScopedNSAnimationContextGroup localAnimationGroup(animate);
-            localAnimationGroup.SetCurrentContextShortestDuration();
+            if (animate) {
+                [NSAnimationContext beginGrouping];
+                [[NSAnimationContext currentContext] setDuration:0];
+            }
             if (verticalLayout_)
                 tabFrame.origin.y = availableSpace - tabFrame.size.height - offset;
             else
@@ -753,6 +720,7 @@ private:
             NSValue* identifier = [NSValue valueWithPointer:(__bridge const void*)[tab view]];
             [targetFrames_ setObject:[NSValue valueWithRect:tabFrame]
                               forKey:identifier];
+            [NSAnimationContext endGrouping];
             continue;
         }
         
@@ -809,6 +777,8 @@ private:
             offset -= kTabOverlap;
         }
         i++;
+        
+        [NSAnimationContext endGrouping];
     }
     
     if (forceNewTabButtonHidden_) {
@@ -832,10 +802,10 @@ private:
             [self setNewTabButtonHoverState:shouldShowHover];
             
             if (visible && animate) {
-                ScopedNSAnimationContextGroup localAnimationGroup(true);
+                [NSAnimationContext beginGrouping];
                 BOOL movingLeft = NSMinX(newTabNewFrame) < NSMinX(newTabTargetFrame_);
                 if (!movingLeft) {
-                    localAnimationGroup.SetCurrentContextShortestDuration();
+                    [[NSAnimationContext currentContext] setDuration:0];
                 }
                 [[newTabButton_ animator] setFrame:newTabNewFrame];
                 newTabTargetFrame_ = newTabNewFrame;
@@ -847,7 +817,7 @@ private:
     }
     
     [dragBlockingView_ setFrame:enclosingRect];
-    
+    [NSAnimationContext endGrouping];
     initialLayoutComplete_ = YES;
 }
 
@@ -910,9 +880,11 @@ private:
     
     NSRect newFrame = [tabView frame];
     newFrame = NSOffsetRect(newFrame, 0, -newFrame.size.height);
-    ScopedNSAnimationContextGroup animationGroup(true);
-    animationGroup.SetCurrentContextDuration(kAnimationDuration);
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] gtm_setDuration:kAnimationDuration
+                                               eventMask:NSLeftMouseUpMask];
     [[tabView animator] setFrame:newFrame];
+    [NSAnimationContext endGrouping];
 }
 
 - (NSImageView*)iconImageViewForContents:(CTTabContents*)contents {

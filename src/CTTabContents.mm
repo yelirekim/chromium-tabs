@@ -167,7 +167,7 @@ NSString* const CTTabContentsDidCloseNotification =
 
 #pragma mark Callbacks
 
--(void)closingOfTabDidStart:(CTTabStripModel*)closeInitiatedByTabStripModel {
+-(void)closingOfTabDidStart:(CTTabStripModel2*)closeInitiatedByTabStripModel {
   NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
   [nc postNotificationName:CTTabContentsDidCloseNotification object:self];
 }

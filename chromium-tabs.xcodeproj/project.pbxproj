@@ -94,7 +94,7 @@
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
 		A25493C313F414FA0027474A /* HoverButton+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493C213F414F90027474A /* HoverButton+Private.h */; };
 		A2CD3AD213F48C9A00954A59 /* CTTabStripModel2.h in Headers */ = {isa = PBXBuildFile; fileRef = A2CD3AD013F48C9900954A59 /* CTTabStripModel2.h */; };
-		A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2CD3AD113F48C9900954A59 /* CTTabStripModel2.mm */; };
+		A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */ = {isa = PBXBuildFile; fileRef = A2CD3AD113F48C9900954A59 /* CTTabStripModel2.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,7 +219,7 @@
 		A25493BF13F4117D0027474A /* CTBrowser+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CTBrowser+Private.h"; sourceTree = "<group>"; };
 		A25493C213F414F90027474A /* HoverButton+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HoverButton+Private.h"; sourceTree = "<group>"; };
 		A2CD3AD013F48C9900954A59 /* CTTabStripModel2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripModel2.h; sourceTree = "<group>"; };
-		A2CD3AD113F48C9900954A59 /* CTTabStripModel2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripModel2.mm; sourceTree = "<group>"; };
+		A2CD3AD113F48C9900954A59 /* CTTabStripModel2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabStripModel2.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -473,7 +473,7 @@
 			isa = PBXGroup;
 			children = (
 				A2CD3AD013F48C9900954A59 /* CTTabStripModel2.h */,
-				A2CD3AD113F48C9900954A59 /* CTTabStripModel2.mm */,
+				A2CD3AD113F48C9900954A59 /* CTTabStripModel2.m */,
 			);
 			path = tabs;
 			sourceTree = "<group>";
@@ -657,7 +657,7 @@
 				3A92904712294F1900DA7E43 /* CTToolbarController.mm in Sources */,
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
-				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.mm in Sources */,
+				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

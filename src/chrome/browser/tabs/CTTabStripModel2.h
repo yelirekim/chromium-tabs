@@ -1,39 +1,36 @@
 #import "CTPageTransition.h"
 #import "CTTabStripModelDelegate.h"
 
-enum InsertionPolicy {
+typedef enum {
     INSERT_AFTER,
     INSERT_BEFORE,
-};
+} InsertionPolicy;
 
-enum CloseTypes {
+typedef enum {
     CLOSE_NONE                     = 0,
     CLOSE_USER_GESTURE             = 1 << 0,
     CLOSE_CREATE_HISTORICAL_TAB    = 1 << 1,
-};
+} CloseTypes;
 
-enum AddTabTypes {
+typedef enum {
     ADD_NONE          = 0,
     ADD_SELECTED      = 1 << 0,
     ADD_PINNED        = 1 << 1,
     ADD_FORCE_INDEX   = 1 << 2,
     ADD_INHERIT_GROUP = 1 << 3,
     ADD_INHERIT_OPENER = 1 << 4,
-};
+} AddTabTypes;
 
-enum CTTabChangeType {
+typedef enum {
     CTTabChangeTypeLoadingOnly,
     CTTabChangeTypeTitleNotLoading,
     CTTabChangeTypeAll
-};
+} CTTabChangeType;
 
-enum CTTabReplaceType {
+typedef enum {
     REPLACE_MADE_PHANTOM,
     REPLACE_MATCH_PREVIEW
-};
-
-class CTTabStripModel;
-class CTTabStripModelObserver;
+} CTTabReplaceType;
 
 @class CTTabContents;
 

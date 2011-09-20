@@ -1,28 +1,28 @@
 #import "CTTabStripModel2.h"
 
-extern NSString* const kCTTabInsertedNotification = @"kCTTabInsertedNotification";
-extern NSString* const kCTTabClosingNotification = @"kCTTabClosingNotification";
-extern NSString* const kCTTabDetachedNotification = @"kCTTabDetachedNotification";
-extern NSString* const kCTTabDeselectedNotification = @"kCTTabDeselectedNotification";
-extern NSString* const kCTTabSelectedNotification = @"kCTTabSelectedNotification";
-extern NSString* const kCTTabMovedNotification = @"kCTTabMovedNotification";
-extern NSString* const kCTTabChangedNotification = @"kCTTabChangedNotification";
-extern NSString* const kCTTabReplacedNotification = @"kCTTabReplacedNotification";
-extern NSString* const kCTTabPinnedStateChangedNotification = @"kCTTabPinnedStateChangedNotification";
-extern NSString* const kCTTabMiniStateChangedNotification = @"kCTTabMiniStateChangedNotification";
-extern NSString* const kCTTabBlockedStateChangedNotification = @"kCTTabBlockedStateChangedNotification";
-extern NSString* const kCTTabStripEmptyNotification = @"kCTTabStripEmptyNotification";
-extern NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelDeletedNotification";
+NSString* const kCTTabInsertedNotification = @"kCTTabInsertedNotification";
+NSString* const kCTTabClosingNotification = @"kCTTabClosingNotification";
+NSString* const kCTTabDetachedNotification = @"kCTTabDetachedNotification";
+NSString* const kCTTabDeselectedNotification = @"kCTTabDeselectedNotification";
+NSString* const kCTTabSelectedNotification = @"kCTTabSelectedNotification";
+NSString* const kCTTabMovedNotification = @"kCTTabMovedNotification";
+NSString* const kCTTabChangedNotification = @"kCTTabChangedNotification";
+NSString* const kCTTabReplacedNotification = @"kCTTabReplacedNotification";
+NSString* const kCTTabPinnedStateChangedNotification = @"kCTTabPinnedStateChangedNotification";
+NSString* const kCTTabMiniStateChangedNotification = @"kCTTabMiniStateChangedNotification";
+NSString* const kCTTabBlockedStateChangedNotification = @"kCTTabBlockedStateChangedNotification";
+NSString* const kCTTabStripEmptyNotification = @"kCTTabStripEmptyNotification";
+NSString* const kCTTabStripModelDeletedNotification = @"kCTTabStripModelDeletedNotification";
 
-extern NSString* const kCTTabContentsUserInfoKey = @"kCTTabContentsUserInfoKey";
-extern NSString* const kCTTabNewContentsUserInfoKey = @"kCTTabNewContentsUserInfoKey";
-extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
-extern NSString* const kCTTabToIndexUserInfoKey = @"kCTTabToIndexUserInfoKey";
-extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
-extern NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
-extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
+NSString* const kCTTabContentsUserInfoKey = @"kCTTabContentsUserInfoKey";
+NSString* const kCTTabNewContentsUserInfoKey = @"kCTTabNewContentsUserInfoKey";
+NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
+NSString* const kCTTabToIndexUserInfoKey = @"kCTTabToIndexUserInfoKey";
+NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
+NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
+NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
-extern const int kNoTab = -1;
+const int kNoTab = -1;
 
 @interface TabContentsData : NSObject {
 @public

@@ -93,6 +93,8 @@ private:
 - (CTTabController*)newTab;
 - (void)setTabTitle:(NSViewController*)tab withContents:(CTTabContents*)contents;
 - (void)swapInTabAtIndex:(NSInteger)modelIndex;
+- (void)startClosingTabWithAnimation:(CTTabController*)closingTab;
+- (void)removeTab:(CTTabController*)controller;
 @end
 
 
@@ -208,6 +210,7 @@ private:
     id ob3;
     id ob4;
     id ob5;
+    id ob6;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -458,6 +461,22 @@ private:
             [self updateFavIconForContents:contents atIndex:modelIndex];
             [self layoutTabs];
         }];
+        
+        ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            NSInteger index = [self indexFromModelIndex:modelIndex];
+            
+            CTTabController* tab = [tabArray_ objectAtIndex:index];
+            if ([tabStripModel2_ count] > 0) {
+                [self startClosingTabWithAnimation:tab];
+                [self layoutTabs];
+            } else {
+                [self removeTab:tab];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kTabStripNumberOfTabsChanged object:self];
+        }];
     }
     return self;
 }
@@ -477,6 +496,7 @@ private:
     [[NSNotificationCenter defaultCenter] removeObserver:ob3];
     [[NSNotificationCenter defaultCenter] removeObserver:ob4];
     [[NSNotificationCenter defaultCenter] removeObserver:ob5];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob6];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

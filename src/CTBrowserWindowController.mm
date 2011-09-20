@@ -42,6 +42,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     id ob2;
     id ob3;
     id ob4;
+    id ob5;
 }
 
 @synthesize tabStripController = tabStripController_;
@@ -181,6 +182,17 @@ static CTBrowserWindowController* _currentMain = nil; // weak
             [self updateToolbarWithContents:contents shouldRestoreState:!!oldContents];
         }
     }];
+    
+    ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        NSDictionary* userInfo = notification.userInfo;
+        CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+        NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+        [contents tabDidDetachFromBrowser:browser_ atIndex:index];
+        if (contents.isSelected) {
+            [self updateToolbarWithContents:nil shouldRestoreState:NO];
+        }
+    }];
+    
   return self;
 }
 
@@ -219,6 +231,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     [[NSNotificationCenter defaultCenter] removeObserver:ob2];
     [[NSNotificationCenter defaultCenter] removeObserver:ob3];
     [[NSNotificationCenter defaultCenter] removeObserver:ob4];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob5];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     toolbarController_ = nil;

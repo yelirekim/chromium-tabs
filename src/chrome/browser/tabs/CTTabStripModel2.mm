@@ -329,9 +329,13 @@ static const int kNoTab = -1;
     if (![self hasNonPhantomTabs]) {
         tabStripModel_->closing_all_ = true;
     }
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              removed_contents, kCTTabContentsUserInfoKey,
+                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabDetachedNotification object:self userInfo:userInfo];
     ObserverList<CTTabStripModelObserver>::Iterator iter(tabStripModel_->observers_);
     while (CTTabStripModelObserver* obs = iter.GetNext()) {
-        obs->TabDetachedAt(removed_contents, index);
         if (![self hasNonPhantomTabs])
             obs->TabStripEmpty();
     }

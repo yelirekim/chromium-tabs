@@ -75,10 +75,3 @@
 
 @end
 
-@interface CTBrowserWindowController(ProtectedMethods)
-
-- (void)detachTabView:(NSView*)view;
-- (void)toggleTabStripDisplayMode;
-- (void)layoutSubviews;
-
-@end

@@ -17,6 +17,9 @@
 - (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY width:(CGFloat)width fullscreen:(BOOL)fullscreen;
 - (CGFloat)layoutToolbarAtMinX:(CGFloat)minX  maxY:(CGFloat)maxY width:(CGFloat)width;
 - (void)setUseOverlay:(BOOL)useOverlay;
+- (void)detachTabView:(NSView*)view;
+- (void)toggleTabStripDisplayMode;
+- (void)layoutSubviews;
 
 @end
 
@@ -147,7 +150,6 @@
     
     return self;
 }
-
 
 - (id)initWithBrowser:(CTBrowser *)browser {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];

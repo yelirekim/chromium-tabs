@@ -3,7 +3,6 @@
 // found in the LICENSE-chromium file.
 
 #import "CTTabViewController.h"
-#import "CTTabControllerTarget.h"
 #import "CTTabView.h"
 
 static NSString* const kBrowserThemeDidChangeNotification =
@@ -25,7 +24,6 @@ static NSString* const kBrowserThemeDidChangeNotification =
     CTTabLoadingState loadingState_;
     CGFloat iconTitleXOffset_;  // between left edges of icon and title
     CGFloat titleCloseWidthOffset_;  // between right edges of icon and close btn.
-    id<CTTabControllerTarget> __unsafe_unretained target_;  // weak, where actions are sent
     SEL action_;  // selector sent when tab is selected by clicking
     //scoped_ptr<TabMenuModel> contextMenuModel_;
     //scoped_ptr<TabControllerInternal::MenuDelegate> contextMenuDelegate_;
@@ -111,18 +109,7 @@ static NSString* const kBrowserThemeDidChangeNotification =
   [self internalSetSelected:selected_];
 }
 
-// Called when Cocoa wants to display the context menu. Lazily instantiate
-// the menu based off of the cross-platform model. Re-create the menu and
-// model every time to get the correct labels and enabling.
 - (NSMenu*)menu {
-  /*contextMenuDelegate_.reset(
-      new TabControllerInternal::MenuDelegate(target_, self));
-  contextMenuModel_.reset(new TabMenuModel(contextMenuDelegate_.get(),
-                                           [self pinned]));
-  contextMenuController_.reset(
-      [[MenuController alloc] initWithModel:contextMenuModel_.get()
-                     useWithPopUpButtonCell:NO]);
-  return [contextMenuController_ menu];*/
   return nil;
 }
 

@@ -18,7 +18,6 @@ typedef enum {
 } CTTabLoadingState;
 
 @class CTTabView;
-@protocol CTTabControllerTarget;
 
 // A class that manages a single tab in the tab strip. Set its target/action
 // to be sent a message when the tab is selected by the user clicking. Setting

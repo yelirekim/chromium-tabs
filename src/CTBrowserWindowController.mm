@@ -957,36 +957,4 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   }
 }
 
-
-#pragma mark -
-#pragma mark CTTabStripModelObserverBridge impl.
-
-// Note: the following are called by the CTTabStripModel and thus indicate
-// the model's state rather than the UI state. This means that when for instance
-// tabSelectedWithContents:... is called, the view is not yet on screen, so
-// doing things like restoring focus is not possible.
-
-- (void)tabReplacedWithContents:(CTTabContents*)contents
-                    oldContents:(CTTabContents*)oldContents
-                        atIndex:(NSInteger)index {
-  [contents tabReplaced:oldContents inBrowser:browser_ atIndex:index];
-  if ([self selectedTabIndex] == index) {
-    [self updateToolbarWithContents:contents
-                 shouldRestoreState:!!oldContents];
-  }
-}
-
-
-- (void)tabDetachedWithContents:(CTTabContents*)contents
-                        atIndex:(NSInteger)index {
-  [contents tabDidDetachFromBrowser:browser_ atIndex:index];
-  if (contents.isSelected)
-    [self updateToolbarWithContents:nil shouldRestoreState:NO];
-}
-
-- (void)tabStripEmpty {
-  [self close];
-}
-
-
 @end

@@ -729,19 +729,22 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 
 -(void)willStartTearingTab {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
+    CTTabContents* contents = [browser_ selectedTabContents];
+  if (contents) {
     contents.isTeared = YES;
   }
 }
 
 -(void)willEndTearingTab {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
+    CTTabContents* contents = [browser_ selectedTabContents];
+  if (contents) {
     contents.isTeared = NO;
   }
 }
 
 -(void)didEndTearingTab {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
+    CTTabContents* contents = [browser_ selectedTabContents];
+  if (contents) {
     [contents tabDidResignTeared];
   }
 }
@@ -761,7 +764,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   [tabContentView setFrame:tabContentFrame];
   // If the relayout shifts the content area up or down, let the renderer know.
   if (contentShifted) {
-    if (CTTabContents* contents = [browser_ selectedTabContents]) {
+      CTTabContents* contents = [browser_ selectedTabContents];
+    if (contents) {
       [contents viewFrameDidChange:newFrame];
     }
   }
@@ -876,7 +880,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 // Called when we are activated (when we gain focus).
 - (void)windowDidBecomeKey:(NSNotification*)notification {
   if (![[self window] isMiniaturized]) {
-    if (CTTabContents* contents = [browser_ selectedTabContents]) {
+      CTTabContents* contents = [browser_ selectedTabContents];
+    if (contents) {
       contents.isVisible = YES;
     }
   }
@@ -900,14 +905,16 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 // Called when we have been minimized.
 - (void)windowDidMiniaturize:(NSNotification *)notification {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
+    CTTabContents* contents = [browser_ selectedTabContents];
+  if (contents) {
     contents.isVisible = NO;
   }
 }
 
 // Called when we have been unminimized.
 - (void)windowDidDeminiaturize:(NSNotification *)notification {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
+    CTTabContents* contents = [browser_ selectedTabContents];
+  if (contents) {
     contents.isVisible = YES;
   }
 }
@@ -917,7 +924,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   // Let the selected tab know (unless we are minimized, in which case nothing
   // has really changed).
   if (![[self window] isMiniaturized]) {
-    if (CTTabContents* contents = [browser_ selectedTabContents]) {
+      CTTabContents* contents = [browser_ selectedTabContents];
+    if (contents) {
       contents.isVisible = NO;
     }
   }
@@ -928,7 +936,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   // Let the selected tab know
   // (unless we are minimized, in which case nothing has really changed).
   if (![[self window] isMiniaturized]) {
-    if (CTTabContents* contents = [browser_ selectedTabContents]) {
+      CTTabContents* contents = [browser_ selectedTabContents];
+    if (contents) {
       contents.isVisible = YES;
     }
   }
@@ -942,7 +951,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 }
 
 - (void)focusTabContents {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
+    CTTabContents* contents = [browser_ selectedTabContents];
+  if (contents) {
     [[self window] makeFirstResponder:contents.view];
   }
 }

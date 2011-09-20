@@ -71,7 +71,7 @@
 		3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */; };
 		3A92904612294F1900DA7E43 /* CTToolbarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92904412294F1900DA7E43 /* CTToolbarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A92904712294F1900DA7E43 /* CTToolbarController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A92904512294F1900DA7E43 /* CTToolbarController.mm */; };
+		3A92904712294F1900DA7E43 /* CTToolbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92904512294F1900DA7E43 /* CTToolbarController.m */; };
 		3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A92907512295BC400DA7E43 /* Toolbar.xib */; };
 		3A9291981229BEB600DA7E43 /* CTPageTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921DB1221AA4B006D8305 /* CTPageTransition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92919B1229BEE900DA7E43 /* basictypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA331225E911009E2908 /* basictypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -205,7 +205,7 @@
 		3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+CTThemed.h"; sourceTree = "<group>"; };
 		3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+CTThemed.m"; sourceTree = "<group>"; };
 		3A92904412294F1900DA7E43 /* CTToolbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTToolbarController.h; sourceTree = "<group>"; };
-		3A92904512294F1900DA7E43 /* CTToolbarController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTToolbarController.mm; sourceTree = "<group>"; };
+		3A92904512294F1900DA7E43 /* CTToolbarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTToolbarController.m; sourceTree = "<group>"; };
 		3A92907512295BC400DA7E43 /* Toolbar.xib */ = {isa = PBXFileReference; explicitFileType = file.xib; path = Toolbar.xib; sourceTree = "<group>"; };
 		3AA71889122479CE005022BE /* CTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowser.h; sourceTree = "<group>"; };
 		3AA7188A122479CE005022BE /* CTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowser.m; sourceTree = "<group>"; };
@@ -271,7 +271,7 @@
 				3A929006122947A800DA7E43 /* CTToolbarView.h */,
 				3A929007122947A800DA7E43 /* CTToolbarView.m */,
 				3A92904412294F1900DA7E43 /* CTToolbarController.h */,
-				3A92904512294F1900DA7E43 /* CTToolbarController.mm */,
+				3A92904512294F1900DA7E43 /* CTToolbarController.m */,
 				3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */,
 				3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */,
 				3A3EDA321225E911009E2908 /* base */,
@@ -654,7 +654,7 @@
 				3A3EDAF51225FBFF009E2908 /* NSImage+CTAdditions.m in Sources */,
 				3A929009122947A800DA7E43 /* CTToolbarView.m in Sources */,
 				3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */,
-				3A92904712294F1900DA7E43 /* CTToolbarController.mm in Sources */,
+				3A92904712294F1900DA7E43 /* CTToolbarController.m in Sources */,
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
 				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */,

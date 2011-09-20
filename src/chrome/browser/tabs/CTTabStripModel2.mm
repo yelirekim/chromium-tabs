@@ -377,10 +377,6 @@ static const int kNoTab = -1;
                                   nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabMiniStateChangedNotification object:self userInfo:userInfo];
     }
-    
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabPinnedStateChanged(data->contents,
-                                            index));
 }
 
 - (void) closeSelectedTab

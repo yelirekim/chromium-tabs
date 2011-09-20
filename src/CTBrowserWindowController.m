@@ -37,8 +37,6 @@
 }
 @end
 
-static CTBrowserWindowController* _currentMain = nil;
-
 @implementation CTBrowserWindowController {
     BOOL initializing_;
     IBOutlet FastResizeView* tabContentArea_;
@@ -68,10 +66,6 @@ static CTBrowserWindowController* _currentMain = nil;
     return [[self alloc] init];
 }
 
-+ (CTBrowserWindowController*)mainBrowserWindowController {
-    return _currentMain;
-}
-
 + (CTBrowserWindowController*)browserWindowControllerForWindow:(NSWindow*)window {
     while (window) {
         id controller = [window windowController];
@@ -90,10 +84,6 @@ static CTBrowserWindowController* _currentMain = nil;
 - (void)dealloc {
     if (overlayWindow_) {
         [self setUseOverlay:NO];
-    }
-    
-    if (_currentMain == self) {
-        _currentMain = nil;
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
@@ -125,9 +115,6 @@ static CTBrowserWindowController* _currentMain = nil;
         [self layoutSubviews];
         
         initializing_ = NO;
-        if (!_currentMain) {
-            _currentMain = self;
-        }
         
         ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             NSDictionary* userInfo = notification.userInfo;
@@ -216,9 +203,6 @@ static CTBrowserWindowController* _currentMain = nil;
         if ([browser_.tabStripModel2 hasNonPhantomTabs]) {
             [[self window] orderOut:self];
             [browser_ windowDidBeginToClose];
-            if (_currentMain == self) {
-                _currentMain = nil;
-            }
             return NO;
         }
         
@@ -229,16 +213,10 @@ static CTBrowserWindowController* _currentMain = nil;
 }
 
 - (void)windowDidBecomeMain:(NSNotification*)notification {
-    _currentMain = self;
-    
     [[self window] setViewsNeedDisplay:YES];
 }
 
 - (void)windowDidResignMain:(NSNotification*)notification {
-    if (_currentMain == self) {
-        _currentMain = nil;
-    }
-    
     [[self window] setViewsNeedDisplay:YES];
 }
 

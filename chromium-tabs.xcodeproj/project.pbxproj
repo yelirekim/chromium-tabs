@@ -174,8 +174,8 @@
 		3AA7188A122479CE005022BE /* CTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowser.m; sourceTree = "<group>"; };
 		3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserWindow.h; sourceTree = "<group>"; };
 		3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowserWindow.m; sourceTree = "<group>"; };
-		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
-		3AEE19531222DDEB009DA438 /* CTTabContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabContents.m; sourceTree = "<group>"; };
+		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTTabContents.h; path = ../../../CTTabContents.h; sourceTree = "<group>"; };
+		3AEE19531222DDEB009DA438 /* CTTabContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTTabContents.m; path = ../../../CTTabContents.m; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMFadeTruncatingTextFieldCell.h; sourceTree = "<group>"; };
 		A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMFadeTruncatingTextFieldCell.m; sourceTree = "<group>"; };
@@ -222,8 +222,6 @@
 				3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */,
 				3A1CF95F12235704008A3B8C /* CTBrowserWindowController.h */,
 				3A1CF96012235704008A3B8C /* CTBrowserWindowController.m */,
-				3AEE19521222DDEB009DA438 /* CTTabContents.h */,
-				3AEE19531222DDEB009DA438 /* CTTabContents.m */,
 				3A286FE21222D25400F1BB78 /* CTTabStripController.h */,
 				3A286FE31222D25400F1BB78 /* CTTabStripController.m */,
 				A2CD3AD013F48C9900954A59 /* CTTabStripModel.h */,
@@ -358,12 +356,14 @@
 		A27EF69914292A5C0045C670 /* view controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3AEE19521222DDEB009DA438 /* CTTabContents.h */,
+				3AEE19531222DDEB009DA438 /* CTTabContents.m */,
+				3A236D9E1223375D00D21E66 /* CTTabContentsViewController.h */,
+				3A236D9F1223375D00D21E66 /* CTTabContentsViewController.m */,
 				3A39270A1221C566006D8305 /* CTTabView.h */,
 				3A39270B1221C566006D8305 /* CTTabView.m */,
 				3A3921F11221AF58006D8305 /* CTTabViewController.h */,
 				3A3921F21221AF58006D8305 /* CTTabViewController.m */,
-				3A236D9E1223375D00D21E66 /* CTTabContentsViewController.h */,
-				3A236D9F1223375D00D21E66 /* CTTabContentsViewController.m */,
 			);
 			name = "view controllers";
 			path = chrome/browser/cocoa;

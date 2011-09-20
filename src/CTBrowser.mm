@@ -35,7 +35,7 @@
 - (id)init {
     if ((self = [super init])) {
         tabStripModel_ = new CTTabStripModel(self);
-        tabStripModel2_ = [[CTTabStripModel2 alloc] initWithPointer:tabStripModel_];
+        tabStripModel2_ = [[CTTabStripModel2 alloc] initWithDelegate:self];
     }
     return self;
 }

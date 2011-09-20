@@ -1,4 +1,5 @@
 #import "CTPageTransition.h"
+#import "CTTabStripModelDelegate.h"
 
 enum InsertionPolicy {
     INSERT_AFTER,
@@ -41,7 +42,7 @@ class CTTabStripModelObserver;
 @property (nonatomic) InsertionPolicy insertionPolicy;
 @property (nonatomic) NSInteger selectedIndex;
 
-- (id) initWithPointer:(CTTabStripModel*)tabStripModel;
+- (id) initWithDelegate:(NSObject<CTTabStripModelDelegate>*)delegate;
 
 - (BOOL) hasNonPhantomTabs;
 - (NSInteger) count;

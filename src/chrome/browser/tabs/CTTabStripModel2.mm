@@ -47,9 +47,9 @@ extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
 
 @implementation CTTabStripModel2 {
-    CTTabStripModel* tabStripModel_;
     NSMutableArray* contents_data_;
     BOOL closing_all_;
+    NSObject<CTTabStripModelDelegate>* delegate_;
 }
 
 @synthesize insertionPolicy = insertionPolicy_;
@@ -57,10 +57,10 @@ extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
 static const int kNoTab = -1;
 
-- (id) initWithPointer:(CTTabStripModel*)tabStripModel
+- (id) initWithDelegate:(NSObject<CTTabStripModelDelegate>*)delegate
 {
     if (nil != (self = [super init])) {
-        tabStripModel_ = tabStripModel;
+        delegate_ = delegate;
         contents_data_ = [NSMutableArray array];
     }
     return self;
@@ -452,7 +452,7 @@ static const int kNoTab = -1;
         CTTabContents* detached_contents = [self _contentsAtIndex:index];
         [detached_contents closingOfTabDidStart:nil]; // TODO notification
         
-        if (![tabStripModel_->delegate_ canCloseContentsAt:index]) {
+        if (![delegate_ canCloseContentsAt:index]) {
             retval = false;
             continue;
         }
@@ -461,7 +461,7 @@ static const int kNoTab = -1;
             detached_contents.closedByUserGesture = options & CLOSE_USER_GESTURE;
         }
         
-        if ([tabStripModel_->delegate_ runUnloadListenerBeforeClosing:detached_contents]) {
+        if ([delegate_ runUnloadListenerBeforeClosing:detached_contents]) {
             retval = false;
             continue;
         }
@@ -481,7 +481,7 @@ static const int kNoTab = -1;
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabClosingNotification object:self userInfo:userInfo];
     
     if (createHistory) {
-        [tabStripModel_->delegate_ createHistoricalTab:contents];
+        [delegate_ createHistoricalTab:contents];
     }
     
     [self detachTabContentsAtIndex:index];

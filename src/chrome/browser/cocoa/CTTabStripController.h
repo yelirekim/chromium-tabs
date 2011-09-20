@@ -1,6 +1,6 @@
 
 @class NewTabButton;
-@class CTTabContentsController;
+@class CTTabContentsViewController;
 @class CTTabView;
 @class CTTabStripView;
 
@@ -36,7 +36,7 @@
 + (CGFloat)defaultTabHeight;
 + (CGFloat)defaultIndentForControls;
 
-- (CTTabContentsController*)activeTabContentsController;
+- (CTTabContentsViewController*)activeTabContentsController;
 
 @end
 

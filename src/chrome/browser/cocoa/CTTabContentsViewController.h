@@ -1,7 +1,7 @@
 
 @class CTTabContents;
 
-@interface CTTabContentsController : NSViewController
+@interface CTTabContentsViewController : NSViewController
 
 - (id)initWithNibName:(NSString*)name bundle:(NSBundle*)bundle contents:(CTTabContents*)contents;
 - (id)initWithContents:(CTTabContents*)contents;

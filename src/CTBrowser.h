@@ -8,7 +8,7 @@ typedef enum {
 
 @class CTTabStripModel;
 @class CTBrowserWindowController;
-@class CTTabContentsController;
+@class CTTabContentsViewController;
 @class CTToolbarController;
 
 // There is one CTBrowser instance per percieved window.
@@ -24,7 +24,7 @@ typedef enum {
 
 -(id)init;
 
--(CTTabContentsController*)createTabContentsControllerWithContents:(CTTabContents*)contents;
+-(CTTabContentsViewController*)createTabContentsControllerWithContents:(CTTabContents*)contents;
 -(CTTabContents*)createBlankTabBasedOn:(CTTabContents*)baseContents;
 -(CTTabContents*)addBlankTabAtIndex:(int)index inForeground:(BOOL)foreground;
 -(CTTabContents*)addBlankTabInForeground:(BOOL)foreground;

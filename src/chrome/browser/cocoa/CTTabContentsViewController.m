@@ -1,7 +1,7 @@
-#import "CTTabContentsController.h"
+#import "CTTabContentsViewController.h"
 #import "CTTabContents.h"
 
-@implementation CTTabContentsController {
+@implementation CTTabContentsViewController {
     CTTabContents* contents_;
     IBOutlet NSSplitView* contentsContainer_;
 }

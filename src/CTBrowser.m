@@ -2,7 +2,7 @@
 #import "CTTabStripModel.h"
 #import "CTTabStripController.h"
 #import "CTBrowserWindowController.h"
-#import "CTTabContentsController.h"
+#import "CTTabContentsViewController.h"
 #import "CTBrowserCommand.h"
 #import "CTTabContents.h"
 
@@ -22,9 +22,9 @@
     return self;
 }
 
--(CTTabContentsController*)createTabContentsControllerWithContents:(CTTabContents*)contents {
+-(CTTabContentsViewController*)createTabContentsControllerWithContents:(CTTabContents*)contents {
     // subclasses could override this
-    return [[CTTabContentsController alloc] initWithContents:contents];
+    return [[CTTabContentsViewController alloc] initWithContents:contents];
 }
 
 

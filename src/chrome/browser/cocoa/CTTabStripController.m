@@ -10,7 +10,7 @@
 
 #import "NewTabButton.h"
 #import "CTTabStripView.h"
-#import "CTTabContentsController.h"
+#import "CTTabContentsViewController.h"
 #import "CTTabViewController.h"
 #import "CTTabView.h"
 #import "ThrobberView.h"
@@ -281,7 +281,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             
             NSInteger index = [self indexFromModelIndex:modelIndex];
             
-            CTTabContentsController* contentsController =
+            CTTabContentsViewController* contentsController =
             [browser_ createTabContentsControllerWithContents:contents];
             [tabContentsArray_ insertObject:contentsController atIndex:index];
             
@@ -322,7 +322,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
                 int oldModelIndex = [tabStripModel2_ indexOfTabContents:oldContents];
                 if (oldModelIndex != -1) {  // When closing a tab, the old tab may be gone.
                     NSInteger oldIndex = [self indexFromModelIndex:oldModelIndex];
-                    CTTabContentsController* oldController = [tabContentsArray_ objectAtIndex:oldIndex];
+                    CTTabContentsViewController* oldController = [tabContentsArray_ objectAtIndex:oldIndex];
                     [oldController willResignSelectedTab];
                 }
             }
@@ -333,7 +333,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
                 ++i;
             }
             
-            CTTabContentsController *newController =
+            CTTabContentsViewController *newController =
             [tabContentsArray_ objectAtIndex:index];
             [newController willBecomeSelectedTab];
             
@@ -359,7 +359,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             NSInteger from = [self indexFromModelIndex:modelFrom];
             NSInteger to = [self indexFromModelIndex:modelTo];
             
-            CTTabContentsController* movedTabContentsController = [tabContentsArray_ objectAtIndex:from];
+            CTTabContentsViewController* movedTabContentsController = [tabContentsArray_ objectAtIndex:from];
             [tabContentsArray_ removeObjectAtIndex:from];
             [tabContentsArray_ insertObject:movedTabContentsController atIndex:to];
             CTTabViewController* movedTabController = [tabArray_ objectAtIndex:from];
@@ -398,7 +398,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             
             [self updateFavIconForContents:contents atIndex:modelIndex];
             
-            CTTabContentsController* updatedController = [tabContentsArray_ objectAtIndex:index];
+            CTTabContentsViewController* updatedController = [tabContentsArray_ objectAtIndex:index];
             [updatedController tabDidChange:contents];
         }];
         
@@ -466,7 +466,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 - (void)swapInTabAtIndex:(NSInteger)modelIndex {
     assert(modelIndex >= 0 && modelIndex < [tabStripModel2_ count]);
     NSInteger index = [self indexFromModelIndex:modelIndex];
-    CTTabContentsController* controller = [tabContentsArray_ objectAtIndex:index];
+    CTTabContentsViewController* controller = [tabContentsArray_ objectAtIndex:index];
     
     NSView* newView = [controller view];
     NSRect frame = [switchView_ bounds];
@@ -538,7 +538,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 - (NSInteger)modelIndexForContentsView:(NSView*)view {
     NSInteger index = 0;
     NSInteger i = 0;
-    for (CTTabContentsController* current in tabContentsArray_) {
+    for (CTTabContentsViewController* current in tabContentsArray_) {
         // If the CTTabController corresponding to |current| is closing, skip it.
         CTTabViewController* controller = [tabArray_ objectAtIndex:i];
         if ([closingControllers_ containsObject:controller]) {
@@ -1151,7 +1151,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     [self setTabTrackingAreasEnabled:mouseInside_];
 }
 
-- (CTTabContentsController*)activeTabContentsController {
+- (CTTabContentsViewController*)activeTabContentsController {
     int modelIndex = [tabStripModel2_ selectedIndex];
     if (modelIndex < 0)
         return nil;

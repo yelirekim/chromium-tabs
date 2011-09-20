@@ -1,7 +1,3 @@
-#ifndef CT_BROWSER_COMMAND_H_
-#define CT_BROWSER_COMMAND_H_
-#pragma once
-
 // NOTE: Within each of the following sections, the IDs are ordered roughly by
 // how they appear in the GUI/menus (left to right, top to bottom, etc.).
 
@@ -39,4 +35,3 @@ typedef enum {
   //CTBrowserCommandTabpose                   = 34036,
 } CTBrowserCommand;
 
-#endif // CT_BROWSER_COMMAND_H_

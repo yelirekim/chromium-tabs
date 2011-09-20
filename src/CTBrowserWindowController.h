@@ -1,4 +1,3 @@
-#import <Cocoa/Cocoa.h>
 #import "CTBrowser.h"
 #import "CTTabStripModelDelegate.h"
 #import "CTTabWindowController.h"

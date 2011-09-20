@@ -5,6 +5,7 @@
 #import "CTBrowserWindowController.h"
 #import "CTTabContentsController.h"
 #import "CTToolbarController.h"
+#import "CTBrowserCommand.h"
 
 @implementation CTBrowser
 @synthesize windowController = windowController_;

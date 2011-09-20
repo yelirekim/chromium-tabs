@@ -48,7 +48,6 @@ extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
 @implementation CTTabStripModel2 {
     CTTabStripModel* tabStripModel_;
-    ObserverList<CTTabStripModelObserver> observers_;
 }
 
 @synthesize insertionPolicy = insertionPolicy_;
@@ -63,26 +62,9 @@ static const int kNoTab = -1;
     return self;
 }
 
-- (void) addObserver:(CTTabStripModelObserver*)observer
-{
-    tabStripModel_->AddObserver(observer);
-    observers_.AddObserver(observer);
-}
-
-- (void) removeObserver:(CTTabStripModelObserver*)observer
-{
-    tabStripModel_->RemoveObserver(observer);
-    observers_.RemoveObserver(observer);
-}
-
 - (BOOL) hasNonPhantomTabs
 {
     return [self count];
-}
-
-- (BOOL) hasObserver:(CTTabStripModelObserver*)observer
-{
-    return tabStripModel_->HasObserver(observer);
 }
 
 - (NSInteger) count

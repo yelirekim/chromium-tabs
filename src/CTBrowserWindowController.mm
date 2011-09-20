@@ -3,7 +3,6 @@
 #import "CTTabStripModel.h"
 #import "CTTabContents.h"
 #import "CTTabStripController.h"
-#import "CTTabStripModelObserverBridge.h"
 #import "CTTabView.h"
 #import "CTTabStripView.h"
 #import "CTToolbarController.h"
@@ -36,7 +35,6 @@
 static CTBrowserWindowController* _currentMain = nil; // weak
 
 @implementation CTBrowserWindowController {
-    CTTabStripModelObserverBridge *tabStripObserver_;
     BOOL initializing_; // true if the instance is initializing
     id ob1;
     id ob2;
@@ -101,10 +99,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   // Our browser
   browser_ = browser;
   browser_.windowController = self;
-
-  // Observe tabs
-  tabStripObserver_ =
-      new CTTabStripModelObserverBridge([browser_ tabStripModel], self);
 
   // Note: the below statement including [self window] implicitly loads the
   // window and thus initializes IBOutlets, needed later. If [self window] is
@@ -221,7 +215,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   if (_currentMain == self) {
     _currentMain = nil;
   }
-  delete tabStripObserver_;
 
   // Close all tabs
   //[browser_ closeAllTabs]; // TODO
@@ -248,9 +241,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   if (_currentMain == self) {
     _currentMain = nil;
   }
-  //NSLog(@"%@ will finalize (retainCount: %u)", self, [self retainCount]);
-  //NSLog(@"%@", [NSThread callStackSymbols]);
-  delete tabStripObserver_;
   [super finalize];
 }
 

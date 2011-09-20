@@ -43,10 +43,7 @@ class CTTabStripModelObserver;
 
 - (id) initWithPointer:(CTTabStripModel*)tabStripModel;
 
-- (void) addObserver:(CTTabStripModelObserver*)observer;
-- (void) removeObserver:(CTTabStripModelObserver*)observer;
 - (BOOL) hasNonPhantomTabs;
-- (BOOL) hasObserver:(CTTabStripModelObserver*)observer;
 - (NSInteger) count;
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index;
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents;

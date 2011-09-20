@@ -17,7 +17,6 @@
 #import "CTTabStripView.h"
 #import "CTTabContentsController.h"
 #import "CTTabController.h"
-#import "CTTabStripModelObserverBridge.h"
 #import "CTTabView.h"
 #import "ThrobberView.h"
 #import "CTTabStripModel.h"
@@ -181,7 +180,6 @@ private:
     NSView* dragBlockingView_;  // avoid bad window server drags
     NewTabButton* newTabButton_;  // weak, obtained from the nib.
     NSTrackingArea* newTabTrackingArea_;
-    CTTabStripModelObserverBridge* bridge_;
     CTBrowser *browser_;  // weak
     CTTabStripModel* tabStripModel_;  // weak
     CTTabStripModel2* tabStripModel2_;
@@ -230,7 +228,6 @@ private:
         browser_ = browser;
         tabStripModel_ = [browser_ tabStripModel];
         tabStripModel2_ = [browser_ tabStripModel2];
-        bridge_ = new CTTabStripModelObserverBridge(tabStripModel_, self);
         
         tabContentsArray_ = [[NSMutableArray alloc] init];
         tabArray_ = [[NSMutableArray alloc] init];
@@ -414,9 +411,11 @@ private:
             [tabArray_ removeObjectAtIndex:from];
             [tabArray_ insertObject:movedTabController atIndex:to];
             
+#if 0
             if ([tabStripModel2_ isMiniTabAtIndex:modelTo] != [movedTabController mini]) {
                 [self tabMiniStateChangedWithContents:contents atIndex:modelTo];
             }
+#endif
         }];
         
         ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabChangedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {

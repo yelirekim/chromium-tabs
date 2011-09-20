@@ -245,30 +245,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             mouseInside_ = YES;
         }
         
-        [[newTabButton_ cell]
-         accessibilitySetOverrideValue:@"New tab"
-         forAttribute:NSAccessibilityDescriptionAttribute];
-#if 0        
-        const int existingTabCount = [tabStripModel2_ count];
-        const CTTabContents* selection = [tabStripModel2_ selectedTabContents];
-        for (int i = 0; i < existingTabCount; ++i) {
-            CTTabContents* currentContents = [tabStripModel2_ tabContentsAtIndex:i];
-            [self tabInsertedWithContents:currentContents
-                                  atIndex:i
-                             inForeground:NO];
-            if (selection == currentContents) {
-                [self tabSelectedWithContents:currentContents
-                             previousContents:NULL
-                                      atIndex:i
-                                  userGesture:NO];
-            }
-        }
-        if (existingTabCount) {
-            [self performSelectorOnMainThread:@selector(layoutTabs)
-                                   withObject:nil
-                                waitUntilDone:NO];
-        }
-#endif
+        [[newTabButton_ cell] accessibilitySetOverrideValue:@"New tab" forAttribute:NSAccessibilityDescriptionAttribute];
         
         ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             NSDictionary* userInfo = notification.userInfo;

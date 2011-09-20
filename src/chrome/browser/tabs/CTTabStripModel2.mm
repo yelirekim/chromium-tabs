@@ -240,8 +240,13 @@ static const int kNoTab = -1;
     TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
     data->contents = contents;
     
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabReplacedAt(old_contents, contents, index, replaceType));
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              old_contents, kCTTabContentsUserInfoKey,
+                              contents, kCTTabNewContentsUserInfoKey,
+                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInt:replaceType], kCTTabOptionsUserInfoKey, 
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabReplacedNotification object:self userInfo:userInfo];
     [self detachTabContentsAtIndex:index];
 }
 

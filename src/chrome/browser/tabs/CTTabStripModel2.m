@@ -342,7 +342,6 @@ const int kNoTab = -1;
     
     if ([self isAppTabAtIndex:index]) {
         if (!pinned) {
-            NOTREACHED();
             return;
         }
         data->pinned = pinned;

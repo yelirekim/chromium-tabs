@@ -343,7 +343,7 @@
 -(void)continueDraggingDetachedTab:(CTTabContents*)contents
                       windowBounds:(const NSRect)windowBounds
                          tabBounds:(const NSRect)tabBounds {
-    NOTIMPLEMENTED();
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 
@@ -355,19 +355,19 @@
 // Duplicates the contents at the provided index and places it into its own
 // window.
 -(void)duplicateContentsAt:(int)index {
-    NOTIMPLEMENTED();
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 // Called when a drag session has completed and the frame that initiated the
 // the session should be closed.
 -(void)closeFrameAfterDragSession {
-    DLOG("[ChromiumTabs] closeFrameAfterDragSession");
+    
 }
 
 // Creates an entry in the historical tab database for the specified
 // CTTabContents.
 -(void)createHistoricalTab:(CTTabContents*)contents {
-    DLOG("[ChromiumTabs] TODO createHistoricalTab %@", contents);
+    
 }
 
 // Runs any unload listeners associated with the specified CTTabContents before

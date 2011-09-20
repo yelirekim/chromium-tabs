@@ -211,7 +211,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 
 -(void)dealloc {
-  DLOG("[ChromiumTabs] dealloc window controller");
   if (_currentMain == self) {
     _currentMain = nil;
   }
@@ -311,7 +310,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   NSDocumentController* docController =
       [NSDocumentController sharedDocumentController];
   NSError *error = nil;
-  DCHECK(browser_);
+  assert(browser_);
   CTTabContents *baseTabContents = browser_.selectedTabContents;
   CTTabContents *tabContents =
       [docController openUntitledDocumentWithWindowController:self
@@ -647,8 +646,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   }
 
   // Sanity-check |maxY|.
-  DCHECK_GE(maxY, minY);
-  DCHECK_LE(maxY, NSMaxY(contentBounds) + yOffset);
+  assert(maxY >= minY);
+  assert(maxY <= NSMaxY(contentBounds) + yOffset);
 
   // The base class already positions the side tab strip on the left side
   // of the window's content area and sizes it to take the entire vertical

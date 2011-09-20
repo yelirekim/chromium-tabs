@@ -501,7 +501,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 - (NSInteger)numberOfOpenNonMiniTabs {
     NSInteger number = [self numberOfOpenTabs] - [self numberOfOpenMiniTabs];
-    DCHECK_GE(number, 0);
+    assert(number >= 0);
     return number;
 }
 

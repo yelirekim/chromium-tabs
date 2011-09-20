@@ -399,7 +399,6 @@ const CGFloat kRapidCloseDist = 2.5;
       // (and maybe even others?) for reasons I don't understand. So we
       // explicitly check for both events we're expecting, and log others. We
       // should figure out what's going on.
-      WLOG("Spurious event received of type %d", type);
     }
   }
 }
@@ -982,7 +981,7 @@ const CGFloat kRapidCloseDist = 2.5;
           alertState_ = kAlertFalling;
           nextUpdate = MIN(kGlowUpdateInterval, nextUpdate);
         } else {
-          DCHECK_EQ(kAlertFalling, alertState_);
+            assert(kAlertFalling == alertState_);
           alertAlpha = MAX(alertAlpha - elapsed / kAlertHideDuration, 0);
           [self setAlertAlpha:alertAlpha];
           nextUpdate = MIN(kGlowUpdateInterval, nextUpdate);
@@ -1039,8 +1038,6 @@ const CGFloat kRapidCloseDist = 2.5;
           !CFNumberGetValue(workspaceRef, kCFNumberIntType, &workspace)) {
         workspace = -1;
       }
-    } else {
-      NOTREACHED();
     }
   }
   if (useCache) {

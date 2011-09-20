@@ -226,8 +226,6 @@
     [overlayWindow_ orderOut:nil];
     overlayWindow_ = nil;
     cachedContentView_ = nil;
-  } else {
-    NOTREACHED();
   }
 }
 
@@ -243,28 +241,28 @@
 
 - (BOOL)canReceiveFrom:(CTTabWindowController*)source {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return NO;
 }
 
 - (void)moveTabView:(NSView*)view
      fromController:(CTTabWindowController*)dragController {
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
 }
 
 - (NSView*)selectedTabView {
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return nil;
 }
 
 - (void)layoutTabs {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
 }
 
 - (CTTabWindowController*)detachTabToNewWindow:(CTTabView*)tabView {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return NULL;
 }
 
@@ -298,47 +296,48 @@
 
 - (void)setShowsNewTabButton:(BOOL)show {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
 }
 
 - (BOOL)showsNewTabButton {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
+    return NO;
 }
 
 
 - (void)detachTabView:(NSView*)view {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
 }
 
 - (NSInteger)numberOfTabs {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return 0;
 }
 
 - (BOOL)hasLiveTabs {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return NO;
 }
 
 - (NSString*)selectedTabTitle {
   // subclass must implement
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return @"";
 }
 
 - (BOOL)hasTabStrip {
   // Subclasses should implement this.
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return YES;
 }
 
 - (BOOL)useVerticalTabs {
   // Subclasses should implement this.
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
   return NO;
 }
 
@@ -363,7 +362,7 @@
 // Called when the size of the window content area has changed. Override to
 // position specific views. Base class implementation does nothing.
 - (void)layoutSubviews {
-  NOTIMPLEMENTED();
+  [self doesNotRecognizeSelector:_cmd];
 }
 
 @end

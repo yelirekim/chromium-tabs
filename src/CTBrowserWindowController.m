@@ -61,12 +61,30 @@ static CTBrowserWindowController* _currentMain = nil;
 
 @synthesize tabContentArea = tabContentArea_;
 @synthesize didShowNewTabButtonBeforeTemporalAction = didShowNewTabButtonBeforeTemporalAction_;
+@synthesize tabStripController = tabStripController_;
+@synthesize browser = browser_;
 
-- (id)initWithWindow:(NSWindow*)window {
-    if ((self = [super initWithWindow:window]) != nil) {
-        lockedTabs_ = [[NSMutableSet alloc] initWithCapacity:10];
++ (CTBrowserWindowController*)browserWindowController {
+    return [[self alloc] init];
+}
+
++ (CTBrowserWindowController*)mainBrowserWindowController {
+    return _currentMain;
+}
+
++ (CTBrowserWindowController*)browserWindowControllerForWindow:(NSWindow*)window {
+    while (window) {
+        id controller = [window windowController];
+        if ([controller isKindOfClass:[CTBrowserWindowController class]]) {
+            return (CTBrowserWindowController*)controller;
+        }
+        window = [window parentWindow];
     }
-    return self;
+    return nil;
+}
+
++ (CTBrowserWindowController*)browserWindowControllerForView:(NSView*)view {
+    return [CTBrowserWindowController browserWindowControllerForWindow:[view window]];
 }
 
 - (void)dealloc {
@@ -85,6 +103,88 @@ static CTBrowserWindowController* _currentMain = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:ob5];
     [[NSNotificationCenter defaultCenter] removeObserver:ob6];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (id)initWithWindowNibPath:(NSString *)windowNibPath browser:(CTBrowser*)browser {
+    if (nil != (self = [super initWithWindowNibPath:windowNibPath owner:self])) {
+        initializing_ = YES;
+        
+        browser_ = browser;
+        browser_.windowController = self;
+        
+        NSWindow *window = [self window];
+        if ([window respondsToSelector:@selector(setBottomCornerRounded:)]) {
+            [window setBottomCornerRounded:NO];
+        }
+        [[window contentView] setAutoresizesSubviews:YES];
+        
+        tabStripController_ = [[CTTabStripController alloc] initWithView:self.tabStripView switchView:self.tabContentArea browser:browser_];
+        
+        [self setShouldCloseDocument:YES];
+        
+        [self layoutSubviews];
+        
+        initializing_ = NO;
+        if (!_currentMain) {
+            _currentMain = self;
+        }
+        
+        ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            BOOL foreground = [[userInfo objectForKey:kCTTabForegroundUserInfoKey] boolValue];
+            [contents tabDidInsertIntoBrowser:browser_
+                                      atIndex:index
+                                 inForeground:foreground];
+        }];
+        
+        ob2 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabClosingNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            [contents tabWillCloseInBrowser:browser_ atIndex:index];
+        }];
+        
+        ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabSelectedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            CTTabContents* newContents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
+            assert(newContents != oldContents);
+        }];
+        
+        ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabReplacedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            CTTabContents* contents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
+            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            [contents tabReplaced:oldContents inBrowser:browser_ atIndex:index];
+        }];
+        
+        ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            [contents tabDidDetachFromBrowser:browser_ atIndex:index];
+        }];
+        
+        ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            [self close];
+        }];
+    }
+    
+    return self;
+}
+
+
+- (id)initWithBrowser:(CTBrowser *)browser {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *windowNibPath = [bundle pathForResource:@"BrowserWindow" ofType:@"nib"];
+    return [self initWithWindowNibPath:windowNibPath browser:browser];
+}
+
+- (id)init {
+    return [self initWithBrowser:[CTBrowser browser]];
 }
 
 - (void)addSideTabStripToWindow {
@@ -107,6 +207,88 @@ static CTBrowserWindowController* _currentMain = nil;
     [contentParent addSubview:topTabStripView_];
 }
 
+#pragma mark -
+#pragma mark NSWindowController
+
+- (BOOL)windowShouldClose:(id)sender {
+    NSDisableScreenUpdates();
+    @try {
+        if ([browser_.tabStripModel2 hasNonPhantomTabs]) {
+            [[self window] orderOut:self];
+            [browser_ windowDidBeginToClose];
+            if (_currentMain == self) {
+                _currentMain = nil;
+            }
+            return NO;
+        }
+        
+        return YES;
+    } @finally {
+        NSEnableScreenUpdates();
+    }
+}
+
+- (void)windowDidBecomeMain:(NSNotification*)notification {
+    _currentMain = self;
+    
+    [[self window] setViewsNeedDisplay:YES];
+}
+
+- (void)windowDidResignMain:(NSNotification*)notification {
+    if (_currentMain == self) {
+        _currentMain = nil;
+    }
+    
+    [[self window] setViewsNeedDisplay:YES];
+}
+
+- (void)windowDidBecomeKey:(NSNotification*)notification {
+    if (![[self window] isMiniaturized]) {
+        CTTabContents* contents = [browser_ selectedTabContents];
+        if (contents) {
+            contents.isVisible = YES;
+        }
+    }
+}
+
+- (void)windowDidResignKey:(NSNotification*)notification {
+    if ([NSApp isActive] && ([NSApp keyWindow] == [self window])) {
+        return;
+    }
+}
+
+- (void)windowDidMiniaturize:(NSNotification *)notification {
+    CTTabContents* contents = [browser_ selectedTabContents];
+    if (contents) {
+        contents.isVisible = NO;
+    }
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification {
+    CTTabContents* contents = [browser_ selectedTabContents];
+    if (contents) {
+        contents.isVisible = YES;
+    }
+}
+
+- (void)applicationDidHide:(NSNotification *)notification {
+    if (![[self window] isMiniaturized]) {
+        CTTabContents* contents = [browser_ selectedTabContents];
+        if (contents) {
+            contents.isVisible = NO;
+        }
+    }
+}
+
+- (void)applicationDidUnhide:(NSNotification *)notification {
+    if (![[self window] isMiniaturized]) {
+        CTTabContents* contents = [browser_ selectedTabContents];
+        if (contents) {
+            contents.isVisible = YES;
+        }
+    }
+}
+
 - (void)windowDidLoad {
     NSRect tabFrame = [tabContentArea_ frame];
     NSRect contentFrame = [[[self window] contentView] frame];
@@ -125,6 +307,8 @@ static CTBrowserWindowController* _currentMain = nil;
         [tabContentArea_ setFrame:tabFrame];
     }
 }
+
+#pragma mark -
 
 - (void)toggleTabStripDisplayMode {
     BOOL useVertical = [self useVerticalTabs];
@@ -148,8 +332,9 @@ static CTBrowserWindowController* _currentMain = nil;
 }
 
 - (CTTabStripView*)tabStripView {
-    if ([self useVerticalTabs])
+    if ([self useVerticalTabs]) {
         return sideTabStripView_;
+    }
     return topTabStripView_;
 }
 
@@ -239,119 +424,8 @@ static CTBrowserWindowController* _currentMain = nil;
 
 // Browser Window
 
-@synthesize tabStripController = tabStripController_;
-@synthesize browser = browser_;
-
-+ (CTBrowserWindowController*)browserWindowController {
-    return [[self alloc] init];
-}
-
-+ (CTBrowserWindowController*)mainBrowserWindowController {
-    return _currentMain;
-}
-
-+ (CTBrowserWindowController*)browserWindowControllerForWindow:(NSWindow*)window {
-    while (window) {
-        id controller = [window windowController];
-        if ([controller isKindOfClass:[CTBrowserWindowController class]]) {
-            return (CTBrowserWindowController*)controller;
-        }
-        window = [window parentWindow];
-    }
-    return nil;
-}
-
-+ (CTBrowserWindowController*)browserWindowControllerForView:(NSView*)view {
-    return [CTBrowserWindowController browserWindowControllerForWindow:[view window]];
-}
-
-- (id)initWithWindowNibPath:(NSString *)windowNibPath browser:(CTBrowser*)browser {
-    if (nil != (self = [super initWithWindowNibPath:windowNibPath owner:self])) {
-        initializing_ = YES;
-        
-        browser_ = browser;
-        browser_.windowController = self;
-        
-        NSWindow *window = [self window];
-        if ([window respondsToSelector:@selector(setBottomCornerRounded:)]) {
-            [window setBottomCornerRounded:NO];
-        }
-        [[window contentView] setAutoresizesSubviews:YES];
-        
-        tabStripController_ = [[CTTabStripController alloc] initWithView:self.tabStripView switchView:self.tabContentArea browser:browser_];
-        
-        [self setShouldCloseDocument:YES];
-        
-        [self layoutSubviews];
-        
-        initializing_ = NO;
-        if (!_currentMain) {
-            _currentMain = self;
-        }
-        
-        ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            BOOL foreground = [[userInfo objectForKey:kCTTabForegroundUserInfoKey] boolValue];
-            [contents tabDidInsertIntoBrowser:browser_
-                                      atIndex:index
-                                 inForeground:foreground];
-        }];
-        
-        ob2 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabClosingNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            [contents tabWillCloseInBrowser:browser_ atIndex:index];
-        }];
-        
-        ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabSelectedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            CTTabContents* newContents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
-            assert(newContents != oldContents);
-        }];
-        
-        ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabReplacedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            CTTabContents* contents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            [contents tabReplaced:oldContents inBrowser:browser_ atIndex:index];
-        }];
-        
-        ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            [contents tabDidDetachFromBrowser:browser_ atIndex:index];
-        }];
-        
-        ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            [self close];
-        }];
-    }
-    
-    return self;
-}
-
-
-- (id)initWithBrowser:(CTBrowser *)browser {
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *windowNibPath = [bundle pathForResource:@"BrowserWindow" ofType:@"nib"];
-    return [self initWithWindowNibPath:windowNibPath browser:browser];
-}
-
-- (id)init {
-    return [self initWithBrowser:[CTBrowser browser]];
-}
-
 - (BOOL)isFullscreen {
     return NO;
-}
-
-- (void)synchronizeWindowTitleWithDocumentName {
 }
 
 #pragma mark -
@@ -374,6 +448,7 @@ static CTBrowserWindowController* _currentMain = nil;
 - (IBAction)saveAllDocuments:(id)sender {
     [[NSDocumentController sharedDocumentController] saveAllDocuments:sender];
 }
+
 - (IBAction)openDocument:(id)sender {
     [[NSDocumentController sharedDocumentController] openDocument:sender];
 }
@@ -384,8 +459,7 @@ static CTBrowserWindowController* _currentMain = nil;
     NSError *error = nil;
     assert(browser_);
     CTTabContents *baseTabContents = browser_.selectedTabContents;
-    CTTabContents *tabContents =
-    [docController openUntitledDocumentWithWindowController:self display:YES error:&error];
+    CTTabContents *tabContents = [docController openUntitledDocumentWithWindowController:self display:YES error:&error];
     if (!tabContents) {
         [NSApp presentError:error];
     } else if (baseTabContents) {
@@ -409,12 +483,10 @@ static CTBrowserWindowController* _currentMain = nil;
     [targetController.browser executeCommand:[sender tag]];
 }
 
-
 -(IBAction)closeTab:(id)sender {
     CTTabStripModel *tabStripModel2 = browser_.tabStripModel2;
     [tabStripModel2 closeTabContentsAtIndex:[tabStripModel2 selectedIndex] options:CLOSE_CREATE_HISTORICAL_TAB];
 }
-
 
 #pragma mark -
 #pragma mark CTBrowserWindowController implementation
@@ -654,94 +726,6 @@ static CTBrowserWindowController* _currentMain = nil;
     [tabStripController_ layoutTabs];
     
     return maxY;
-}
-
-
-#pragma mark -
-#pragma mark NSWindowController impl
-
-- (BOOL)windowShouldClose:(id)sender {
-    NSDisableScreenUpdates();
-    @try {
-        if ([browser_.tabStripModel2 hasNonPhantomTabs]) {
-            [[self window] orderOut:self];
-            [browser_ windowDidBeginToClose];
-            if (_currentMain == self) {
-                _currentMain = nil;
-            }
-            return NO;
-        }
-        
-        return YES;
-    } @finally {
-        NSEnableScreenUpdates();
-    }
-}
-
-
-- (void)windowWillClose:(NSNotification *)notification {
-}
-
-
-- (void)windowDidBecomeMain:(NSNotification*)notification {
-    _currentMain = self;
-    
-    [[self window] setViewsNeedDisplay:YES];
-}
-
-- (void)windowDidResignMain:(NSNotification*)notification {
-    if (_currentMain == self) {
-        _currentMain = nil;
-    }
-    
-    [[self window] setViewsNeedDisplay:YES];
-}
-
-- (void)windowDidBecomeKey:(NSNotification*)notification {
-    if (![[self window] isMiniaturized]) {
-        CTTabContents* contents = [browser_ selectedTabContents];
-        if (contents) {
-            contents.isVisible = YES;
-        }
-    }
-}
-
-- (void)windowDidResignKey:(NSNotification*)notification {
-    if ([NSApp isActive] && ([NSApp keyWindow] == [self window])) {
-        return;
-    }
-}
-
-- (void)windowDidMiniaturize:(NSNotification *)notification {
-    CTTabContents* contents = [browser_ selectedTabContents];
-    if (contents) {
-        contents.isVisible = NO;
-    }
-}
-
-- (void)windowDidDeminiaturize:(NSNotification *)notification {
-    CTTabContents* contents = [browser_ selectedTabContents];
-    if (contents) {
-        contents.isVisible = YES;
-    }
-}
-
-- (void)applicationDidHide:(NSNotification *)notification {
-    if (![[self window] isMiniaturized]) {
-        CTTabContents* contents = [browser_ selectedTabContents];
-        if (contents) {
-            contents.isVisible = NO;
-        }
-    }
-}
-
-- (void)applicationDidUnhide:(NSNotification *)notification {
-    if (![[self window] isMiniaturized]) {
-        CTTabContents* contents = [browser_ selectedTabContents];
-        if (contents) {
-            contents.isVisible = YES;
-        }
-    }
 }
 
 #pragma mark -

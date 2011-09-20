@@ -212,7 +212,7 @@ const CGFloat kRapidCloseDist = 2.5;
     return NO;
   NSWindowController* controller = [sourceWindow_ windowController];
   if ([controller isKindOfClass:[CTTabWindowController class]]) {
-    CTTabWindowController* realController = controller;
+    CTTabWindowController* realController = (CTTabWindowController*) controller;
     return [realController isTabDraggable:self];
   }
   return YES;
@@ -243,7 +243,7 @@ const CGFloat kRapidCloseDist = 2.5;
     }
     NSWindowController* controller = [window windowController];
     if ([controller isKindOfClass:[CTTabWindowController class]]) {
-      CTTabWindowController* realController = controller;
+      CTTabWindowController* realController = (CTTabWindowController*) controller;
       if ([realController canReceiveFrom:dragController])
         [targets addObject:controller];
     }

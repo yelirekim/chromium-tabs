@@ -4,24 +4,6 @@
 #import "CTTabStripView.h"
 #import "NSWindow+CTThemed.h"
 
-static CFTypeRef GetValueFromDictionary(CFDictionaryRef dict,
-                                        CFStringRef key,
-                                        CFTypeID expected_type) {
-    CFTypeRef value = CFDictionaryGetValue(dict, key);
-    if (!value)
-        return value;
-    
-    if (CFGetTypeID(value) != expected_type) {
-        CFStringRef expected_type_ref = CFCopyTypeIDDescription(expected_type);
-        CFStringRef actual_type_ref = CFCopyTypeIDDescription(CFGetTypeID(value));
-        NSLog(@"warning: Expected value for key %@ to be %@ but it was %@ instead",
-              key, expected_type_ref, actual_type_ref);
-        return NULL;
-    }
-    
-    return value;
-}
-
 const CGFloat kInsetMultiplier = 2.0/3.0;
 const CGFloat kControlPoint1Multiplier = 1.0/3.0;
 const CGFloat kControlPoint2Multiplier = 3.0/8.0;
@@ -41,7 +23,6 @@ const CGFloat kRapidCloseDist = 2.5;
 - (void)resetLastGlowUpdateTime;
 - (NSTimeInterval)timeElapsedSinceLastGlowUpdate;
 - (void)adjustGlowValue;
-- (int)getWorkspaceID:(NSWindow*)window useCache:(BOOL)useCache;
 - (NSBezierPath*)bezierPathForRect:(NSRect)rect;
 
 @end
@@ -181,10 +162,6 @@ const CGFloat kRapidCloseDist = 2.5;
         if (![window isVisible]) continue;
         if ([window respondsToSelector:@selector(isOnActiveSpace)]) {
             if (![window performSelector:@selector(isOnActiveSpace)])
-                continue;
-        } else {
-            if ([self getWorkspaceID:dragWindow useCache:NO] !=
-                [self getWorkspaceID:window useCache:YES])
                 continue;
         }
         NSWindowController* controller = [window windowController];
@@ -758,44 +735,6 @@ const CGFloat kRapidCloseDist = 2.5;
     
     [self resetLastGlowUpdateTime];
     [self setNeedsDisplay:YES];
-}
-
-- (int)getWorkspaceID:(NSWindow*)window useCache:(BOOL)useCache {
-    CGWindowID windowID = [window windowNumber];
-    if (useCache) {
-        NSNumber* workspace = [workspaceIDCache_ objectForKey:[NSNumber numberWithInt:windowID]];
-        if (workspace) {
-            return [workspace intValue];
-        }
-    }
-    
-    int workspace = -1;
-    CFArrayRef windowIDs = CFArrayCreate(NULL, (const void**)&windowID, 1, NULL);
-    CFArrayRef descriptions = CGWindowListCreateDescriptionFromArray(windowIDs);
-    assert(CFArrayGetCount(descriptions) <= 1);
-    if (CFArrayGetCount(descriptions) > 0) {
-        CFDictionaryRef dict = CFArrayGetValueAtIndex(descriptions, 0);
-        assert(CFGetTypeID(dict) == CFDictionaryGetTypeID());
-        
-        CFNumberRef otherIDRef = (CFNumberRef)GetValueFromDictionary(
-                                                                     dict, kCGWindowNumber, CFNumberGetTypeID());
-        CGWindowID otherID;
-        if (otherIDRef &&
-            CFNumberGetValue(otherIDRef, kCGWindowIDCFNumberType, &otherID) && otherID == windowID) {
-            CFNumberRef workspaceRef = (CFNumberRef)GetValueFromDictionary(
-                                                                           dict, kCGWindowWorkspace, CFNumberGetTypeID());
-            if (!workspaceRef ||
-                !CFNumberGetValue(workspaceRef, kCFNumberIntType, &workspace)) {
-                workspace = -1;
-            }
-        }
-    }
-    if (useCache) {
-        [workspaceIDCache_ setObject:[NSNumber numberWithInt:workspace] forKey:[NSNumber numberWithInt:windowID]];
-    }
-    CFRelease(windowIDs);
-    CFRelease(descriptions);
-    return workspace;
 }
 
 - (NSBezierPath*)bezierPathForRect:(NSRect)rect {

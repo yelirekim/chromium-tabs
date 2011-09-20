@@ -461,7 +461,7 @@ const int kNoTab = -1;
     for (size_t i = 0; i < indices.count; ++i) {
         int index = [[indices objectAtIndex:i] intValue];
         CTTabContents* detached_contents = [self _contentsAtIndex:index];
-        [detached_contents closingOfTabDidStart:nil]; // TODO notification
+        [detached_contents closingOfTabDidStart:self]; // TODO notification
         
         if (![delegate_ canCloseContentsAt:index]) {
             retval = false;

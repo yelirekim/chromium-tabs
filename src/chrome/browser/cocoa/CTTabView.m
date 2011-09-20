@@ -1,6 +1,6 @@
 #import "CTTabView.h"
+#import "CTBrowserWindowController.h"
 #import "CTTabViewController.h"
-#import "CTTabWindowController.h"
 #import "CTTabStripView.h"
 #import "NSWindow+CTThemed.h"
 
@@ -54,17 +54,17 @@ const CGFloat kRapidCloseDist = 2.5;
     NSTimeInterval tearTime_;
     NSPoint tearOrigin_;
     NSPoint dragOrigin_;
-    CTTabWindowController* sourceController_;
+    CTBrowserWindowController* sourceController_;
     NSWindow* sourceWindow_;
     NSRect sourceWindowFrame_;
     NSRect sourceTabFrame_;
     
-    CTTabWindowController* draggedController_;
+    CTBrowserWindowController* draggedController_;
     NSWindow* dragWindow_;
     NSWindow* dragOverlay_;
     NSMutableDictionary* workspaceIDCache_;
     
-    CTTabWindowController* targetController_;
+    CTBrowserWindowController* targetController_;
     NSCellStateValue state_;
 }
 
@@ -147,14 +147,14 @@ const CGFloat kRapidCloseDist = 2.5;
         return NO;
     }
     NSWindowController* controller = [sourceWindow_ windowController];
-    if ([controller isKindOfClass:[CTTabWindowController class]]) {
-        CTTabWindowController* realController = (CTTabWindowController*) controller;
+    if ([controller isKindOfClass:[CTBrowserWindowController class]]) {
+        CTBrowserWindowController* realController = (CTBrowserWindowController*) controller;
         return [realController isTabDraggable:self];
     }
     return YES;
 }
 
-- (NSArray*)dropTargetsForController:(CTTabWindowController*)dragController {
+- (NSArray*)dropTargetsForController:(CTBrowserWindowController*)dragController {
     NSMutableArray* targets = [NSMutableArray array];
     NSWindow* dragWindow = [dragController window];
     for (NSWindow* window in [NSApp orderedWindows]) {
@@ -165,8 +165,8 @@ const CGFloat kRapidCloseDist = 2.5;
                 continue;
         }
         NSWindowController* controller = [window windowController];
-        if ([controller isKindOfClass:[CTTabWindowController class]]) {
-            CTTabWindowController* realController = (CTTabWindowController*) controller;
+        if ([controller isKindOfClass:[CTBrowserWindowController class]]) {
+            CTBrowserWindowController* realController = (CTBrowserWindowController*) controller;
             if ([realController canReceiveFrom:dragController])
                 [targets addObject:controller];
         }
@@ -312,8 +312,8 @@ const CGFloat kRapidCloseDist = 2.5;
     
     NSPoint thisPoint = [NSEvent mouseLocation];
     NSArray* targets = [self dropTargetsForController:draggedController_];
-    CTTabWindowController* newTarget = nil;
-    for (CTTabWindowController* target in targets) {
+    CTBrowserWindowController* newTarget = nil;
+    for (CTBrowserWindowController* target in targets) {
         NSRect windowFrame = [[target window] frame];
         if (NSPointInRect(thisPoint, windowFrame)) {
             [[target window] orderFront:self];

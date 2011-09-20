@@ -16,6 +16,18 @@
 
 - (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY width:(CGFloat)width fullscreen:(BOOL)fullscreen;
 - (CGFloat)layoutToolbarAtMinX:(CGFloat)minX  maxY:(CGFloat)maxY width:(CGFloat)width;
+- (void)setUseOverlay:(BOOL)useOverlay;
+
+@end
+
+@interface TabWindowOverlayWindow : NSWindow
+@end
+
+@implementation TabWindowOverlayWindow
+
+- (NSPoint)themePatternPhase {
+    return NSZeroPoint;
+}
 
 @end
 
@@ -29,6 +41,16 @@ static CTBrowserWindowController* _currentMain = nil;
 
 @implementation CTBrowserWindowController {
     BOOL initializing_;
+    IBOutlet FastResizeView* tabContentArea_;
+    IBOutlet CTTabStripView* topTabStripView_;
+    IBOutlet CTTabStripView* sideTabStripView_;
+    NSWindow* overlayWindow_;
+    NSView* cachedContentView_;
+    NSMutableSet* lockedTabs_;
+    BOOL closeDeferred_;
+    CGFloat contentAreaHeightDelta_;
+    BOOL didShowNewTabButtonBeforeTemporalAction_;
+    
     id ob1;
     id ob2;
     id ob3;
@@ -36,6 +58,186 @@ static CTBrowserWindowController* _currentMain = nil;
     id ob5;
     id ob6;
 }
+
+@synthesize tabContentArea = tabContentArea_;
+@synthesize didShowNewTabButtonBeforeTemporalAction = didShowNewTabButtonBeforeTemporalAction_;
+
+- (id)initWithWindow:(NSWindow*)window {
+    if ((self = [super initWithWindow:window]) != nil) {
+        lockedTabs_ = [[NSMutableSet alloc] initWithCapacity:10];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if (overlayWindow_) {
+        [self setUseOverlay:NO];
+    }
+    
+    if (_currentMain == self) {
+        _currentMain = nil;
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:ob1];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob2];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob3];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob4];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob5];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob6];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)addSideTabStripToWindow {
+    NSView* contentView = [[self window] contentView];
+    NSRect contentFrame = [contentView frame];
+    NSRect sideStripFrame = NSMakeRect(0, 0,
+                                       NSWidth([sideTabStripView_ frame]),
+                                       NSHeight(contentFrame));
+    [sideTabStripView_ setFrame:sideStripFrame];
+    [contentView addSubview:sideTabStripView_];
+}
+
+- (void)addTopTabStripToWindow {
+    NSRect contentFrame = [tabContentArea_ frame];
+    NSRect tabFrame = NSMakeRect(0, NSMaxY(contentFrame),
+                                 NSWidth(contentFrame),
+                                 NSHeight([topTabStripView_ frame]));
+    [topTabStripView_ setFrame:tabFrame];
+    NSView* contentParent = [[[self window] contentView] superview];
+    [contentParent addSubview:topTabStripView_];
+}
+
+- (void)windowDidLoad {
+    NSRect tabFrame = [tabContentArea_ frame];
+    NSRect contentFrame = [[[self window] contentView] frame];
+    contentAreaHeightDelta_ = NSHeight(contentFrame) - NSHeight(tabFrame);
+    
+    if ([self hasTabStrip]) {
+        if ([self useVerticalTabs]) {
+            tabFrame.size.height = contentFrame.size.height;
+            [tabContentArea_ setFrame:tabFrame];
+            [self addSideTabStripToWindow];
+        } else {
+            [self addTopTabStripToWindow];
+        }
+    } else {
+        tabFrame.size.height = contentFrame.size.height;
+        [tabContentArea_ setFrame:tabFrame];
+    }
+}
+
+- (void)toggleTabStripDisplayMode {
+    BOOL useVertical = [self useVerticalTabs];
+    NSRect tabContentsFrame = [tabContentArea_ frame];
+    tabContentsFrame.size.height += useVertical ?
+    contentAreaHeightDelta_ : -contentAreaHeightDelta_;
+    [tabContentArea_ setFrame:tabContentsFrame];
+    
+    if (useVertical) {
+        [topTabStripView_ removeFromSuperview];
+        [self addSideTabStripToWindow];
+    } else {
+        [sideTabStripView_ removeFromSuperview];
+        NSRect tabContentsFrame = [tabContentArea_ frame];
+        tabContentsFrame.size.height -= contentAreaHeightDelta_;
+        [tabContentArea_ setFrame:tabContentsFrame];
+        [self addTopTabStripToWindow];
+    }
+    
+    [self layoutSubviews];
+}
+
+- (CTTabStripView*)tabStripView {
+    if ([self useVerticalTabs])
+        return sideTabStripView_;
+    return topTabStripView_;
+}
+
+- (void)removeOverlay {
+    [self setUseOverlay:NO];
+    if (closeDeferred_) {
+        [[self window] orderOut:self];
+        [[self window] performClose:self];
+    }
+}
+
+- (void)showOverlay {
+    [self setUseOverlay:YES];
+}
+
+- (void)moveViewsBetweenWindowAndOverlay:(BOOL)useOverlay {
+    if (useOverlay) {
+        [[[overlayWindow_ contentView] superview] addSubview:[self tabStripView]];
+        [[overlayWindow_ contentView] addSubview:cachedContentView_];
+    } else {
+        [[self window] setContentView:cachedContentView_];
+        [[[[self window] contentView] superview] addSubview:[self tabStripView]];
+        [[[[self window] contentView] superview] updateTrackingAreas];
+    }
+}
+
+- (void)setUseOverlay:(BOOL)useOverlay {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(removeOverlay) object:nil];
+    NSWindow* window = [self window];
+    if (useOverlay && !overlayWindow_) {
+        assert(!cachedContentView_);
+        overlayWindow_ = [[TabWindowOverlayWindow alloc] initWithContentRect:[window frame] styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+        [overlayWindow_ setTitle:@"overlay"];
+        [overlayWindow_ setBackgroundColor:[NSColor clearColor]];
+        [overlayWindow_ setOpaque:NO];
+        [overlayWindow_ setDelegate:self];
+        cachedContentView_ = [window contentView];
+        [window addChildWindow:overlayWindow_ ordered:NSWindowAbove];
+        [self moveViewsBetweenWindowAndOverlay:useOverlay];
+        [overlayWindow_ orderFront:nil];
+    } else if (!useOverlay && overlayWindow_) {
+        assert(cachedContentView_);
+        [overlayWindow_ setDelegate:nil];
+        [window setDelegate:nil];
+        [window setContentView:cachedContentView_];
+        [self moveViewsBetweenWindowAndOverlay:useOverlay];
+        [window makeFirstResponder:cachedContentView_];
+        [window display];
+        [window removeChildWindow:overlayWindow_];
+        [overlayWindow_ orderOut:nil];
+        overlayWindow_ = nil;
+        cachedContentView_ = nil;
+    }
+}
+
+- (NSWindow*)overlayWindow {
+    return overlayWindow_;
+}
+
+- (BOOL)shouldConstrainFrameRect {
+    return overlayWindow_ == nil;
+}
+
+- (BOOL)tabTearingAllowed {
+    return YES;
+}
+
+- (BOOL)windowMovementAllowed {
+    return YES;
+}
+
+- (BOOL)isTabDraggable:(NSView*)tabView {
+    return ![lockedTabs_ containsObject:tabView];
+}
+
+- (void)setTab:(NSView*)tabView isDraggable:(BOOL)draggable {
+    if (draggable) {
+        [lockedTabs_ removeObject:tabView];
+    } else {
+        [lockedTabs_ addObject:tabView];
+    }
+}
+
+- (void)deferPerformClose {
+    closeDeferred_ = YES;
+}
+
+// Browser Window
 
 @synthesize tabStripController = tabStripController_;
 @synthesize browser = browser_;
@@ -136,31 +338,13 @@ static CTBrowserWindowController* _currentMain = nil;
 
 
 - (id)initWithBrowser:(CTBrowser *)browser {
-    // subclasses could override this to provie a custom nib
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *windowNibPath = [bundle pathForResource:@"BrowserWindow" ofType:@"nib"];
     return [self initWithWindowNibPath:windowNibPath browser:browser];
 }
 
-
 - (id)init {
-    // subclasses could override this to provide a custom |CTBrowser|
     return [self initWithBrowser:[CTBrowser browser]];
-}
-
-
--(void)dealloc {
-    if (_currentMain == self) {
-        _currentMain = nil;
-    }
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:ob1];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob2];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob3];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob4];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob5];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob6];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)isFullscreen {
@@ -233,16 +417,16 @@ static CTBrowserWindowController* _currentMain = nil;
 
 
 #pragma mark -
-#pragma mark CTTabWindowController implementation
+#pragma mark CTBrowserWindowController implementation
 
-- (BOOL)canReceiveFrom:(CTTabWindowController*)source {
+- (BOOL)canReceiveFrom:(CTBrowserWindowController*)source {
     if (![source isKindOfClass:[isa class]]) {
         return NO;
     }
     return YES;
 }
 
-- (void)moveTabView:(NSView*)view fromController:(CTTabWindowController*)dragController {
+- (void)moveTabView:(NSView*)view fromController:(CTBrowserWindowController*)dragController {
     if (dragController) {
         BOOL isBrowser =
         [dragController isKindOfClass:[CTBrowserWindowController class]];
@@ -283,7 +467,7 @@ static CTBrowserWindowController* _currentMain = nil;
     [tabStripController_ layoutTabs];
 }
 
-- (CTTabWindowController*)detachTabToNewWindow:(CTTabView*)tabView {
+- (CTBrowserWindowController*)detachTabToNewWindow:(CTTabView*)tabView {
     NSDisableScreenUpdates();
     @try {
         CTTabStripModel *tabStripModel2 = [browser_ tabStripModel2];
@@ -318,12 +502,14 @@ static CTBrowserWindowController* _currentMain = nil;
 }
 
 - (void)insertPlaceholderForTab:(CTTabView*)tab frame:(NSRect)frame yStretchiness:(CGFloat)yStretchiness {
-    [super insertPlaceholderForTab:tab frame:frame yStretchiness:yStretchiness];
+    self.showsNewTabButton = NO;
     [tabStripController_ insertPlaceholderForTab:tab frame:frame yStretchiness:yStretchiness];
 }
 
 - (void)removePlaceholder {
-    [super removePlaceholder];
+    if (didShowNewTabButtonBeforeTemporalAction_) {
+        self.showsNewTabButton = YES;
+    }
     [tabStripController_ insertPlaceholderForTab:nil frame:NSZeroRect yStretchiness:0];
 }
 

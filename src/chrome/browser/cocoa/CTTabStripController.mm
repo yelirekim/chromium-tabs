@@ -919,20 +919,6 @@ private:
     [[tabView animator] setFrame:newFrame];
 }
 
-- (void)tabDetachedWithContents:(CTTabContents*)contents atIndex:(NSInteger)modelIndex {
-    NSInteger index = [self indexFromModelIndex:modelIndex];
-    
-    CTTabController* tab = [tabArray_ objectAtIndex:index];
-    if ([tabStripModel2_ count] > 0) {
-        [self startClosingTabWithAnimation:tab];
-        [self layoutTabs];
-    } else {
-        [self removeTab:tab];
-    }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kTabStripNumberOfTabsChanged object:self];
-}
-
 - (NSImageView*)iconImageViewForContents:(CTTabContents*)contents {
     NSImage* image = contents.icon;
     if (!image)
@@ -1015,60 +1001,6 @@ private:
         
         [tabController setIconView:iconView];
     }
-}
-
-- (void)tabChangedWithContents:(CTTabContents*)contents atIndex:(NSInteger)modelIndex changeType:(CTTabChangeType)change {
-    NSInteger index = [self indexFromModelIndex:modelIndex];
-    
-    if (change == CTTabChangeTypeTitleNotLoading) {
-        return;
-    }
-    
-    CTTabController* tabController = [tabArray_ objectAtIndex:index];
-    
-    if (change != CTTabChangeTypeLoadingOnly)
-        [self setTabTitle:tabController withContents:contents];
-    
-    bool isPhantom = [tabStripModel2_ isPhantomTabAtIndex:modelIndex];
-    if (isPhantom != [tabController phantom])
-        [tabController setPhantom:isPhantom];
-    
-    [self updateFavIconForContents:contents atIndex:modelIndex];
-    
-    CTTabContentsController* updatedController =
-    [tabContentsArray_ objectAtIndex:index];
-    [updatedController tabDidChange:contents];
-}
-
-- (void)tabMovedWithContents:(CTTabContents*)contents fromIndex:(NSInteger)modelFrom toIndex:(NSInteger)modelTo {
-    NSInteger from = [self indexFromModelIndex:modelFrom];
-    NSInteger to = [self indexFromModelIndex:modelTo];
-    
-    CTTabContentsController* movedTabContentsController = 
-    [tabContentsArray_ objectAtIndex:from];
-    [tabContentsArray_ removeObjectAtIndex:from];
-    [tabContentsArray_ insertObject:movedTabContentsController
-                            atIndex:to];
-    CTTabController* movedTabController = 
-    [tabArray_ objectAtIndex:from];
-    assert([movedTabController isKindOfClass:[CTTabController class]]);
-    [tabArray_ removeObjectAtIndex:from];
-    [tabArray_ insertObject:movedTabController atIndex:to];
-    
-    if ([tabStripModel2_ isMiniTabAtIndex:modelTo] != [movedTabController mini])
-        [self tabMiniStateChangedWithContents:contents atIndex:modelTo];
-}
-
-- (void)tabMiniStateChangedWithContents:(CTTabContents*)contents atIndex:(NSInteger)modelIndex {
-    NSInteger index = [self indexFromModelIndex:modelIndex];
-    
-    CTTabController* tabController = [tabArray_ objectAtIndex:index];
-    assert([tabController isKindOfClass:[CTTabController class]]);
-    [tabController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
-    [tabController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
-    [tabController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
-    [self updateFavIconForContents:contents atIndex:modelIndex];
-    [self layoutTabs];
 }
 
 - (void)setFrameOfSelectedTab:(NSRect)frame {

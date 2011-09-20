@@ -21,6 +21,7 @@ extern NSString* const kCTTabIndexUserInfoKey = @"kCTTabIndexUserInfoKey";
 extern NSString* const kCTTabToIndexUserInfoKey = @"kCTTabToIndexUserInfoKey";
 extern NSString* const kCTTabForegroundUserInfoKey = @"kCTTabForegroundUserInfoKey";
 extern NSString* const kCTTabUserGestureUserInfoKey = @"kCTTaUserGestureUserInfoKey";
+extern NSString* const kCTTabOptionsUserInfoKey = @"kCTTaOptionsInfoKey";
 
 @interface CTTabStripModel2 (Private)
 
@@ -224,8 +225,12 @@ static const int kNoTab = -1;
 - (void) updateTabContentsStateAtIndex:(NSInteger)index changeType:(CTTabChangeType)changeType
 {
     assert([self containsIndex:index]);
-    FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                      TabChangedAt([self tabContentsAtIndex:index], index, changeType));
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [self tabContentsAtIndex:index], kCTTabContentsUserInfoKey,
+                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInt:changeType], kCTTabOptionsUserInfoKey, 
+                              nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabChangedNotification object:self userInfo:userInfo];
 }
 
 - (void) replaceTabContentsAtIndex:(NSInteger)index withContents:contents replaceType:(CTTabReplaceType)replaceType
@@ -234,6 +239,7 @@ static const int kNoTab = -1;
     CTTabContents* old_contents = [self tabContentsAtIndex:index];
     TabContentsData* data = [tabStripModel_->contents_data_ objectAtIndex:index];
     data->contents = contents;
+    
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
                       TabReplacedAt(old_contents, contents, index, replaceType));
     [self detachTabContentsAtIndex:index];

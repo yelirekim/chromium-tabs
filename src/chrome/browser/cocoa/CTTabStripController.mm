@@ -206,6 +206,7 @@ private:
     id ob1;
     id ob2;
     id ob3;
+    id ob4;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -413,6 +414,34 @@ private:
                 [self tabMiniStateChangedWithContents:contents atIndex:modelTo];
             }
         }];
+        
+        ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabChangedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            CTTabChangeType change = (CTTabChangeType)[[userInfo valueForKey:kCTTabOptionsUserInfoKey] intValue];
+            NSInteger index = [self indexFromModelIndex:modelIndex];
+            
+            if (change == CTTabChangeTypeTitleNotLoading) {
+                return;
+            }
+            
+            CTTabController* tabController = [tabArray_ objectAtIndex:index];
+            
+            if (change != CTTabChangeTypeLoadingOnly) {
+                [self setTabTitle:tabController withContents:contents];
+            }
+            
+            bool isPhantom = [tabStripModel2_ isPhantomTabAtIndex:modelIndex];
+            if (isPhantom != [tabController phantom]) {
+                [tabController setPhantom:isPhantom];
+            }
+            
+            [self updateFavIconForContents:contents atIndex:modelIndex];
+            
+            CTTabContentsController* updatedController = [tabContentsArray_ objectAtIndex:index];
+            [updatedController tabDidChange:contents];
+        }];
     }
     return self;
 }
@@ -430,6 +459,7 @@ private:
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
     [[NSNotificationCenter defaultCenter] removeObserver:ob2];
     [[NSNotificationCenter defaultCenter] removeObserver:ob3];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob4];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

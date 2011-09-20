@@ -369,9 +369,11 @@ static const int kNoTab = -1;
             return;
         }
         
-        FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,
-                          TabMiniStateChanged(data->contents,
-                                              index));
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  data->contents, kCTTabContentsUserInfoKey,
+                                  [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                                  nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabMiniStateChangedNotification object:self userInfo:userInfo];
     }
     
     FOR_EACH_OBSERVER(CTTabStripModelObserver, tabStripModel_->observers_,

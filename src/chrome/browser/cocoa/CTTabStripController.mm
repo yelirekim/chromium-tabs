@@ -207,6 +207,7 @@ private:
     id ob2;
     id ob3;
     id ob4;
+    id ob5;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -442,6 +443,21 @@ private:
             CTTabContentsController* updatedController = [tabContentsArray_ objectAtIndex:index];
             [updatedController tabDidChange:contents];
         }];
+        
+        ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabChangedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+            NSDictionary* userInfo = notification.userInfo;
+            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
+            NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
+            NSInteger index = [self indexFromModelIndex:modelIndex];
+            
+            CTTabController* tabController = [tabArray_ objectAtIndex:index];
+            assert([tabController isKindOfClass:[CTTabController class]]);
+            [tabController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
+            [tabController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
+            [tabController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
+            [self updateFavIconForContents:contents atIndex:modelIndex];
+            [self layoutTabs];
+        }];
     }
     return self;
 }
@@ -460,6 +476,7 @@ private:
     [[NSNotificationCenter defaultCenter] removeObserver:ob2];
     [[NSNotificationCenter defaultCenter] removeObserver:ob3];
     [[NSNotificationCenter defaultCenter] removeObserver:ob4];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob5];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

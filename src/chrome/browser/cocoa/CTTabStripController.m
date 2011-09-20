@@ -10,9 +10,6 @@
 #import "CTUtil.h"
 #import "NSImage+CTAdditions.h"
 
-#import <limits>
-#import <string>
-
 #import "NewTabButton.h"
 #import "CTTabStripView.h"
 #import "CTTabContentsController.h"
@@ -495,7 +492,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 }
 
 - (NSInteger)numberOfOpenTabs {
-    return static_cast<NSInteger>([tabStripModel2_ count]);
+    return [tabStripModel2_ count];
 }
 
 - (NSInteger)numberOfOpenMiniTabs {
@@ -830,7 +827,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     if (contents)
         titleString = contents.title;
     if (!titleString || ![titleString length])
-        titleString = L10n(@"New Tab");
+        titleString = @"New Tab";
     [tab setTitle:titleString];
 }
 

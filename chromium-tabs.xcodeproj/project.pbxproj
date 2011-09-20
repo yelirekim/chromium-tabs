@@ -171,7 +171,6 @@
 		3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSColor+Luminance.m"; sourceTree = "<group>"; };
 		3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+MCAdditions.h"; path = "src/third_party/molokocacao/NSBezierPath+MCAdditions.h"; sourceTree = SOURCE_ROOT; };
 		3A3ED68A1225CE7A009E2908 /* NSBezierPath+MCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MCAdditions.m"; sourceTree = "<group>"; };
-		3A3ED7071225D7A6009E2908 /* build_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = build_config.h; sourceTree = "<group>"; };
 		3A3ED9751225E0A7009E2908 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3A3ED97D1225E116009E2908 /* ChromiumTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.h; sourceTree = "<group>"; };
 		3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChromiumTabs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,7 +239,6 @@
 			children = (
 				3A3ED97D1225E116009E2908 /* ChromiumTabs.h */,
 				256AC3F00F4B6AF500CF3369 /* prefix.pch */,
-				3A3ED7071225D7A6009E2908 /* build_config.h */,
 				3A1168C31225404F00757641 /* common.h */,
 				3A1168C21225404F00757641 /* common.c */,
 				3A3EDA9B1225EF84009E2908 /* CTUtil.h */,

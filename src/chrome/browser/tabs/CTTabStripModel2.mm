@@ -334,10 +334,8 @@ static const int kNoTab = -1;
                               [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabDetachedNotification object:self userInfo:userInfo];
-    ObserverList<CTTabStripModelObserver>::Iterator iter(tabStripModel_->observers_);
-    while (CTTabStripModelObserver* obs = iter.GetNext()) {
-        if (![self hasNonPhantomTabs])
-            obs->TabStripEmpty();
+    if (![self hasNonPhantomTabs]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabStripEmptyNotification object:self userInfo:nil];
     }
     if ([self hasNonPhantomTabs]) {
         if (index == tabStripModel_->selected_index_) {

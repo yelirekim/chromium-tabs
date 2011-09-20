@@ -43,6 +43,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     id ob3;
     id ob4;
     id ob5;
+    id ob6;
 }
 
 @synthesize tabStripController = tabStripController_;
@@ -193,6 +194,10 @@ static CTBrowserWindowController* _currentMain = nil; // weak
         }
     }];
     
+    ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        [self close];
+    }];
+    
   return self;
 }
 
@@ -232,6 +237,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     [[NSNotificationCenter defaultCenter] removeObserver:ob3];
     [[NSNotificationCenter defaultCenter] removeObserver:ob4];
     [[NSNotificationCenter defaultCenter] removeObserver:ob5];
+    [[NSNotificationCenter defaultCenter] removeObserver:ob6];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     toolbarController_ = nil;

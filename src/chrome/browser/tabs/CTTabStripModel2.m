@@ -49,7 +49,7 @@ const int kNoTab = -1;
 
 @interface CTTabStripModel2 (OrderController)
 
-- (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents pageTransition:(CTPageTransition)transition foreground:(BOOL)foreground;
+- (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents foreground:(BOOL)foreground;
 - (NSInteger) determineInsertionIndexForAppending;
 - (NSInteger) determineNewSelectedIndexByRemovingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove;
 - (NSInteger) validIndexForIndex:(NSInteger)index removingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove;
@@ -245,21 +245,14 @@ const int kNoTab = -1;
     [self _closeTabsatIndices:closing_tabs options:CLOSE_CREATE_HISTORICAL_TAB];
 }
 
-- (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options
+- (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options
 {
     bool inherit_group = (options & ADD_INHERIT_GROUP) == ADD_INHERIT_GROUP;
     
-    if (pageTransition == CTPageTransitionLink && (options & ADD_FORCE_INDEX) == 0) {
-        index = [self determineInsertionIndexForContents:contents pageTransition:pageTransition foreground:options & ADD_SELECTED];
-        inherit_group = true;
-    } else {
-        if (index < 0 || index > self.count)
-            index = [self determineInsertionIndexForAppending];
-        }
-    
-    if (pageTransition == CTPageTransitionTyped && index == self.count) {
-        inherit_group = true;
+    if (index < 0 || index > self.count) {
+        index = [self determineInsertionIndexForAppending];
     }
+    inherit_group = true;
     [self insertTabContents:contents atIndex:index options:options | (inherit_group ? ADD_INHERIT_GROUP : 0)];
     
     index = [self indexOfTabContents:contents];
@@ -505,19 +498,11 @@ const int kNoTab = -1;
 #pragma mark -
 #pragma mark Model Order Controller Functions
 
-- (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents pageTransition:(CTPageTransition)transition foreground:(BOOL)foreground
+- (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents foreground:(BOOL)foreground
 {
     int tab_count = [self count];
-    if (!tab_count)
+    if (!tab_count) {
         return 0;
-    
-    NSInteger selectedIndex = [self selectedIndex];
-    if (transition == CTPageTransitionLink && selectedIndex != -1) {
-        int delta = (self.insertionPolicy == INSERT_AFTER) ? 1 : 0;
-        if (foreground) {
-            return selectedIndex + delta;
-        }
-        return selectedIndex + delta;
     }
     
     return [self determineInsertionIndexForAppending];

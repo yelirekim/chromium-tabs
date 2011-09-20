@@ -1,7 +1,6 @@
 #import "CTBrowser.h"
 #import "CTTabStripModel2.h"
 #import "CTTabStripController.h"
-#import "CTPageTransition.h"
 #import "CTBrowserWindowController.h"
 #import "CTTabContentsController.h"
 #import "CTBrowserCommand.h"
@@ -125,7 +124,7 @@
 
 -(CTTabContents*)addTabContents:(CTTabContents*)contents atIndex:(int)index inForeground:(BOOL)foreground {
     int addTypes = foreground ? (ADD_SELECTED | ADD_INHERIT_GROUP) : ADD_NONE;
-    index = [tabStripModel2_ addTabContents:contents atIndex:index withPageTransition:CTPageTransitionTyped options:addTypes];
+    index = [tabStripModel2_ addTabContents:contents atIndex:index options:addTypes];
     if ((addTypes & ADD_SELECTED) == 0) {
         contents.isVisible = NO;
     }

@@ -1,4 +1,3 @@
-#import "CTPageTransition.h"
 #import "CTTabStripModelDelegate.h"
 
 typedef enum {
@@ -59,7 +58,7 @@ typedef enum {
 - (void) updateTabContentsStateAtIndex:(NSInteger)index changeType:(CTTabChangeType)changeType;
 - (void) replaceTabContentsAtIndex:(NSInteger)index withContents:contents replaceType:(CTTabReplaceType)replaceType;
 - (void) closeAllTabs;
-- (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index withPageTransition:(CTPageTransition)pageTransition options:(NSInteger)options;
+- (NSInteger) addTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options;
 - (void) selectNextTab;
 - (void) selectPreviousTab;
 - (void) moveTabNext;

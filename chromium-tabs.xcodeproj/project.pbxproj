@@ -13,7 +13,6 @@
 		3A3ED9C01225E320009E2908 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3ED9751225E0A7009E2908 /* QuartzCore.framework */; };
 		3A3ED9C41225E32A009E2908 /* HoverCloseButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921F01221AF58006D8305 /* HoverCloseButton.m */; };
 		3A3ED9C51225E32A009E2908 /* HoverButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921EE1221AF58006D8305 /* HoverButton.m */; };
-		3A3ED9C71225E32A009E2908 /* CTPageTransition.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921DA1221AA4B006D8305 /* CTPageTransition.c */; };
 		3A3ED9C81225E32A009E2908 /* BackgroundGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3927121221C596006D8305 /* BackgroundGradientView.m */; };
 		3A3ED9C91225E32A009E2908 /* CTTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921F21221AF58006D8305 /* CTTabViewController.m */; };
 		3A3ED9CA1225E32A009E2908 /* CTTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A39270B1221C566006D8305 /* CTTabView.m */; };
@@ -63,7 +62,6 @@
 		3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */; };
 		3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A92907512295BC400DA7E43 /* Toolbar.xib */; };
-		3A9291981229BEB600DA7E43 /* CTPageTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921DB1221AA4B006D8305 /* CTPageTransition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE71222D53500F1BB78 /* ThrobberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A51229BEE900DA7E43 /* BackgroundGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3927111221C596006D8305 /* BackgroundGradientView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A61229BEE900DA7E43 /* HoverButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921ED1221AF58006D8305 /* HoverButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -140,8 +138,6 @@
 		3A286FF71222D85300F1BB78 /* default-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "default-icon.pdf"; path = "gfx/default-icon.pdf"; sourceTree = "<group>"; };
 		3A286FFA1222D94600F1BB78 /* throbber_waiting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = throbber_waiting.png; path = gfx/throbber_waiting.png; sourceTree = "<group>"; };
 		3A286FFD1222D99B00F1BB78 /* sadfavicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sadfavicon.png; path = gfx/sadfavicon.png; sourceTree = "<group>"; };
-		3A3921DA1221AA4B006D8305 /* CTPageTransition.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CTPageTransition.c; sourceTree = "<group>"; };
-		3A3921DB1221AA4B006D8305 /* CTPageTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTPageTransition.h; sourceTree = "<group>"; };
 		3A3921ED1221AF58006D8305 /* HoverButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = HoverButton.h; sourceTree = "<group>"; };
 		3A3921EE1221AF58006D8305 /* HoverButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverButton.m; sourceTree = "<group>"; };
 		3A3921EF1221AF58006D8305 /* HoverCloseButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = HoverCloseButton.h; sourceTree = "<group>"; };
@@ -305,18 +301,8 @@
 			isa = PBXGroup;
 			children = (
 				3A3921EB1221AF58006D8305 /* browser */,
-				3A3921D91221AA4B006D8305 /* common */,
 			);
 			path = chrome;
-			sourceTree = "<group>";
-		};
-		3A3921D91221AA4B006D8305 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				3A3921DA1221AA4B006D8305 /* CTPageTransition.c */,
-				3A3921DB1221AA4B006D8305 /* CTPageTransition.h */,
-			);
-			path = common;
 			sourceTree = "<group>";
 		};
 		3A3921EB1221AF58006D8305 /* browser */ = {
@@ -443,7 +429,6 @@
 			files = (
 				3A3EDACF1225FACA009E2908 /* ChromiumTabs.h in Headers */,
 				3A3EDAD31225FACA009E2908 /* CTBrowser.h in Headers */,
-				3A9291981229BEB600DA7E43 /* CTPageTransition.h in Headers */,
 				3A3EDAD51225FACA009E2908 /* CTTabContents.h in Headers */,
 				3A928BDB1226F81600DA7E43 /* CTTabView.h in Headers */,
 				3A928BDC1226F81600DA7E43 /* CTTabViewController.h in Headers */,
@@ -579,7 +564,6 @@
 			files = (
 				3A3ED9C41225E32A009E2908 /* HoverCloseButton.m in Sources */,
 				3A3ED9C51225E32A009E2908 /* HoverButton.m in Sources */,
-				3A3ED9C71225E32A009E2908 /* CTPageTransition.c in Sources */,
 				3A3ED9C81225E32A009E2908 /* BackgroundGradientView.m in Sources */,
 				3A3ED9C91225E32A009E2908 /* CTTabViewController.m in Sources */,
 				3A3ED9CA1225E32A009E2908 /* CTTabView.m in Sources */,

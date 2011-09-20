@@ -10,11 +10,9 @@
 //#import "chrome/browser/global_keyboard_shortcuts_mac.h"
 //#import "chrome/browser/renderer_host/render_widget_host_view_mac.h"
 
-namespace {
   // Size of the gradient. Empirically determined so that the gradient looks
   // like what the heuristic does when there are just a few tabs.
   const CGFloat kWindowGradientHeight = 24.0;
-}
 
 // Our browser window does some interesting things to get the behaviors that
 // we want. We replace the standard window controls (zoom, close, miniaturize)
@@ -88,8 +86,7 @@ namespace {
 
   [super setWindowController:controller];
 
-  CTBrowserWindowController* browserController
-      = static_cast<CTBrowserWindowController*>(controller);
+  CTBrowserWindowController* browserController = (CTBrowserWindowController*)controller;
   if ([browserController isKindOfClass:[CTBrowserWindowController class]]) {
     //NSNotificationCenter* defaultCenter = [NSNotificationCenter defaultCenter];
     //[defaultCenter addObserver:self
@@ -198,18 +195,15 @@ namespace {
 // Map our custom buttons into the accessibility hierarchy correctly.
 - (id)accessibilityAttributeValue:(NSString*)attribute {
   id value = nil;
-  struct {
-    NSString* attribute_;
-    id value_;
-  } attributeMap[] = {
-    { NSAccessibilityCloseButtonAttribute, [closeButton_ cell]},
-    { NSAccessibilityZoomButtonAttribute, [zoomButton_ cell]},
-    { NSAccessibilityMinimizeButtonAttribute, [miniaturizeButton_ cell]},
-  };
+    NSDictionary* cellByAttribute = [NSDictionary dictionaryWithObjectsAndKeys:
+        [closeButton_ cell], NSAccessibilityCloseButtonAttribute,
+        [zoomButton_ cell], NSAccessibilityZoomButtonAttribute,
+        [miniaturizeButton_ cell], NSAccessibilityMinimizeButtonAttribute,
+        nil];
 
-  for (size_t i = 0; i < sizeof(attributeMap) / sizeof(attributeMap[0]); ++i) {
-    if ([attributeMap[i].attribute_ isEqualToString:attribute]) {
-      value = attributeMap[i].value_;
+  for (NSString* dictAttribute in cellByAttribute) {
+    if ([dictAttribute isEqualToString:attribute]) {
+      value = [cellByAttribute objectForKey:dictAttribute];
       break;
     }
   }

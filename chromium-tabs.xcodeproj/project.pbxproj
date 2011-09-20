@@ -88,7 +88,7 @@
 		3A9291B61229BF0100DA7E43 /* NSBezierPath+MCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6891225CE7A009E2908 /* NSBezierPath+MCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9292A21229D43300DA7E43 /* CTUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3EDA9B1225EF84009E2908 /* CTUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */; };
+		3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */; };
 		A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */; };
 		A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
@@ -210,7 +210,7 @@
 		3AA71889122479CE005022BE /* CTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowser.h; sourceTree = "<group>"; };
 		3AA7188A122479CE005022BE /* CTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowser.m; sourceTree = "<group>"; };
 		3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserWindow.h; sourceTree = "<group>"; };
-		3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTBrowserWindow.mm; sourceTree = "<group>"; };
+		3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowserWindow.m; sourceTree = "<group>"; };
 		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
 		3AEE19531222DDEB009DA438 /* CTTabContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTTabContents.m; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -263,7 +263,7 @@
 				A25493BF13F4117D0027474A /* CTBrowser+Private.h */,
 				3AA7188A122479CE005022BE /* CTBrowser.m */,
 				3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */,
-				3ABF4A1812A4592A0020233C /* CTBrowserWindow.mm */,
+				3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */,
 				3A1CF95F12235704008A3B8C /* CTBrowserWindowController.h */,
 				3A1CF96012235704008A3B8C /* CTBrowserWindowController.mm */,
 				3AEE19521222DDEB009DA438 /* CTTabContents.h */,
@@ -655,7 +655,7 @@
 				3A929009122947A800DA7E43 /* CTToolbarView.m in Sources */,
 				3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */,
 				3A92904712294F1900DA7E43 /* CTToolbarController.m in Sources */,
-				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.mm in Sources */,
+				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,
 				A2CD3AD313F48C9A00954A59 /* CTTabStripModel2.m in Sources */,
 			);

@@ -245,7 +245,9 @@ const NSTimeInterval kAnimationDuration = 0.125;
             mouseInside_ = YES;
         }
         
-        [[newTabButton_ cell] accessibilitySetOverrideValue:@"New tab" forAttribute:NSAccessibilityDescriptionAttribute];
+        [[newTabButton_ cell]
+         accessibilitySetOverrideValue:@"New tab"
+         forAttribute:NSAccessibilityDescriptionAttribute];
         
         ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             NSDictionary* userInfo = notification.userInfo;

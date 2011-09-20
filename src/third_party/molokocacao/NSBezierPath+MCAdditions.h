@@ -13,10 +13,6 @@
 @interface NSBezierPath (MCAdditions)
 
 - (void)fillWithInnerShadow:(NSShadow*)shadow;
-- (void)drawBlurWithColor:(NSColor*)color radius:(CGFloat)radius;
-
-- (void)strokeInside;
-- (void)strokeInsideWithinRect:(NSRect)clipRect;
 
 @end
 

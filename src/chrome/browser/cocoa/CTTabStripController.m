@@ -331,7 +331,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
         
         ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabMovedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
             NSInteger modelFrom = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             NSInteger modelTo = [[userInfo valueForKey:kCTTabToIndexUserInfoKey] intValue];
             NSInteger from = [self indexFromModelIndex:modelFrom];

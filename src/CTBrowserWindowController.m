@@ -187,7 +187,7 @@
 - (BOOL)windowShouldClose:(id)sender {
     NSDisableScreenUpdates();
     @try {
-        if ([browser_.tabStripModel2 hasNonPhantomTabs]) {
+        if ([browser_.tabStripModel2 count]) {
             [[self window] orderOut:self];
             [browser_ windowDidBeginToClose];
             return NO;
@@ -573,7 +573,7 @@
 }
 
 - (BOOL)hasLiveTabs {
-    return [browser_.tabStripModel2 hasNonPhantomTabs];
+    return [browser_.tabStripModel2 count];
 }
 
 - (int)selectedTabIndex {

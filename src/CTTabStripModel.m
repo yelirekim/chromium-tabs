@@ -75,11 +75,6 @@ const int kNoTab = -1;
     return self;
 }
 
-- (BOOL) hasNonPhantomTabs
-{
-    return [self count];
-}
-
 - (NSInteger) count
 {
     return contents_data_.count;
@@ -275,7 +270,7 @@ const int kNoTab = -1;
     int next_selected_index = [self determineNewSelectedIndexByRemovingIndex:index isRemove:YES];
     [contents_data_ removeObjectAtIndex:index];
     next_selected_index = [self indexOfNextNonPhantomTabFromIndex:next_selected_index ignoreIndex:-1];
-    if (![self hasNonPhantomTabs]) {
+    if (![self count]) {
         closing_all_ = true;
     }
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -283,10 +278,10 @@ const int kNoTab = -1;
                               [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabDetachedNotification object:self userInfo:userInfo];
-    if (![self hasNonPhantomTabs]) {
+    if (![self count]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabStripEmptyNotification object:self userInfo:nil];
     }
-    if ([self hasNonPhantomTabs]) {
+    if ([self count]) {
         if (index == selectedIndex_) {
             [self changeSelectedContentsFrom:removed_contents toIndex:next_selected_index userGesture:NO];
         } else if (index < selectedIndex_) {

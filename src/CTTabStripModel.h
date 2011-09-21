@@ -40,7 +40,6 @@ typedef enum {
 
 - (id) initWithDelegate:(NSObject<CTTabStripModelDelegate>*)delegate;
 
-- (BOOL) hasNonPhantomTabs;
 - (NSInteger) count;
 - (CTTabContents*) tabContentsAtIndex:(NSInteger)index;
 - (NSInteger) indexOfTabContents:(CTTabContents*)tabContents;

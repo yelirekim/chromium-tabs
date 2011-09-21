@@ -1,29 +1,9 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 #import "CTBrowserWindow.h"
-
 #import "CTBrowserWindowController.h"
 #import "CTTabStripController.h"
-//#import "chrome/browser/cocoa/themed_window.h"
-//#import "chrome/browser/global_keyboard_shortcuts_mac.h"
-//#import "chrome/browser/renderer_host/render_widget_host_view_mac.h"
-
-  // Size of the gradient. Empirically determined so that the gradient looks
-  // like what the heuristic does when there are just a few tabs.
 const CGFloat kWindowGradientHeight = 24.0;
 
-// Our browser window does some interesting things to get the behaviors that
-// we want. We replace the standard window controls (zoom, close, miniaturize)
-// with our own versions, so that we can position them slightly differently than
-// the default window has them. To do this, we hide the ones that Apple provides
-// us with, and create our own. This requires us to handle tracking for the
-// buttons (so that they highlight and activate correctly) as well as implement
-// the private method _mouseInGroup in our frame view class which is required
-// to get the rollover highlight drawing to draw correctly.
 @interface CTBrowserWindow(CTBrowserWindowPrivateMethods)
-// Return the view that does the "frame" drawing.
 - (NSView*)frameView;
 @end
 
@@ -49,11 +29,6 @@ const CGFloat kWindowGradientHeight = 24.0;
                                  backing:bufferingType
                                    defer:flag])) {
     if (aStyle & NSTexturedBackgroundWindowMask) {
-      // The following two calls fix http://www.crbug.com/25684 by preventing
-      // the window from recalculating the border thickness as the window is
-      // resized.
-      // This was causing the window tint to change for the default system theme
-      // when the window was being resized.
       [self setAutorecalculatesContentBorderThickness:NO forEdge:NSMaxYEdge];
       [self setContentBorderThickness:kWindowGradientHeight forEdge:NSMaxYEdge];
     }
@@ -74,7 +49,6 @@ const CGFloat kWindowGradientHeight = 24.0;
   if (controller == [self windowController]) {
     return;
   }
-  // Clean up our old stuff.
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
   [closeButton_ removeFromSuperview];
@@ -88,28 +62,15 @@ const CGFloat kWindowGradientHeight = 24.0;
 
   CTBrowserWindowController* browserController = (CTBrowserWindowController*)controller;
   if ([browserController isKindOfClass:[CTBrowserWindowController class]]) {
-    //NSNotificationCenter* defaultCenter = [NSNotificationCenter defaultCenter];
-    //[defaultCenter addObserver:self
-    //                  selector:@selector(themeDidChangeNotification:)
-    //                      name:kBrowserThemeDidChangeNotification
-    //                    object:nil];
-
-    // Hook ourselves up to get notified if the user changes the system
-    // theme on us.
     NSDistributedNotificationCenter* distCenter =
         [NSDistributedNotificationCenter defaultCenter];
     [distCenter addObserver:self
                    selector:@selector(systemThemeDidChangeNotification:)
                        name:@"AppleAquaColorVariantChanged"
                      object:nil];
-    // Set up our buttons how we like them.
     NSView* frameView = [self frameView];
     NSRect frameViewBounds = [frameView bounds];
 
-    // Find all the "original" buttons, and hide them. We can't use the original
-    // buttons because the OS likes to move them around when we resize windows
-    // and will put them back in what it considers to be their "preferred"
-    // locations.
     NSButton* oldButton = [self standardWindowButton:NSWindowCloseButton];
     [oldButton setHidden:YES];
     oldButton = [self standardWindowButton:NSWindowMiniaturizeButton];
@@ -117,7 +78,6 @@ const CGFloat kWindowGradientHeight = 24.0;
     oldButton = [self standardWindowButton:NSWindowZoomButton];
     [oldButton setHidden:YES];
 
-    // Create and position our new buttons.
     NSUInteger aStyle = [self styleMask];
     closeButton_ = [NSWindow standardWindowButton:NSWindowCloseButton
                                      forStyleMask:aStyle];
@@ -164,9 +124,6 @@ const CGFloat kWindowGradientHeight = 24.0;
     [frameView addSubview:zoomButton_];
   }
 
-  // Update our tracking areas. We want to update them even if we haven't
-  // added buttons above as we need to remove the old tracking area. If the
-  // buttons aren't to be shown, updateTrackingAreas won't add new ones.
   [self updateTrackingAreas];
 }
 
@@ -174,8 +131,6 @@ const CGFloat kWindowGradientHeight = 24.0;
   return [[self contentView] superview];
 }
 
-// The tab strip view covers our window buttons. So we add hit testing here
-// to find them properly and return them to the accessibility system.
 - (id)accessibilityHitTest:(NSPoint)point {
   NSPoint windowPoint = [self convertScreenToBase:point];
   NSControl* controls[] = { closeButton_, zoomButton_, miniaturizeButton_ };
@@ -192,7 +147,6 @@ const CGFloat kWindowGradientHeight = 24.0;
   return value;
 }
 
-// Map our custom buttons into the accessibility hierarchy correctly.
 - (id)accessibilityAttributeValue:(NSString*)attribute {
   id value = nil;
     NSDictionary* cellByAttribute = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -230,12 +184,10 @@ const CGFloat kWindowGradientHeight = 24.0;
                                     userInfo:nil];
     [frameView addTrackingArea:widgetTrackingArea_];
 
-    // Check to see if the cursor is still in trackingRect.
     NSPoint point = [self mouseLocationOutsideOfEventStream];
     point = [[self contentView] convertPoint:point fromView:nil];
     BOOL newEntered = NSPointInRect (point, trackingRect);
     if (newEntered != entered_) {
-      // Buttons have moved, so update button state.
       entered_ = newEntered;
       [closeButton_ setNeedsDisplay];
       [zoomButton_ setNeedsDisplay];
@@ -268,7 +220,6 @@ const CGFloat kWindowGradientHeight = 24.0;
   [super resignMainWindow];
 }
 
-// Called after the current theme has changed.
 - (void)themeDidChangeNotification:(NSNotification*)aNotification {
   [[self frameView] setNeedsDisplay:YES];
 }
@@ -280,12 +231,6 @@ const CGFloat kWindowGradientHeight = 24.0;
 }
 
 - (void)sendEvent:(NSEvent*)event {
-  // For cocoa windows, clicking on the close and the miniaturize (but not the
-  // zoom buttons) while a window is in the background does NOT bring that
-  // window to the front. We don't get that behavior for free, so we handle
-  // it here. Zoom buttons do bring the window to the front. Note that
-  // Finder windows (in Leopard) behave differently in this regard in that
-  // zoom buttons don't bring the window to the foreground.
   BOOL eventHandled = NO;
   if (![self isMainWindow]) {
     if ([event type] == NSLeftMouseDown) {
@@ -306,7 +251,6 @@ const CGFloat kWindowGradientHeight = 24.0;
   }
 }
 
-// Update our buttons so that they highlight correctly.
 - (void)mouseEntered:(NSEvent*)event {
   entered_ = YES;
   [closeButton_ setNeedsDisplay];
@@ -314,7 +258,6 @@ const CGFloat kWindowGradientHeight = 24.0;
   [miniaturizeButton_ setNeedsDisplay];
 }
 
-// Update our buttons so that they highlight correctly.
 - (void)mouseExited:(NSEvent*)event {
   entered_ = NO;
   [closeButton_ setNeedsDisplay];
@@ -334,12 +277,7 @@ const CGFloat kWindowGradientHeight = 24.0;
   return shouldHideTitle_;
 }
 
-// This method is called whenever a window is moved in order to ensure it fits
-// on the screen.  We cannot always handle resizes without breaking, so we
-// prevent frame constraining in those cases.
 - (NSRect)constrainFrameRect:(NSRect)frame toScreen:(NSScreen*)screen {
-  // Do not constrain the frame rect if our delegate says no.  In this case,
-  // return the original (unconstrained) frame.
   id delegate = [self delegate];
   if ([delegate respondsToSelector:@selector(shouldConstrainFrameRect)] &&
       ![delegate shouldConstrainFrameRect])

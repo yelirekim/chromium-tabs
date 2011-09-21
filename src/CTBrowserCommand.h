@@ -7,9 +7,7 @@
 typedef enum {
   // Window management commands
   CTBrowserCommandNewWindow                 = 34000,
-  //CTBrowserCommandNewIncognitoWindow       = 34001,
   CTBrowserCommandCloseWindow               = 34012,
-  //CTBrowserCommandAlwaysOnTop              = 34013,
   CTBrowserCommandNewTab                    = 34014,
   CTBrowserCommandCloseTab                  = 34015,
   CTBrowserCommandSelectNextTab             = 34016,
@@ -29,9 +27,6 @@ typedef enum {
   CTBrowserCommandFullscreen                = 34030,
   CTBrowserCommandExit                      = 34031,
   CTBrowserCommandMoveTabNext               = 34032,
-  CTBrowserCommandMoveTabPrevious           = 34033,
-  //CTBrowserCommandToggleVerticalTabs        = 34034,
-  //CTBrowserCommandSearch                    = 34035,
-  //CTBrowserCommandTabpose                   = 34036,
+  CTBrowserCommandMoveTabPrevious           = 34033
 } CTBrowserCommand;
 

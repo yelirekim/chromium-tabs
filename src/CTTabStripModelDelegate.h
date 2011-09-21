@@ -3,6 +3,7 @@
 @class CTTabContents;
 
 @protocol CTTabStripModelDelegate
+
 -(CTTabContents*)addBlankTabInForeground:(BOOL)foreground;
 -(CTTabContents*)addBlankTabAtIndex:(int)index inForeground:(BOOL)foreground;
 -(CTBrowser*)createNewStripWithContents:(CTTabContents*)contents;

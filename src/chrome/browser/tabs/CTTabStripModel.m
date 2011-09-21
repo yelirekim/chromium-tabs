@@ -179,7 +179,6 @@ const int kNoTab = -1;
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options
 {
     bool foreground = options & ADD_SELECTED;
-    // Force app tabs to be pinned.
     bool pin = contents.isApp || options & ADD_PINNED;
     index = [self constrainInsertionIndex:index miniTab:pin];
     

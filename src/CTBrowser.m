@@ -147,14 +147,12 @@
     return [[CTTabContents alloc] initWithBaseTabContents:baseContents];
 }
 
-// implementation conforms to CTTabStripModelDelegate
 -(CTTabContents*)addBlankTabAtIndex:(int)index inForeground:(BOOL)foreground {
     CTTabContents* baseContents = [tabStripModel2_ selectedTabContents];
     CTTabContents* contents = [self createBlankTabBasedOn:baseContents];
     return [self addTabContents:contents atIndex:index inForeground:foreground];
 }
 
-// implementation conforms to CTTabStripModelDelegate
 -(CTTabContents*)addBlankTabInForeground:(BOOL)foreground {
     return [self addBlankTabAtIndex:-1 inForeground:foreground];
 }

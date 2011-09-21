@@ -1,13 +1,6 @@
-// Copyright (c) 2010 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE-chromium file.
-
 #import "CTTabStripController.h"
-
-#import <QuartzCore/QuartzCore.h>
 #import "CTTabContents.h"
 #import "CTBrowser.h"
-
 #import "NewTabButton.h"
 #import "CTTabStripView.h"
 #import "CTTabContentsViewController.h"
@@ -16,6 +9,8 @@
 #import "ThrobberView.h"
 #import "CTTabStripModel.h"
 #import "CTBrowserCommand.h"
+
+#import <QuartzCore/QuartzCore.h>
 
 NSString* const kTabStripNumberOfTabsChanged = @"kTabStripNumberOfTabsChanged";
 
@@ -54,7 +49,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 
 @interface TabStripControllerDragBlockingView : NSView {
-    CTTabStripController* controller_;  // weak; owns us
+    CTTabStripController* controller_;
 }
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -92,8 +87,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 @interface TabCloseAnimationDelegate : NSObject {
 @private
-    CTTabStripController* strip_;  // weak; owns us indirectly
-    CTTabViewController* controller_;  // weak
+    CTTabStripController* strip_;
+    CTTabViewController* controller_;
 }
 
 - (id)initWithTabStrip:(CTTabStripController*)strip tabController:(CTTabViewController*)controller;
@@ -130,21 +125,21 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 @implementation CTTabStripController {
     BOOL verticalLayout_;
-    CTTabContents* currentTab_;  // weak, tab for which we're showing state
+    CTTabContents* currentTab_;
     CTTabStripView* tabStripView_;
-    NSView* switchView_;  // weak
-    NSView* dragBlockingView_;  // avoid bad window server drags
-    NewTabButton* newTabButton_;  // weak, obtained from the nib.
+    NSView* switchView_;
+    NSView* dragBlockingView_;
+    NewTabButton* newTabButton_;
     NSTrackingArea* newTabTrackingArea_;
-    CTBrowser *browser_;  // weak
+    CTBrowser *browser_;
     CTTabStripModel* tabStripModel2_;
     BOOL newTabButtonShowingHoverImage_;
     NSMutableArray* tabContentsArray_;
     NSMutableArray* tabArray_;
     NSMutableSet* closingControllers_;
-    CTTabView* placeholderTab_;  // weak. Tab being dragged
-    NSRect placeholderFrame_;  // Frame to use
-    CGFloat placeholderStretchiness_; // Vertical force shown by streching tab.
+    CTTabView* placeholderTab_;
+    NSRect placeholderFrame_;
+    CGFloat placeholderStretchiness_;
     NSRect droppedTabFrame_;
     NSMutableDictionary* targetFrames_;
     NSRect newTabTargetFrame_;
@@ -152,7 +147,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     BOOL initialLayoutComplete_;
     float availableResizeWidth_;
     NSTrackingArea* trackingArea_;
-    CTTabView* hoveredTab_;  // weak. Tab that the mouse is hovering over
+    CTTabView* hoveredTab_;
     NSMutableArray* permanentSubviews_;
     NSImage* defaultFavIcon_;
     CGFloat indentForControls_;
@@ -1040,8 +1035,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
     }
     
     if (hoveredTab_ != tabView) {
-        [hoveredTab_ mouseExited:nil];  // We don't pass event because moved events
-        [tabView mouseEntered:nil];  // don't have valid tracking areas
+        [hoveredTab_ mouseExited:nil];
+        [tabView mouseEntered:nil];
         hoveredTab_ = tabView;
     } else {
         [hoveredTab_ mouseMoved:event];

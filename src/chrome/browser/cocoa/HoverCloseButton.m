@@ -1,11 +1,6 @@
-// Copyright (c) 2010 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE-chromium file.
-
 #import "HoverCloseButton.h"
 #import "HoverButton+Private.h"
 
-// Convenience function to return the middle point of the given |rect|.
 static NSPoint MidRect(NSRect rect) {
     return NSMakePoint(NSMidX(rect), NSMidY(rect));
 }
@@ -21,10 +16,7 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
 @end
 
 @implementation HoverCloseButton {
-    // Bezier path for drawing the 'x' within the button.
     NSBezierPath* xPath_;
-    
-    // Bezier path for drawing the hover state circle behind the 'x'.
     NSBezierPath* circlePath_;
 }
 
@@ -46,8 +38,6 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
     
     NSColor* innerColor;
     if (self.hoverState != kHoverStateNone) {
-        // Adjust the darkness of the circle depending on whether it is being
-        // clicked.
         CGFloat white = (self.hoverState == kHoverStateMouseOver) ?
         kCircleHoverWhite : kCircleClickWhite;
         [[NSColor colorWithCalibratedWhite:white alpha:1.0] set];
@@ -62,11 +52,8 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
 }
 
 - (void)commonInit {
-    // Set accessibility description.
     NSString* description = @"Close";
-    [[self cell]
-     accessibilitySetOverrideValue:description
-     forAttribute:NSAccessibilityDescriptionAttribute];
+    [[self cell] accessibilitySetOverrideValue:description forAttribute:NSAccessibilityDescriptionAttribute];
 }
 
 - (void)setUpDrawingPaths {
@@ -75,13 +62,8 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
     circlePath_ = [NSBezierPath bezierPath];
     [circlePath_ moveToPoint:viewCenter];
     CGFloat radius = kCircleRadiusPercentage * NSWidth([self bounds]);
-    [circlePath_ appendBezierPathWithArcWithCenter:viewCenter
-                                            radius:radius
-                                        startAngle:0.0
-                                          endAngle:365.0];
+    [circlePath_ appendBezierPathWithArcWithCenter:viewCenter radius:radius startAngle:0.0 endAngle:365.0];
     
-    // Construct an 'x' by drawing two intersecting rectangles in the shape of a
-    // cross and then rotating the path by 45 degrees.
     xPath_ = [NSBezierPath bezierPath];
     [xPath_ appendBezierPathWithRect:NSMakeRect(3.5, 7.0, 9.0, 2.0)];
     [xPath_ appendBezierPathWithRect:NSMakeRect(7.0, 3.5, 2.0, 9.0)];

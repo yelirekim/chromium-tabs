@@ -13,7 +13,6 @@ typedef enum {
 @property(assign, nonatomic) CTTabLoadingState loadingState;
 @property(assign, nonatomic) SEL action;
 @property(assign, nonatomic) BOOL app;
-@property(assign, nonatomic) BOOL mini;
 @property(assign, nonatomic) BOOL phantom;
 @property(assign, nonatomic) BOOL pinned;
 @property(assign, nonatomic) BOOL selected;

@@ -34,8 +34,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
 - (void)animationDidStopForController:(CTTabViewController*)controller finished:(BOOL)finished;
 - (NSInteger)indexFromModelIndex:(NSInteger)index;
 - (NSInteger)numberOfOpenTabs;
-- (NSInteger)numberOfOpenMiniTabs;
-- (NSInteger)numberOfOpenNonMiniTabs;
 - (void)mouseMoved:(NSEvent*)event;
 - (void)setTabTrackingAreasEnabled:(BOOL)enabled;
 - (void)setNewTabButtonHoverState:(BOOL)showHover;
@@ -258,7 +256,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             [tabContentsArray_ insertObject:contentsController atIndex:index];
             
             CTTabViewController* newController = [self newTab];
-            [newController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
             [newController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
             [newController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
             [tabArray_ insertObject:newController atIndex:index];
@@ -381,7 +378,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             
             CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
             assert([tabController isKindOfClass:[CTTabViewController class]]);
-            [tabController setMini:[tabStripModel2_ isMiniTabAtIndex:modelIndex]];
             [tabController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
             [tabController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
             [self updateFavIconForContents:contents atIndex:modelIndex];
@@ -606,7 +602,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     const CGFloat kMinTabWidth = [CTTabViewController minTabWidth];
     const CGFloat kMinSelectedTabWidth = [CTTabViewController minSelectedTabWidth];
     const CGFloat kMiniTabWidth = [CTTabViewController miniTabWidth];
-    const CGFloat kAppTabWidth = [CTTabViewController appTabWidth];
     
     NSRect enclosingRect = NSZeroRect;
     if (animate) {
@@ -711,8 +706,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             }
         }
         
-        tabFrame.size.width = [tab mini] ?
-        ([tab app] ? kAppTabWidth : kMiniTabWidth) : nonMiniTabWidth;
+        tabFrame.size.width = nonMiniTabWidth;
         if ([tab selected])
             tabFrame.size.width = MAX(tabFrame.size.width, kMinSelectedTabWidth);
         
@@ -891,7 +885,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     }
     
     bool oldHasIcon = [tabController iconView] != nil;
-    bool newHasIcon = contents.hasIcon || [tabStripModel2_ isMiniTabAtIndex:modelIndex];  // Always show icon if mini.
+    bool newHasIcon = contents.hasIcon;
     
     CTTabLoadingState oldState = [tabController loadingState];
     CTTabLoadingState newState = CTTabLoadingStateDone;

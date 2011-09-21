@@ -132,12 +132,7 @@ const int kNoTab = -1;
 
 - (NSInteger) indexOfFirstNonMiniTab
 {
-    for (size_t i = 0; i < contents_data_.count; ++i) {
-        if (![self isMiniTabAtIndex:i]) {
-            return i;
-        }
-    }
-    return self.count;
+    return 0;
 }
 
 - (BOOL) isMiniTabAtIndex:(NSInteger)index

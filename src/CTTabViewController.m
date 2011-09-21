@@ -26,7 +26,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 @synthesize action = action_;
 @synthesize app = app_;
 @synthesize loadingState = loadingState_;
-@synthesize mini = mini_;
 @synthesize phantom = phantom_;
 @synthesize pinned = pinned_;
 @synthesize target = target_;
@@ -95,11 +94,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 
 - (void)setTitle:(NSString*)title {
     [[self view] setToolTip:title];
-    if ([self mini] && ![self selected]) {
-        CTTabView* tabView = (CTTabView*)[self view];
-        assert([tabView isKindOfClass:[CTTabView class]]);
-        [tabView startAlert];
-    }
     [super setTitle:title];
 }
 
@@ -151,10 +145,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
         return NO;
     }
     
-    if ([self mini]) {
-        return YES;
-    }
-    
     CGFloat iconCapacity = [self iconCapacity];
     if ([self selected]) {
         return iconCapacity >= 2.0;
@@ -163,9 +153,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 }
 
 - (BOOL)shouldShowCloseButton {
-    if ([self mini]) {
-        return NO;
-    }
     return ([self selected] || [self iconCapacity] >= 3.0);
 }
 
@@ -175,8 +162,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
     
     [iconView_ setHidden:newShowIcon ? NO : YES];
     isIconShowing_ = newShowIcon;
-    
-    [titleView_ setHidden:[self mini]];
     
     BOOL oldShowCloseButton = [closeButton_ isHidden] ? NO : YES;
     BOOL newShowCloseButton = [self shouldShowCloseButton] ? YES : NO;

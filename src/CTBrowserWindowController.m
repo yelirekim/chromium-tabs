@@ -614,11 +614,10 @@
     BOOL isFullscreen = [self isFullscreen];
     CGFloat yOffset = 0;
     CGFloat maxY = NSMaxY(contentBounds) + yOffset;
-    CGFloat startMaxY = maxY;
     
     if ([self hasTabStrip] && ![self useVerticalTabs]) {
         NSRect windowFrame = [contentView convertRect:[window frame] fromView:nil];
-        startMaxY = maxY = NSHeight(windowFrame) + yOffset;
+        maxY = NSHeight(windowFrame) + yOffset;
         maxY = [self layoutTabStripAtMaxY:maxY width:width fullscreen:isFullscreen];
     }
     

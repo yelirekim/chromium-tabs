@@ -16,7 +16,6 @@
 
 @property(strong, readonly, nonatomic) CTTabStripController *tabStripController;
 @property(strong, readonly, nonatomic) CTBrowser *browser;
-@property(readonly, nonatomic) BOOL isFullscreen;
 
 + (CTBrowserWindowController*)browserWindowController;
 

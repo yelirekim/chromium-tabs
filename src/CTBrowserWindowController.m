@@ -14,8 +14,7 @@
 
 @interface CTBrowserWindowController (Private)
 
-- (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY width:(CGFloat)width fullscreen:(BOOL)fullscreen;
-- (CGFloat)layoutToolbarAtMinX:(CGFloat)minX  maxY:(CGFloat)maxY width:(CGFloat)width;
+- (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY width:(CGFloat)width;
 - (void)setUseOverlay:(BOOL)useOverlay;
 - (void)detachTabView:(NSView*)view;
 - (void)layoutSubviews;
@@ -297,10 +296,6 @@
 
 // Browser Window
 
-- (BOOL)isFullscreen {
-    return NO;
-}
-
 #pragma mark -
 #pragma mark NSWindow (CTThemed)
 
@@ -512,22 +507,17 @@
     if ([window respondsToSelector:@selector(setShouldHideTitle:)])
         [window setShouldHideTitle:YES];
     
-    BOOL isFullscreen = [self isFullscreen];
     CGFloat yOffset = 0;
     CGFloat maxY = NSMaxY(contentBounds) + yOffset;
     
     if ([self hasTabStrip]) {
         NSRect windowFrame = [contentView convertRect:[window frame] fromView:nil];
         maxY = NSHeight(windowFrame) + yOffset;
-        maxY = [self layoutTabStripAtMaxY:maxY width:width fullscreen:isFullscreen];
+        maxY = [self layoutTabStripAtMaxY:maxY width:width];
     }
     
     assert(maxY >= minY);
     assert(maxY <= NSMaxY(contentBounds) + yOffset);
-    
-    if (isFullscreen) {
-        maxY = NSMaxY(contentBounds);
-    }
     
     NSRect contentAreaRect = NSMakeRect(minX, minY, width, maxY - minY);
     [self layoutTabContentArea:contentAreaRect];
@@ -576,7 +566,7 @@
 #pragma mark -
 #pragma mark Private
 
-- (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY width:(CGFloat)width fullscreen:(BOOL)fullscreen {
+- (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY width:(CGFloat)width {
     if (![self hasTabStrip]) {
         return maxY;
     }
@@ -586,7 +576,7 @@
     maxY -= tabStripHeight;
     [tabStripView setFrame:NSMakeRect(0, maxY, width, tabStripHeight)];
     
-    [tabStripController_ setIndentForControls:(fullscreen ? 0 : [[tabStripController_ class] defaultIndentForControls])];
+    [tabStripController_ setIndentForControls:[[tabStripController_ class] defaultIndentForControls]];
     
     [tabStripController_ layoutTabs];
     

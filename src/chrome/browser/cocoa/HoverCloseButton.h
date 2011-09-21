@@ -1,7 +1,7 @@
-#import "HoverButton.h"
 
-@interface HoverCloseButton : HoverButton
+@interface HoverCloseButton : NSButton
 
-- (void)commonInit;
+- (void)setTrackingEnabled:(BOOL)enabled;
+- (void)checkImageState;
 
 @end

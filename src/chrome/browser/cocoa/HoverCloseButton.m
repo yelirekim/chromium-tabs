@@ -1,9 +1,10 @@
 #import "HoverCloseButton.h"
-#import "HoverButton+Private.h"
 
-static NSPoint MidRect(NSRect rect) {
-    return NSMakePoint(NSMidX(rect), NSMidY(rect));
-}
+typedef enum {
+    kHoverStateNone = 0,
+    kHoverStateMouseOver = 1,
+    kHoverStateMouseDown = 2
+} HoverState;
 
 static const CGFloat kCircleRadiusPercentage = 0.415;
 static const CGFloat kCircleHoverWhite = 0.565;
@@ -12,12 +13,21 @@ static const CGFloat kXShadowAlpha = 0.75;
 static const CGFloat kXShadowCircleAlpha = 0.1;
 
 @interface HoverCloseButton(Private)
+- (HoverState) hoverState;
 - (void)setUpDrawingPaths;
+- (void)commonInit;
 @end
 
 @implementation HoverCloseButton {
+    HoverState hoverState_;
+    NSTrackingArea* trackingArea_;
+    
     NSBezierPath* xPath_;
     NSBezierPath* circlePath_;
+}
+
+- (void)dealloc {
+    [self setTrackingEnabled:NO];
 }
 
 - (id)initWithFrame:(NSRect)frameRect {
@@ -37,9 +47,8 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
         [self setUpDrawingPaths];
     
     NSColor* innerColor;
-    if (self.hoverState != kHoverStateNone) {
-        CGFloat white = (self.hoverState == kHoverStateMouseOver) ?
-        kCircleHoverWhite : kCircleClickWhite;
+    if (hoverState_ != kHoverStateNone) {
+        CGFloat white = (hoverState_ == kHoverStateMouseOver) ? kCircleHoverWhite : kCircleClickWhite;
         [[NSColor colorWithCalibratedWhite:white alpha:1.0] set];
         [circlePath_ fill];
         innerColor = [NSColor whiteColor];
@@ -52,12 +61,15 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
 }
 
 - (void)commonInit {
-    NSString* description = @"Close";
-    [[self cell] accessibilitySetOverrideValue:description forAttribute:NSAccessibilityDescriptionAttribute];
+    [self setTrackingEnabled:YES];
+    hoverState_ = kHoverStateNone;
+    [self updateTrackingAreas];
+    [[self cell] accessibilitySetOverrideValue:@"Close" forAttribute:NSAccessibilityDescriptionAttribute];
 }
 
 - (void)setUpDrawingPaths {
-    NSPoint viewCenter = MidRect([self bounds]);
+    NSRect bounds = [self bounds];
+    NSPoint viewCenter = NSMakePoint(NSMidX(bounds), NSMidY(bounds));
     
     circlePath_ = [NSBezierPath bezierPath];
     [circlePath_ moveToPoint:viewCenter];
@@ -68,7 +80,8 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
     [xPath_ appendBezierPathWithRect:NSMakeRect(3.5, 7.0, 9.0, 2.0)];
     [xPath_ appendBezierPathWithRect:NSMakeRect(7.0, 3.5, 2.0, 9.0)];
     
-    NSPoint pathCenter = MidRect([xPath_ bounds]);
+    NSRect xPathBounds = [xPath_ bounds];
+    NSPoint pathCenter = NSMakePoint(NSMidX(xPathBounds), NSMidY(xPathBounds));
     
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:viewCenter.x yBy:viewCenter.y];
@@ -76,6 +89,57 @@ static const CGFloat kXShadowCircleAlpha = 0.1;
     [transform translateXBy:-pathCenter.x yBy:-pathCenter.y];
     
     [xPath_ transformUsingAffineTransform:transform];
+}
+
+- (void)mouseEntered:(NSEvent*)theEvent {
+    hoverState_ = kHoverStateMouseOver;
+    [self setNeedsDisplay:YES];
+}
+
+- (void)mouseExited:(NSEvent*)theEvent {
+    hoverState_ = kHoverStateNone;
+    [self setNeedsDisplay:YES];
+}
+
+- (void)mouseDown:(NSEvent*)theEvent {
+    hoverState_ = kHoverStateMouseDown;
+    [self setNeedsDisplay:YES];
+    
+    [super mouseDown:theEvent];
+    [self checkImageState];
+    
+}
+
+- (void)setTrackingEnabled:(BOOL)enabled {
+    if (enabled) {
+        trackingArea_ = [[NSTrackingArea alloc] initWithRect:[self bounds] options:NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways owner:self userInfo:nil];
+        [self addTrackingArea:trackingArea_];
+        [self checkImageState];
+    } else if (trackingArea_) {
+        [self removeTrackingArea:trackingArea_];
+        trackingArea_ = nil;
+    }
+}
+
+- (void)updateTrackingAreas {
+    [super updateTrackingAreas];
+    [self checkImageState];
+}
+
+- (void)checkImageState {
+    if (!trackingArea_) {
+        return;
+    }
+    
+    NSPoint mouseLoc = [[self window] mouseLocationOutsideOfEventStream];
+    mouseLoc = [self convertPoint:mouseLoc fromView:nil];
+    hoverState_ = NSPointInRect(mouseLoc, [self bounds]) ? kHoverStateMouseOver : kHoverStateNone;
+    [self setNeedsDisplay:YES];
+}
+
+- (HoverState) hoverState
+{
+    return hoverState_;
 }
 
 @end

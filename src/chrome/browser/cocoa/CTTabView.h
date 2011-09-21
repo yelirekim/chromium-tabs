@@ -1,7 +1,6 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "BackgroundGradientView.h"
-#import "HoverCloseButton.h"
 
 typedef enum {
   kAlertNone = 0,

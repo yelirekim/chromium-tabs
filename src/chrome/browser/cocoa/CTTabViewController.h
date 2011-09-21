@@ -1,4 +1,3 @@
-#import "HoverCloseButton.h"
 
 typedef enum {
   CTTabLoadingStateDone,

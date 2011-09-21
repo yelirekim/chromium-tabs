@@ -3,6 +3,7 @@
 #import "CTTabViewController.h"
 #import "CTTabStripView.h"
 #import "NSWindow+CTThemed.h"
+#import "HoverCloseButton.h"
 
 const CGFloat kInsetMultiplier = 2.0/3.0;
 const CGFloat kControlPoint1Multiplier = 1.0/3.0;

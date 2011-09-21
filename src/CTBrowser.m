@@ -38,10 +38,6 @@
 #pragma mark -
 #pragma mark TabStripModel convenience helpers
 
--(CTTabContents*)selectedTabContents {
-    return [tabStripModel2_ selectedTabContents];
-}
-
 -(CTTabContents*)tabContentsAtIndex:(int)index {
     return [tabStripModel2_ tabContentsAtIndex:index];
 }
@@ -190,7 +186,7 @@
 
 
 -(void)executeCommand:(int)cmd withDisposition:(CTWindowOpenDisposition)disposition {
-    if (![self selectedTabContents]) {
+    if (![tabStripModel2_ selectedTabContents]) {
         return;
     }
     

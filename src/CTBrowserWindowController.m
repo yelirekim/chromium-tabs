@@ -209,7 +209,7 @@
 
 - (void)windowDidBecomeKey:(NSNotification*)notification {
     if (![[self window] isMiniaturized]) {
-        CTTabContents* contents = [browser_ selectedTabContents];
+        CTTabContents* contents = [self selectedTabContents];
         if (contents) {
             contents.isVisible = YES;
         }
@@ -223,14 +223,14 @@
 }
 
 - (void)windowDidMiniaturize:(NSNotification *)notification {
-    CTTabContents* contents = [browser_ selectedTabContents];
+    CTTabContents* contents = [self selectedTabContents];
     if (contents) {
         contents.isVisible = NO;
     }
 }
 
 - (void)windowDidDeminiaturize:(NSNotification *)notification {
-    CTTabContents* contents = [browser_ selectedTabContents];
+    CTTabContents* contents = [self selectedTabContents];
     if (contents) {
         contents.isVisible = YES;
     }
@@ -238,7 +238,7 @@
 
 - (void)applicationDidHide:(NSNotification *)notification {
     if (![[self window] isMiniaturized]) {
-        CTTabContents* contents = [browser_ selectedTabContents];
+        CTTabContents* contents = [self selectedTabContents];
         if (contents) {
             contents.isVisible = NO;
         }
@@ -247,7 +247,7 @@
 
 - (void)applicationDidUnhide:(NSNotification *)notification {
     if (![[self window] isMiniaturized]) {
-        CTTabContents* contents = [browser_ selectedTabContents];
+        CTTabContents* contents = [self selectedTabContents];
         if (contents) {
             contents.isVisible = YES;
         }
@@ -423,7 +423,7 @@
     [NSDocumentController sharedDocumentController];
     NSError *error = nil;
     assert(browser_);
-    CTTabContents *baseTabContents = browser_.selectedTabContents;
+    CTTabContents *baseTabContents = [self selectedTabContents];
     CTTabContents *tabContents = [docController openUntitledDocumentWithWindowController:self display:YES error:&error];
     if (!tabContents) {
         [NSApp presentError:error];
@@ -630,21 +630,21 @@
 }
 
 -(void)willStartTearingTab {
-    CTTabContents* contents = [browser_ selectedTabContents];
+    CTTabContents* contents = [self selectedTabContents];
     if (contents) {
         contents.isTeared = YES;
     }
 }
 
 -(void)willEndTearingTab {
-    CTTabContents* contents = [browser_ selectedTabContents];
+    CTTabContents* contents = [self selectedTabContents];
     if (contents) {
         contents.isTeared = NO;
     }
 }
 
 -(void)didEndTearingTab {
-    CTTabContents* contents = [browser_ selectedTabContents];
+    CTTabContents* contents = [self selectedTabContents];
     if (contents) {
         [contents tabDidResignTeared];
     }
@@ -662,7 +662,7 @@
     tabContentFrame.size.height = newFrame.size.height;
     [tabContentView setFrame:tabContentFrame];
     if (contentShifted) {
-        CTTabContents* contents = [browser_ selectedTabContents];
+        CTTabContents* contents = [self selectedTabContents];
         if (contents) {
             [contents viewFrameDidChange:newFrame];
         }
@@ -697,7 +697,7 @@
 }
 
 - (void)focusTabContents {
-    CTTabContents* contents = [browser_ selectedTabContents];
+    CTTabContents* contents = [self selectedTabContents];
     if (contents) {
         [[self window] makeFirstResponder:contents.view];
     }

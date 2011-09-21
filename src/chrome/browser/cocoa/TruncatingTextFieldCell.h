@@ -1,0 +1,4 @@
+
+@interface TruncatingTextFieldCell : NSTextFieldCell
+
+@end

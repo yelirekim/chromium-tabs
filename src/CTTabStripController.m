@@ -334,12 +334,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             assert([movedTabController isKindOfClass:[CTTabViewController class]]);
             [tabArray_ removeObjectAtIndex:from];
             [tabArray_ insertObject:movedTabController atIndex:to];
-            
-#if 0
-            if ([tabStripModel2_ isMiniTabAtIndex:modelTo] != [movedTabController mini]) {
-                [self tabMiniStateChangedWithContents:contents atIndex:modelTo];
-            }
-#endif
         }];
         
         ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabChangedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
@@ -601,7 +595,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     const CGFloat kMaxTabWidth = [CTTabViewController maxTabWidth];
     const CGFloat kMinTabWidth = [CTTabViewController minTabWidth];
     const CGFloat kMinSelectedTabWidth = [CTTabViewController minSelectedTabWidth];
-    const CGFloat kMiniTabWidth = [CTTabViewController miniTabWidth];
     
     NSRect enclosingRect = NSZeroRect;
     if (animate) {
@@ -630,10 +623,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     }
     
     CGFloat availableSpaceForNonMini = availableSpace;
-    if (!verticalLayout_) {
-        availableSpaceForNonMini -=
-        [self numberOfOpenMiniTabs] * (kMiniTabWidth - kTabOverlap);
-    }
     
     CGFloat nonMiniTabWidth = kMaxTabWidth;
     const NSInteger numberOfOpenNonMiniTabs = [self numberOfOpenNonMiniTabs];

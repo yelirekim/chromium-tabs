@@ -21,7 +21,6 @@ typedef enum {
 + (CGFloat)minTabWidth;
 + (CGFloat)maxTabWidth;
 + (CGFloat)minSelectedTabWidth;
-+ (CGFloat)miniTabWidth;
 + (CGFloat)appTabWidth;
 
 - (id)init;

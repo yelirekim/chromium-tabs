@@ -13,7 +13,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
     BOOL isIconShowing_;
     
     BOOL app_;
-    BOOL mini_;
     BOOL pinned_;
     BOOL phantom_;
     BOOL selected_;
@@ -33,7 +32,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 + (CGFloat)minTabWidth { return 31; }
 + (CGFloat)minSelectedTabWidth { return 46; }
 + (CGFloat)maxTabWidth { return 220; }
-+ (CGFloat)miniTabWidth { return 53; }
 + (CGFloat)appTabWidth { return 66; }
 
 - (CTTabView*)tabView {

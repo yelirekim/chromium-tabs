@@ -104,45 +104,6 @@
         
         initializing_ = NO;
         
-        ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            BOOL foreground = [[userInfo objectForKey:kCTTabForegroundUserInfoKey] boolValue];
-            [contents tabDidInsertIntoBrowser:browser_
-                                      atIndex:index
-                                 inForeground:foreground];
-        }];
-        
-        ob2 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabClosingNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            [contents tabWillCloseInBrowser:browser_ atIndex:index];
-        }];
-        
-        ob3 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabSelectedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            CTTabContents* newContents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
-            assert(newContents != oldContents);
-        }];
-        
-        ob4 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabReplacedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* oldContents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            CTTabContents* contents = [userInfo objectForKey:kCTTabNewContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            [contents tabReplaced:oldContents inBrowser:browser_ atIndex:index];
-        }];
-        
-        ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger index = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            [contents tabDidDetachFromBrowser:browser_ atIndex:index];
-        }];
-        
         ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             [self close];
         }];

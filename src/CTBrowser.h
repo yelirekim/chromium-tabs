@@ -53,6 +53,4 @@ typedef enum {
 -(void)loadingStateDidChange:(CTTabContents*)contents;
 -(void)windowDidBeginToClose;
 
--(void)updateTabStateForContent:(CTTabContents*)contents;
-
 @end

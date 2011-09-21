@@ -18,7 +18,6 @@ extern NSString* const CTTabContentsDidCloseNotification;
 @property(retain, nonatomic) NSView *view;
 @property(retain, nonatomic) NSString *title;
 @property(retain, nonatomic) NSImage *icon;
-@property(strong, nonatomic) CTBrowser *browser;
 @property(strong, nonatomic) CTTabContents* parentOpener;
 @property(readonly, nonatomic) BOOL hasIcon;
 
@@ -27,10 +26,6 @@ extern NSString* const CTTabContentsDidCloseNotification;
 - (BOOL)becomeFirstResponder;
 
 -(void)closingOfTabDidStart:(CTTabStripModel*)model;
-- (void)tabDidInsertIntoBrowser:(CTBrowser*)browser atIndex:(NSInteger)index inForeground:(bool)foreground;
-- (void)tabReplaced:(CTTabContents*)oldContents inBrowser:(CTBrowser*)browser atIndex:(NSInteger)index;
-- (void)tabWillCloseInBrowser:(CTBrowser*)browser atIndex:(NSInteger)index;
-- (void)tabDidDetachFromBrowser:(CTBrowser*)browser atIndex:(NSInteger)index;
 
 -(void)tabDidBecomeVisible;
 -(void)tabDidResignVisible;

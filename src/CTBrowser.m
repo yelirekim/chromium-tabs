@@ -36,16 +36,6 @@
 }
 
 #pragma mark -
-#pragma mark TabStripModel convenience helpers
-
--(void)updateTabStateForContent:(CTTabContents*)contents {
-    int index = [tabStripModel2_ indexOfTabContents:contents];
-    if (index != -1) {
-        [tabStripModel2_ updateTabContentsStateAtIndex:index changeType:CTTabChangeTypeAll];;
-    }
-}
-
-#pragma mark -
 #pragma mark Callbacks
 
 -(void)loadingStateDidChange:(CTTabContents*)contents {

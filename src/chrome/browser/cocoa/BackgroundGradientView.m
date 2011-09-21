@@ -1,7 +1,3 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE-chromium file.
-
 #import "BackgroundGradientView.h"
 
 #define kToolbarTopOffset 12
@@ -36,8 +32,7 @@ static NSColor* kDefaultColorToolbarStrokeInactive = nil;
 }
 
 - (id)initWithFrame:(NSRect)frameRect {
-  self = [super initWithFrame:frameRect];
-  if (self != nil) {
+  if (nil != (self = [super initWithFrame:frameRect])) {
     showsDivider_ = YES;
   }
   return self;
@@ -53,23 +48,15 @@ static NSColor* kDefaultColorToolbarStrokeInactive = nil;
 }
 
 - (void)drawBackground {
-  NSGradient *gradient = [[self window] isKeyWindow] ? _gradientNotFaded :
-                                                       _gradientFaded;
+  NSGradient *gradient = [[self window] isKeyWindow] ? _gradientNotFaded :  _gradientFaded;
   CGFloat winHeight = NSHeight([[self window] frame]);
-  NSPoint startPoint =
-      [self convertPoint:NSMakePoint(0, winHeight - kToolbarTopOffset)
-                fromView:nil];
-  NSPoint endPoint =
-      NSMakePoint(0, winHeight - kToolbarTopOffset - kToolbarMaxHeight);
+  NSPoint startPoint = [self convertPoint:NSMakePoint(0, winHeight - kToolbarTopOffset) fromView:nil];
+  NSPoint endPoint = NSMakePoint(0, winHeight - kToolbarTopOffset - kToolbarMaxHeight);
   endPoint = [self convertPoint:endPoint fromView:nil];
 
-  [gradient drawFromPoint:startPoint
-                  toPoint:endPoint
-                  options:(NSGradientDrawsBeforeStartingLocation |
-                           NSGradientDrawsAfterEndingLocation)];
+  [gradient drawFromPoint:startPoint toPoint:endPoint options:(NSGradientDrawsBeforeStartingLocation | NSGradientDrawsAfterEndingLocation)];
 
   if (showsDivider_) {
-    // Draw bottom stroke
     [[self strokeColor] set];
     NSRect borderRect, contentRect;
     NSDivideRect([self bounds], &borderRect, &contentRect, 1, NSMinYEdge);
@@ -78,8 +65,7 @@ static NSColor* kDefaultColorToolbarStrokeInactive = nil;
 }
 
 - (NSColor*)strokeColor {
-  return [[self window] isKeyWindow] ? kDefaultColorToolbarStroke :
-                                       kDefaultColorToolbarStrokeInactive;
+  return [[self window] isKeyWindow] ? kDefaultColorToolbarStroke : kDefaultColorToolbarStrokeInactive;
 }
 
 @end

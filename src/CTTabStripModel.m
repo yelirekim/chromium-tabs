@@ -39,7 +39,7 @@ const int kNoTab = -1;
 
 - (NSInteger) indexOfNextNonPhantomTabFromIndex:(NSInteger)index ignoreIndex:(NSInteger)ignoreIndex;
 - (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
-- (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab;
+- (NSInteger) constrainInsertionIndex:(NSInteger)index;
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
 - (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options;
 - (void) _closeTabAtIndex:(NSInteger)index contents:(CTTabContents*)contents history:(BOOL)createHistory;
@@ -160,11 +160,7 @@ const int kNoTab = -1;
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
 {
     assert([self containsIndex:toIndex]);
-    if (fromIndex == toIndex)
-        return;
-    
-    int first_non_mini_tab = [self indexOfFirstNonMiniTab];
-    if ((fromIndex < first_non_mini_tab && toIndex >= first_non_mini_tab) || (toIndex < first_non_mini_tab && fromIndex >= first_non_mini_tab)) {
+    if (fromIndex == toIndex) {
         return;
     }
     
@@ -175,7 +171,7 @@ const int kNoTab = -1;
 {
     bool foreground = options & ADD_SELECTED;
     bool pin = contents.isApp || options & ADD_PINNED;
-    index = [self constrainInsertionIndex:index miniTab:pin];
+    index = [self constrainInsertionIndex:index];
     
     closing_all_ = false;
     
@@ -398,9 +394,9 @@ const int kNoTab = -1;
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabSelectedNotification object:self userInfo:userInfo];
 }
 
-- (NSInteger) constrainInsertionIndex:(NSInteger)index miniTab:(BOOL)miniTab
+- (NSInteger) constrainInsertionIndex:(NSInteger)index
 {
-    return miniTab ? MIN(MAX(0, index), [self indexOfFirstNonMiniTab]) : MIN(self.count, MAX(index, [self indexOfFirstNonMiniTab]));
+    return MIN(self.count, MAX(index, 0));
 }
      
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove

@@ -53,8 +53,6 @@ typedef enum {
 -(void)loadingStateDidChange:(CTTabContents*)contents;
 -(void)windowDidBeginToClose;
 
--(int)tabCount;
--(int)selectedTabIndex;
 -(CTTabContents*)selectedTabContents;
 -(CTTabContents*)tabContentsAtIndex:(int)index;
 -(NSArray*)allTabContents;

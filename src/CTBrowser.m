@@ -38,14 +38,6 @@
 #pragma mark -
 #pragma mark TabStripModel convenience helpers
 
--(int)tabCount {
-    return [tabStripModel2_ count];
-}
-
--(int)selectedTabIndex {
-    return [tabStripModel2_ selectedIndex];
-}
-
 -(CTTabContents*)selectedTabContents {
     return [tabStripModel2_ selectedTabContents];
 }

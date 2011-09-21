@@ -38,31 +38,11 @@
 #pragma mark -
 #pragma mark TabStripModel convenience helpers
 
--(void)selectTabContentsAtIndex:(int)index userGesture:(BOOL)userGesture {
-    [tabStripModel2_ selectTabContentsAtIndex:index userGesture:userGesture];
-}
-
--(void)updateTabStateAtIndex:(int)index {
-    [tabStripModel2_ updateTabContentsStateAtIndex:index changeType:CTTabChangeTypeAll];
-}
-
 -(void)updateTabStateForContent:(CTTabContents*)contents {
     int index = [tabStripModel2_ indexOfTabContents:contents];
     if (index != -1) {
         [tabStripModel2_ updateTabContentsStateAtIndex:index changeType:CTTabChangeTypeAll];;
     }
-}
-
--(void)replaceTabContentsAtIndex:(int)index withTabContents:(CTTabContents*)contents {
-    [tabStripModel2_ replaceTabContentsAtIndex:index withContents:contents replaceType:(CTTabReplaceType)0];
-}
-
--(void)closeTabAtIndex:(int)index makeHistory:(BOOL)makeHistory {
-    [tabStripModel2_ closeTabContentsAtIndex:index options:makeHistory ? CLOSE_CREATE_HISTORICAL_TAB : 0];
-}
-
--(void)closeAllTabs {
-    [tabStripModel2_ closeAllTabs];
 }
 
 #pragma mark -

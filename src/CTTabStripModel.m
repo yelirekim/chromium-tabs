@@ -130,11 +130,6 @@ const int kNoTab = -1;
     return [self _closeTabsatIndices:closing_tabs options:options];
 }
 
-- (NSInteger) indexOfFirstNonMiniTab
-{
-    return 0;
-}
-
 - (BOOL) isTabPinnedAtIndex:(NSInteger)index
 {
     TabContentsData* data = [contents_data_ objectAtIndex:index];

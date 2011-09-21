@@ -352,11 +352,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
                 [self setTabTitle:tabController withContents:contents];
             }
             
-            bool isPhantom = [tabStripModel2_ isPhantomTabAtIndex:modelIndex];
-            if (isPhantom != [tabController phantom]) {
-                [tabController setPhantom:isPhantom];
-            }
-            
             [self updateFavIconForContents:contents atIndex:modelIndex];
             
             CTTabContentsViewController* updatedController = [tabContentsArray_ objectAtIndex:index];

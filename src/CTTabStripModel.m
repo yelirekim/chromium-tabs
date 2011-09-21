@@ -130,11 +130,6 @@ const int kNoTab = -1;
     return contents && contents.isApp;
 }
 
-- (BOOL) isPhantomTabAtIndex:(NSInteger)index
-{
-    return NO;
-}
-
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
 {
     assert([self containsIndex:toIndex]);
@@ -312,8 +307,9 @@ const int kNoTab = -1;
     index = MIN(self.count - 1, MAX(0, index));
     int start = index;
     do {
-        if (index != ignoreIndex && ![self isPhantomTabAtIndex:index])
+        if (index != ignoreIndex) {
             return index;
+        }
         index = (index + 1) % self.count;
     } while (index != start);
     
@@ -376,7 +372,7 @@ const int kNoTab = -1;
     int delta = next ? 1 : -1;
     do {
         index = (index + self.count + delta) % self.count;
-    } while (index != self.selectedIndex && [self isPhantomTabAtIndex:index]);
+    } while (index != self.selectedIndex);
     [self selectTabContentsAtIndex:index userGesture:YES];
 }
 

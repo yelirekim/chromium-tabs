@@ -135,19 +135,6 @@ NSString* const CTTabContentsDidCloseNotification =
 #pragma mark -
 #pragma mark Actions
 
-- (void)makeKeyAndOrderFront:(id)sender {
-    if (browser_) {
-        NSWindow *window = browser_.window;
-        if (window) {
-            [window makeKeyAndOrderFront:sender];
-        }
-        int index = [browser_ indexOfTabContents:self];
-        assert(index > -1);
-        [browser_ selectTabAtIndex:index];
-    }
-}
-
-
 - (BOOL)becomeFirstResponder {
     if (isVisible_) {
         return [[view_ window] makeFirstResponder:view_];

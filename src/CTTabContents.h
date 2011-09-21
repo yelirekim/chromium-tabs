@@ -24,7 +24,6 @@ extern NSString* const CTTabContentsDidCloseNotification;
 
 -(id)initWithBaseTabContents:(CTTabContents*)baseContents;
 
-- (void)makeKeyAndOrderFront:(id)sender;
 - (BOOL)becomeFirstResponder;
 
 -(void)closingOfTabDidStart:(CTTabStripModel*)model;

@@ -38,23 +38,6 @@
 #pragma mark -
 #pragma mark TabStripModel convenience helpers
 
--(CTTabContents*)tabContentsAtIndex:(int)index {
-    return [tabStripModel2_ tabContentsAtIndex:index];
-}
-
-- (NSArray*)allTabContents {
-    NSUInteger i = 0, count = [tabStripModel2_ count];
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:count];
-    for (; i<count; ++i) {
-        [array insertObject:[tabStripModel2_ tabContentsAtIndex:i] atIndex:i];
-    }
-    return array;
-}
-
--(int)indexOfTabContents:(CTTabContents*)contents {
-    return [tabStripModel2_ indexOfTabContents:contents];
-}
-
 -(void)selectTabContentsAtIndex:(int)index userGesture:(BOOL)userGesture {
     [tabStripModel2_ selectTabContentsAtIndex:index userGesture:userGesture];
 }

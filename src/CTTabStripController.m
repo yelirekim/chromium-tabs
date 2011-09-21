@@ -456,16 +456,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     return [tabStripModel2_ count];
 }
 
-- (NSInteger)numberOfOpenMiniTabs {
-    return [tabStripModel2_ indexOfFirstNonMiniTab];
-}
-
-- (NSInteger)numberOfOpenNonMiniTabs {
-    NSInteger number = [self numberOfOpenTabs] - [self numberOfOpenMiniTabs];
-    assert(number >= 0);
-    return number;
-}
-
 - (NSInteger)indexFromModelIndex:(NSInteger)index {
     assert(index >= 0);
     if (index < 0)
@@ -625,7 +615,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     CGFloat availableSpaceForNonMini = availableSpace;
     
     CGFloat nonMiniTabWidth = kMaxTabWidth;
-    const NSInteger numberOfOpenNonMiniTabs = [self numberOfOpenNonMiniTabs];
+    const NSInteger numberOfOpenNonMiniTabs = [self numberOfOpenTabs];
     if (!verticalLayout_ && numberOfOpenNonMiniTabs) {
         availableSpaceForNonMini += (numberOfOpenNonMiniTabs - 1) * kTabOverlap;
         nonMiniTabWidth = availableSpaceForNonMini / numberOfOpenNonMiniTabs;

@@ -51,13 +51,7 @@
     BOOL closeDeferred_;
     CGFloat contentAreaHeightDelta_;
     BOOL didShowNewTabButtonBeforeTemporalAction_;
-    
     id ob1;
-    id ob2;
-    id ob3;
-    id ob4;
-    id ob5;
-    id ob6;
 }
 
 @synthesize tabContentArea = tabContentArea_;
@@ -75,11 +69,6 @@
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:ob1];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob2];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob3];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob4];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob5];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob6];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -104,7 +93,7 @@
         
         initializing_ = NO;
         
-        ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabStripEmptyNotification object:browser_.tabStripModel2 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             [self close];
         }];
     }
@@ -221,13 +210,7 @@
     contentAreaHeightDelta_ = NSHeight(contentFrame) - NSHeight(tabFrame);
     
     if ([self hasTabStrip]) {
-        if ([self useVerticalTabs]) {
-            tabFrame.size.height = contentFrame.size.height;
-            [tabContentArea_ setFrame:tabFrame];
-            [self addSideTabStripToWindow];
-        } else {
-            [self addTopTabStripToWindow];
-        }
+        [self addTopTabStripToWindow];
     } else {
         tabFrame.size.height = contentFrame.size.height;
         [tabContentArea_ setFrame:tabFrame];
@@ -237,30 +220,19 @@
 #pragma mark -
 
 - (void)toggleTabStripDisplayMode {
-    BOOL useVertical = [self useVerticalTabs];
     NSRect tabContentsFrame = [tabContentArea_ frame];
-    tabContentsFrame.size.height += useVertical ?
-    contentAreaHeightDelta_ : -contentAreaHeightDelta_;
+    tabContentsFrame.size.height -= contentAreaHeightDelta_;
     [tabContentArea_ setFrame:tabContentsFrame];
     
-    if (useVertical) {
-        [topTabStripView_ removeFromSuperview];
-        [self addSideTabStripToWindow];
-    } else {
-        [sideTabStripView_ removeFromSuperview];
-        NSRect tabContentsFrame = [tabContentArea_ frame];
-        tabContentsFrame.size.height -= contentAreaHeightDelta_;
-        [tabContentArea_ setFrame:tabContentsFrame];
-        [self addTopTabStripToWindow];
-    }
+    [sideTabStripView_ removeFromSuperview];
+    tabContentsFrame.size.height -= contentAreaHeightDelta_;
+    [tabContentArea_ setFrame:tabContentsFrame];
+    [self addTopTabStripToWindow];
     
     [self layoutSubviews];
 }
 
 - (CTTabStripView*)tabStripView {
-    if ([self useVerticalTabs]) {
-        return sideTabStripView_;
-    }
     return topTabStripView_;
 }
 
@@ -554,10 +526,6 @@
     return YES;
 }
 
-- (BOOL)useVerticalTabs {
-    return NO;
-}
-
 - (void)layoutSubviews {
     NSWindow* window = [self window];
     NSView* contentView = [window contentView];
@@ -573,7 +541,7 @@
     CGFloat yOffset = 0;
     CGFloat maxY = NSMaxY(contentBounds) + yOffset;
     
-    if ([self hasTabStrip] && ![self useVerticalTabs]) {
+    if ([self hasTabStrip]) {
         NSRect windowFrame = [contentView convertRect:[window frame] fromView:nil];
         maxY = NSHeight(windowFrame) + yOffset;
         maxY = [self layoutTabStripAtMaxY:maxY width:width fullscreen:isFullscreen];

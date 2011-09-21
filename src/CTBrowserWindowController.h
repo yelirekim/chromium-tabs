@@ -68,7 +68,6 @@
 - (NSView *)selectedTabView;
 - (NSString*)selectedTabTitle;
 - (BOOL)hasTabStrip;
-- (BOOL)useVerticalTabs;
 - (BOOL)isTabDraggable:(NSView*)tabView;
 - (void)setTab:(NSView*)tabView isDraggable:(BOOL)draggable;
 - (void)deferPerformClose;

@@ -18,7 +18,6 @@
 - (CGFloat)layoutToolbarAtMinX:(CGFloat)minX  maxY:(CGFloat)maxY width:(CGFloat)width;
 - (void)setUseOverlay:(BOOL)useOverlay;
 - (void)detachTabView:(NSView*)view;
-- (void)toggleTabStripDisplayMode;
 - (void)layoutSubviews;
 
 @end
@@ -44,7 +43,6 @@
     BOOL initializing_;
     IBOutlet FastResizeView* tabContentArea_;
     IBOutlet CTTabStripView* topTabStripView_;
-    IBOutlet CTTabStripView* sideTabStripView_;
     NSWindow* overlayWindow_;
     NSView* cachedContentView_;
     NSMutableSet* lockedTabs_;
@@ -109,16 +107,6 @@
 
 - (id)init {
     return [self initWithBrowser:[CTBrowser browser]];
-}
-
-- (void)addSideTabStripToWindow {
-    NSView* contentView = [[self window] contentView];
-    NSRect contentFrame = [contentView frame];
-    NSRect sideStripFrame = NSMakeRect(0, 0,
-                                       NSWidth([sideTabStripView_ frame]),
-                                       NSHeight(contentFrame));
-    [sideTabStripView_ setFrame:sideStripFrame];
-    [contentView addSubview:sideTabStripView_];
 }
 
 - (void)addTopTabStripToWindow {
@@ -218,19 +206,6 @@
 }
 
 #pragma mark -
-
-- (void)toggleTabStripDisplayMode {
-    NSRect tabContentsFrame = [tabContentArea_ frame];
-    tabContentsFrame.size.height -= contentAreaHeightDelta_;
-    [tabContentArea_ setFrame:tabContentsFrame];
-    
-    [sideTabStripView_ removeFromSuperview];
-    tabContentsFrame.size.height -= contentAreaHeightDelta_;
-    [tabContentArea_ setFrame:tabContentsFrame];
-    [self addTopTabStripToWindow];
-    
-    [self layoutSubviews];
-}
 
 - (CTTabStripView*)tabStripView {
     return topTabStripView_;

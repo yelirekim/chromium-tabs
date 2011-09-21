@@ -17,7 +17,6 @@
 		3A3ED9C91225E32A009E2908 /* CTTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921F21221AF58006D8305 /* CTTabViewController.m */; };
 		3A3ED9CA1225E32A009E2908 /* CTTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A39270B1221C566006D8305 /* CTTabView.m */; };
 		3A3ED9CC1225E32A009E2908 /* CTTabStripView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A286F8C1222CAA000F1BB78 /* CTTabStripView.m */; };
-		3A3ED9CF1225E32A009E2908 /* ThrobberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A286FE81222D53500F1BB78 /* ThrobberView.m */; };
 		3A3ED9D01225E32A009E2908 /* CTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEE19531222DDEB009DA438 /* CTTabContents.m */; };
 		3A3ED9D31225E32A009E2908 /* CTTabContentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A236D9F1223375D00D21E66 /* CTTabContentsViewController.m */; };
 		3A3ED9D41225E32A009E2908 /* CTTabStripController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A286FE31222D25400F1BB78 /* CTTabStripController.m */; };
@@ -57,7 +56,6 @@
 		3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */; };
 		3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A92907512295BC400DA7E43 /* Toolbar.xib */; };
-		3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A286FE71222D53500F1BB78 /* ThrobberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A51229BEE900DA7E43 /* BackgroundGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3927111221C596006D8305 /* BackgroundGradientView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A61229BEE900DA7E43 /* HoverButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921ED1221AF58006D8305 /* HoverButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A71229BEE900DA7E43 /* HoverCloseButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921EF1221AF58006D8305 /* HoverCloseButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -120,8 +118,6 @@
 		3A286FA01222CDBE00F1BB78 /* TabView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabView.xib; sourceTree = "<group>"; };
 		3A286FE21222D25400F1BB78 /* CTTabStripController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTTabStripController.h; path = chrome/browser/cocoa/CTTabStripController.h; sourceTree = "<group>"; };
 		3A286FE31222D25400F1BB78 /* CTTabStripController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTTabStripController.m; path = chrome/browser/cocoa/CTTabStripController.m; sourceTree = "<group>"; };
-		3A286FE71222D53500F1BB78 /* ThrobberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThrobberView.h; sourceTree = "<group>"; };
-		3A286FE81222D53500F1BB78 /* ThrobberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThrobberView.m; sourceTree = "<group>"; };
 		3A286FEA1222D61900F1BB78 /* newtab_h.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = newtab_h.pdf; path = gfx/newtab_h.pdf; sourceTree = "<group>"; };
 		3A286FEB1222D61900F1BB78 /* newtab_p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = newtab_p.pdf; path = gfx/newtab_p.pdf; sourceTree = "<group>"; };
 		3A286FEC1222D61900F1BB78 /* newtab.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = newtab.pdf; path = gfx/newtab.pdf; sourceTree = "<group>"; };
@@ -341,8 +337,6 @@
 				3A3921F01221AF58006D8305 /* HoverCloseButton.m */,
 				3A236DD71223414F00D21E66 /* NewTabButton.h */,
 				3A236DD81223414F00D21E66 /* NewTabButton.m */,
-				3A286FE71222D53500F1BB78 /* ThrobberView.h */,
-				3A286FE81222D53500F1BB78 /* ThrobberView.m */,
 				A22080B7142A24F300002C78 /* TruncatingTextFieldCell.h */,
 				A22080B8142A24F300002C78 /* TruncatingTextFieldCell.m */,
 			);
@@ -369,7 +363,6 @@
 				3A3EDAD21225FACA009E2908 /* CTBrowserCommand.h in Headers */,
 				3A3EDAD41225FACA009E2908 /* CTBrowserWindowController.h in Headers */,
 				3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */,
-				3A9291A31229BEE900DA7E43 /* ThrobberView.h in Headers */,
 				3A9291A51229BEE900DA7E43 /* BackgroundGradientView.h in Headers */,
 				3A9291A61229BEE900DA7E43 /* HoverButton.h in Headers */,
 				3A9291A71229BEE900DA7E43 /* HoverCloseButton.h in Headers */,
@@ -494,7 +487,6 @@
 				3A3ED9C91225E32A009E2908 /* CTTabViewController.m in Sources */,
 				3A3ED9CA1225E32A009E2908 /* CTTabView.m in Sources */,
 				3A3ED9CC1225E32A009E2908 /* CTTabStripView.m in Sources */,
-				3A3ED9CF1225E32A009E2908 /* ThrobberView.m in Sources */,
 				3A3ED9D01225E32A009E2908 /* CTTabContents.m in Sources */,
 				3A3ED9D31225E32A009E2908 /* CTTabContentsViewController.m in Sources */,
 				3A3ED9D41225E32A009E2908 /* CTTabStripController.m in Sources */,

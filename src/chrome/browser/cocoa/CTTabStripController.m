@@ -6,7 +6,6 @@
 #import "CTTabContentsViewController.h"
 #import "CTTabViewController.h"
 #import "CTTabView.h"
-#import "ThrobberView.h"
 #import "CTTabStripModel.h"
 #import "CTBrowserCommand.h"
 
@@ -911,24 +910,11 @@ const NSTimeInterval kAnimationDuration = 0.125;
     if (oldState != newState)
         [tabController setLoadingState:newState];
     
-    if (newState == CTTabLoadingStateDone || oldState != newState ||
-        oldHasIcon != newHasIcon) {
+    if (newState == CTTabLoadingStateDone || oldState != newState || oldHasIcon != newHasIcon) {
         NSView* iconView = nil;
         if (newHasIcon) {
             if (newState == CTTabLoadingStateDone) {
                 iconView = [self iconImageViewForContents:contents];
-            } else if (newState == CTTabLoadingStateCrashed) {
-                NSImage* oldImage = [[self iconImageViewForContents:contents] image];
-                NSRect frame =
-                NSMakeRect(0, 0, kIconWidthAndHeight, kIconWidthAndHeight);
-                iconView = [ThrobberView toastThrobberViewWithFrame:frame
-                                                        beforeImage:oldImage
-                                                         afterImage:sadFaviconImage];
-            } else {
-                NSRect frame =
-                NSMakeRect(0, 0, kIconWidthAndHeight, kIconWidthAndHeight);
-                iconView = [ThrobberView filmstripThrobberViewWithFrame:frame
-                                                                  image:throbberImage];
             }
         }
         

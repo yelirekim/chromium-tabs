@@ -124,7 +124,7 @@
 
 -(CTTabContents*)addTabContents:(CTTabContents*)contents atIndex:(int)index inForeground:(BOOL)foreground {
     int addTypes = foreground ? (ADD_SELECTED | ADD_INHERIT_GROUP) : ADD_NONE;
-    index = [tabStripModel2_ addTabContents:contents atIndex:index options:addTypes];
+    [tabStripModel2_ addTabContents:contents atIndex:index options:addTypes];
     if ((addTypes & ADD_SELECTED) == 0) {
         contents.isVisible = NO;
     }

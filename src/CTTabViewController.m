@@ -12,7 +12,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
     NSRect originalIconFrame_;
     BOOL isIconShowing_;
     
-    BOOL app_;
     BOOL phantom_;
     BOOL selected_;
     CTTabLoadingState loadingState_;
@@ -22,7 +21,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 }
 
 @synthesize action = action_;
-@synthesize app = app_;
 @synthesize loadingState = loadingState_;
 @synthesize phantom = phantom_;
 @synthesize target = target_;
@@ -106,14 +104,7 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 - (void)setIconView:(NSView*)iconView {
     [iconView_ removeFromSuperview];
     iconView_ = iconView;
-    if ([self app]) {
-        NSRect appIconFrame = [iconView frame];
-        appIconFrame.origin = originalIconFrame_.origin;
-        appIconFrame.origin.x = ([CTTabViewController appTabWidth] - NSWidth(appIconFrame)) / 2.0;
-        [iconView setFrame:appIconFrame];
-    } else {
-        [iconView_ setFrame:originalIconFrame_];
-    }
+    [iconView_ setFrame:originalIconFrame_];
     [self updateVisibility];
     
     if (iconView_) {

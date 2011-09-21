@@ -124,12 +124,6 @@ const int kNoTab = -1;
     return [self _closeTabsatIndices:closing_tabs options:options];
 }
 
-- (BOOL) isAppTabAtIndex:(NSInteger)index
-{
-    CTTabContents* contents = [self tabContentsAtIndex:index];
-    return contents && contents.isApp;
-}
-
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove
 {
     assert([self containsIndex:toIndex]);

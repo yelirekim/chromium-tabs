@@ -256,7 +256,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             [tabContentsArray_ insertObject:contentsController atIndex:index];
             
             CTTabViewController* newController = [self newTab];
-            [newController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
             [tabArray_ insertObject:newController atIndex:index];
             NSView* newView = [newController view];
             
@@ -366,7 +365,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             
             CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
             assert([tabController isKindOfClass:[CTTabViewController class]]);
-            [tabController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
             [self updateFavIconForContents:contents atIndex:modelIndex];
             [self layoutTabs];
         }];

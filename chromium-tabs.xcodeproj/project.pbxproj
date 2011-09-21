@@ -25,7 +25,6 @@
 		3A3ED9D71225E32A009E2908 /* CTBrowserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A1CF96012235704008A3B8C /* CTBrowserWindowController.m */; };
 		3A3ED9D81225E32A009E2908 /* FastResizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A1CF98812235CEE008A3B8C /* FastResizeView.m */; };
 		3A3ED9D91225E32A009E2908 /* CTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7188A122479CE005022BE /* CTBrowser.m */; };
-		3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */; };
 		3A3ED9E81225E3C2009E2908 /* BrowserWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286F9E1222CDBE00F1BB78 /* BrowserWindow.xib */; };
 		3A3ED9E91225E3C2009E2908 /* TabContents.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286F9F1222CDBE00F1BB78 /* TabContents.xib */; };
 		3A3ED9EA1225E3C2009E2908 /* TabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FA01222CDBE00F1BB78 /* TabView.xib */; };
@@ -64,7 +63,6 @@
 		3A9291A71229BEE900DA7E43 /* HoverCloseButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3921EF1221AF58006D8305 /* HoverCloseButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A81229BEE900DA7E43 /* NewTabButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A236DD71223414F00D21E66 /* NewTabButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9291A91229BEE900DA7E43 /* FastResizeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A1CF98712235CEE008A3B8C /* FastResizeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */; };
 		A20A90B413F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */; };
@@ -141,8 +139,6 @@
 		3A3927111221C596006D8305 /* BackgroundGradientView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = BackgroundGradientView.h; sourceTree = "<group>"; };
 		3A3927121221C596006D8305 /* BackgroundGradientView.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BackgroundGradientView.m; sourceTree = "<group>"; };
 		3A3ED35012256F06009E2908 /* throbber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = throbber.png; path = gfx/throbber.png; sourceTree = "<group>"; };
-		3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSColor+Luminance.h"; sourceTree = "<group>"; };
-		3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSColor+Luminance.m"; sourceTree = "<group>"; };
 		3A3ED9751225E0A7009E2908 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3A3ED97D1225E116009E2908 /* ChromiumTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.h; sourceTree = "<group>"; };
 		3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChromiumTabs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -301,8 +297,6 @@
 			children = (
 				A20A90B213F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.h */,
 				A20A90B313F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m */,
-				3A3ED6831225CE7A009E2908 /* GTMNSColor+Luminance.h */,
-				3A3ED6841225CE7A009E2908 /* GTMNSColor+Luminance.m */,
 			);
 			path = "gtm-subset";
 			sourceTree = "<group>";
@@ -397,7 +391,6 @@
 				3A9291A71229BEE900DA7E43 /* HoverCloseButton.h in Headers */,
 				3A9291A81229BEE900DA7E43 /* NewTabButton.h in Headers */,
 				3A9291A91229BEE900DA7E43 /* FastResizeView.h in Headers */,
-				3A9291B31229BF0100DA7E43 /* GTMNSColor+Luminance.h in Headers */,
 				3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */,
 				A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */,
 				A25493C313F414FA0027474A /* HoverButton+Private.h in Headers */,
@@ -525,7 +518,6 @@
 				3A3ED9D71225E32A009E2908 /* CTBrowserWindowController.m in Sources */,
 				3A3ED9D81225E32A009E2908 /* FastResizeView.m in Sources */,
 				3A3ED9D91225E32A009E2908 /* CTBrowser.m in Sources */,
-				3A3ED9DC1225E32A009E2908 /* GTMNSColor+Luminance.m in Sources */,
 				3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */,
 				3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */,
 				A20A90B513F456560074B8E7 /* GTMFadeTruncatingTextFieldCell.m in Sources */,

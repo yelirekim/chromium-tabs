@@ -3,33 +3,9 @@
 // found in the LICENSE-chromium file.
 
 #import "BackgroundGradientView.h"
-//#import "chrome/browser/browser_theme_provider.h"
-//#import "themed_window.h"
-#import "GTMNSColor+Luminance.h"
 
 #define kToolbarTopOffset 12
 #define kToolbarMaxHeight 100
-
-static NSGradient *_mkGradient(BOOL faded) {
-  NSColor* base_color = [NSColor colorWithCalibratedWhite:0.2 alpha:1.0];
-  NSColor* start_color =
-      [base_color gtm_colorAdjustedFor:GTMColorationLightHighlight
-                                 faded:faded];
-  NSColor* mid_color =
-      [base_color gtm_colorAdjustedFor:GTMColorationLightMidtone
-                                 faded:faded];
-  NSColor* end_color =
-      [base_color gtm_colorAdjustedFor:GTMColorationLightShadow
-                                 faded:faded];
-  NSColor* glow_color =
-      [base_color gtm_colorAdjustedFor:GTMColorationLightPenumbra
-                                 faded:faded];
-  return [[NSGradient alloc] initWithColorsAndLocations:start_color, 0.0,
-                                                        mid_color, 0.25,
-                                                        end_color, 0.5,
-                                                        glow_color, 0.75,
-                                                        nil];
-}
 
 @implementation BackgroundGradientView {
     BOOL showsDivider_;
@@ -41,15 +17,22 @@ static NSGradient *_gradientNotFaded = nil;
 static NSColor* kDefaultColorToolbarStroke = nil;
 static NSColor* kDefaultColorToolbarStrokeInactive = nil;
 
-+ (void)load {
-  @autoreleasepool {
-    _gradientFaded = _mkGradient(true);
-    _gradientNotFaded = _mkGradient(false);
-    kDefaultColorToolbarStroke =
-      [NSColor colorWithCalibratedWhite: 0x67 / 0xff alpha:1.0];
-    kDefaultColorToolbarStrokeInactive =
-      [NSColor colorWithCalibratedWhite: 0x7b / 0xff alpha:1.0];
-  }
++ (void) initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _gradientFaded = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedRed:0.957321 green:0.957428 blue:0.957302 alpha:1.0], 0.0,
+                          [NSColor colorWithCalibratedRed:0.904617 green:0.904718 blue:0.904599 alpha:1.0], 0.25,
+                          [NSColor colorWithCalibratedRed:0.836730 green:0.836823 blue:0.836713 alpha:1.0], 0.5,
+                          [NSColor colorWithCalibratedRed:0.897006 green:0.897106 blue:0.896989 alpha:1.0], 0.75,
+                          nil];
+        _gradientNotFaded = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithCalibratedRed:0.940553 green:0.940579 blue:0.940562 alpha:1.0], 0.0,
+                             [NSColor colorWithCalibratedRed:0.870679 green:0.870699 blue:0.870688 alpha:1.0], 0.25,
+                             [NSColor colorWithCalibratedRed:0.785800 green:0.785800 blue:0.785810 alpha:1.0], 0.5,
+                             [NSColor colorWithCalibratedRed:0.860891 green:0.860910 blue:0.860901 alpha:1.0], 0.75,
+                             nil];;
+        kDefaultColorToolbarStroke = [NSColor colorWithCalibratedWhite: 0x67 / 0xff alpha:1.0];
+        kDefaultColorToolbarStrokeInactive = [NSColor colorWithCalibratedWhite: 0x7b / 0xff alpha:1.0];
+    });
 }
 
 - (id)initWithFrame:(NSRect)frameRect {

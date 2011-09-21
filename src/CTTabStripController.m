@@ -25,7 +25,6 @@ const CGFloat kIncognitoBadgeTabStripShrink = 18;
 const NSTimeInterval kAnimationDuration = 0.125;
 
 @interface CTTabStripController (Private)
-- (void)installTrackingArea;
 - (void)addSubviewToPermanentList:(NSView*)aView;
 - (void)regenerateSubviewList;
 - (NSInteger)indexForContentsView:(NSView*)view;
@@ -485,10 +484,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     if (index >= [tabArray_ count])
         return NULL;
     return [[tabArray_ objectAtIndex:index] view];
-}
-
-- (NSUInteger)viewsCount {
-    return [tabArray_ count];
 }
 
 - (void)selectTab:(id)sender {
@@ -1054,17 +1049,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     }
     [tabStripView_ setSubviews:subviews];
     [self setTabTrackingAreasEnabled:mouseInside_];
-}
-
-- (CTTabContentsViewController*)activeTabContentsController {
-    int modelIndex = [tabStripModel2_ selectedIndex];
-    if (modelIndex < 0)
-        return nil;
-    NSInteger index = [self indexFromModelIndex:modelIndex];
-    if (index < 0 ||
-        index >= (NSInteger)[tabContentsArray_ count])
-        return nil;
-    return [tabContentsArray_ objectAtIndex:index];
 }
 
 @end

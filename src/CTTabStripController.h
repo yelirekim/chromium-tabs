@@ -10,7 +10,6 @@
 @interface CTTabStripController : NSObject
 
 @property(nonatomic) CGFloat indentForControls;
-
 @property(nonatomic, assign) BOOL showsNewTabButton;
 
 - (id)initWithView:(CTTabStripView*)view switchView:(NSView*)switchView browser:(CTBrowser*)browser;
@@ -23,7 +22,6 @@
 
 - (NSInteger)modelIndexForTabView:(NSView*)view;
 - (NSView*)viewAtIndex:(NSUInteger)index;
-- (NSUInteger)viewsCount;
 
 - (void)insertPlaceholderForTab:(CTTabView*)tab frame:(NSRect)frame yStretchiness:(CGFloat)yStretchiness;
 
@@ -35,8 +33,6 @@
 
 + (CGFloat)defaultTabHeight;
 + (CGFloat)defaultIndentForControls;
-
-- (CTTabContentsViewController*)activeTabContentsController;
 
 @end
 

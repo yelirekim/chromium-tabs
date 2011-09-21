@@ -13,7 +13,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
     BOOL isIconShowing_;
     
     BOOL app_;
-    BOOL pinned_;
     BOOL phantom_;
     BOOL selected_;
     CTTabLoadingState loadingState_;
@@ -26,7 +25,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
 @synthesize app = app_;
 @synthesize loadingState = loadingState_;
 @synthesize phantom = phantom_;
-@synthesize pinned = pinned_;
 @synthesize target = target_;
 
 + (CGFloat)minTabWidth { return 31; }

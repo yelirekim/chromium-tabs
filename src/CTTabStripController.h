@@ -19,7 +19,7 @@
 - (void)setFrameOfSelectedTab:(NSRect)frame;
 - (void)moveTabFromIndex:(NSInteger)from;
 
-- (void)dropTabContents:(CTTabContents*)contents withFrame:(NSRect)frame asPinnedTab:(BOOL)pinned;
+- (void)dropTabContents:(CTTabContents*)contents withFrame:(NSRect)frame;
 
 - (NSInteger)modelIndexForTabView:(NSView*)view;
 - (NSView*)viewAtIndex:(NSUInteger)index;

@@ -485,9 +485,8 @@
         tabOrigin = [[self tabStripView] convertPoint:tabOrigin fromView:nil];
         destinationFrame.origin = tabOrigin;
         
-        bool isPinned = [dragBWC->browser_.tabStripModel2 isTabPinnedAtIndex:index];
         [dragController detachTabView:view];
-        [tabStripController_ dropTabContents:contents withFrame:destinationFrame asPinnedTab:isPinned];
+        [tabStripController_ dropTabContents:contents withFrame:destinationFrame];
     } else {
         int index = [tabStripController_ modelIndexForTabView:view];
         [tabStripController_ moveTabFromIndex:index];

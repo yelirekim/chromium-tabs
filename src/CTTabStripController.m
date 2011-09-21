@@ -256,7 +256,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             [tabContentsArray_ insertObject:contentsController atIndex:index];
             
             CTTabViewController* newController = [self newTab];
-            [newController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
             [newController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
             [tabArray_ insertObject:newController atIndex:index];
             NSView* newView = [newController view];
@@ -372,7 +371,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             
             CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
             assert([tabController isKindOfClass:[CTTabViewController class]]);
-            [tabController setPinned:[tabStripModel2_ isTabPinnedAtIndex:modelIndex]];
             [tabController setApp:[tabStripModel2_ isAppTabAtIndex:modelIndex]];
             [self updateFavIconForContents:contents atIndex:modelIndex];
             [self layoutTabs];
@@ -938,13 +936,12 @@ const NSTimeInterval kAnimationDuration = 0.125;
 }
 
 - (void)dropTabContents:(CTTabContents*)contents
-              withFrame:(NSRect)frame
-            asPinnedTab:(BOOL)pinned {
+              withFrame:(NSRect)frame {
     int modelIndex = [self indexOfPlaceholder];
     
     droppedTabFrame_ = frame;
     
-    [tabStripModel2_ insertTabContents:contents atIndex:modelIndex options:ADD_SELECTED | (pinned ? ADD_PINNED : 0)];
+    [tabStripModel2_ insertTabContents:contents atIndex:modelIndex options:ADD_SELECTED];
 }
 
 - (void)tabViewFrameChanged:(NSNotification*)info {

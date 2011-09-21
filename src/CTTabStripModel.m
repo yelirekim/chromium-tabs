@@ -27,7 +27,6 @@ const int kNoTab = -1;
 @interface TabContentsData : NSObject {
 @public
     CTTabContents* contents;
-    BOOL pinned;
 }
 @end
 
@@ -130,12 +129,6 @@ const int kNoTab = -1;
     return [self _closeTabsatIndices:closing_tabs options:options];
 }
 
-- (BOOL) isTabPinnedAtIndex:(NSInteger)index
-{
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    return data->pinned;
-}
-
 - (BOOL) isAppTabAtIndex:(NSInteger)index
 {
     CTTabContents* contents = [self tabContentsAtIndex:index];
@@ -160,7 +153,6 @@ const int kNoTab = -1;
 - (void) insertTabContents:(CTTabContents*)contents atIndex:(NSInteger)index options:(NSInteger)options
 {
     bool foreground = options & ADD_SELECTED;
-    bool pin = contents.isApp || options & ADD_PINNED;
     index = [self constrainInsertionIndex:index];
     
     closing_all_ = false;
@@ -168,7 +160,6 @@ const int kNoTab = -1;
     CTTabContents* selected_contents = [self selectedTabContents];
     TabContentsData* data = [[TabContentsData alloc] init];
     data->contents = contents;
-    data->pinned = pin;
     
     [contents_data_ insertObject:data atIndex:index];
     

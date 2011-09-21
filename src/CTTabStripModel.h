@@ -48,7 +48,6 @@ typedef enum {
 - (BOOL) containsIndex:(NSInteger)index;
 - (void) selectTabContentsAtIndex:(NSInteger)index userGesture:(BOOL)userGesture;
 - (BOOL) closeTabContentsAtIndex:(NSInteger)index options:(NSInteger)options;
-- (BOOL) isTabPinnedAtIndex:(NSInteger)index;
 - (BOOL) isAppTabAtIndex:(NSInteger)index;
 - (BOOL) isPhantomTabAtIndex:(NSInteger)index;
 - (void) moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;

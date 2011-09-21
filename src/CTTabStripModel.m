@@ -135,11 +135,6 @@ const int kNoTab = -1;
     return 0;
 }
 
-- (BOOL) isMiniTabAtIndex:(NSInteger)index
-{
-    return [self isTabPinnedAtIndex:index] || [self isAppTabAtIndex:index];
-}
-
 - (BOOL) isTabPinnedAtIndex:(NSInteger)index
 {
     TabContentsData* data = [contents_data_ objectAtIndex:index];
@@ -313,37 +308,6 @@ const int kNoTab = -1;
         }
     }
     return removed_contents;
-}
-
-- (void) setTabPinnedAtIndex:(NSInteger)index pinned:(BOOL)pinned
-{
-    assert([self containsIndex:index]);
-    TabContentsData* data = [contents_data_ objectAtIndex:index];
-    if (data->pinned == pinned)
-        return;
-    
-    if ([self isAppTabAtIndex:index]) {
-        if (!pinned) {
-            return;
-        }
-        data->pinned = pinned;
-    } else {
-        int non_mini_tab_index = [self indexOfFirstNonMiniTab];
-        data->pinned = pinned;
-        if (pinned && index != non_mini_tab_index) {
-            [self _moveTabContentsFromIndex:index toIndex:non_mini_tab_index selectAfterMove:NO];
-            return;
-        } else if (!pinned && index + 1 != non_mini_tab_index) {
-            [self _moveTabContentsFromIndex:index toIndex:non_mini_tab_index - 1 selectAfterMove:NO];
-            return;
-        }
-        
-        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  data->contents, kCTTabContentsUserInfoKey,
-                                  [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
-                                  nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabMiniStateChangedNotification object:self userInfo:userInfo];
-    }
 }
 
 - (void) closeSelectedTab

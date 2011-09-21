@@ -518,7 +518,6 @@
         windowRect.origin.y = [screen frame].size.height - windowRect.size.height - windowRect.origin.y;
         
         NSRect tabRect = [tabView frame];
-        bool isPinned = [tabStripModel2 isTabPinnedAtIndex:index];
         [tabStripModel2 detachTabContentsAtIndex:index];
         
         CTBrowser* newBrowser = [[browser_ class] browser];
@@ -528,7 +527,6 @@
         [newBrowser loadingStateDidChange:contents];
         
         [controller.window setFrame:windowRect display:NO];
-        [newBrowser.tabStripModel2 setTabPinnedAtIndex:0 pinned:isPinned];
         tabRect.size.height = [CTTabStripController defaultTabHeight];
         [[controller tabStripController] setFrameOfSelectedTab:tabRect];
         

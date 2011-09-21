@@ -189,6 +189,7 @@
 		080E96DDFE201D6D7F000001 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				A22080C8142A353A00002C78 /* Categories */,
 				3A3ED97D1225E116009E2908 /* ChromiumTabs.h */,
 				256AC3F00F4B6AF500CF3369 /* prefix.pch */,
 				3A1CF94912235277008A3B8C /* CTTabStripModelDelegate.h */,
@@ -204,8 +205,6 @@
 				3A286FE31222D25400F1BB78 /* CTTabStripController.m */,
 				A2CD3AD013F48C9900954A59 /* CTTabStripModel.h */,
 				A2CD3AD113F48C9900954A59 /* CTTabStripModel.m */,
-				3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */,
-				3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */,
 				A27EF69914292A5C0045C670 /* view controllers */,
 				A2B99A891428EE3800A735CD /* views */,
 			);
@@ -297,6 +296,15 @@
 				3A928D0B12282DE500DA7E43 /* MyTabContents.m */,
 			);
 			path = "simple-app";
+			sourceTree = "<group>";
+		};
+		A22080C8142A353A00002C78 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */,
+				3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		A27EF69914292A5C0045C670 /* view controllers */ = {

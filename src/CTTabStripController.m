@@ -840,16 +840,13 @@ const NSTimeInterval kAnimationDuration = 0.125;
     
     CTTabLoadingState oldState = [tabController loadingState];
     CTTabLoadingState newState = CTTabLoadingStateDone;
-    NSImage* throbberImage = nil;
     if (contents.isCrashed) {
         newState = CTTabLoadingStateCrashed;
         newHasIcon = true;
     } else if (contents.isWaitingForResponse) {
         newState = CTTabLoadingStateWaiting;
-        throbberImage = throbberWaitingImage;
     } else if (contents.isLoading) {
         newState = CTTabLoadingStateLoading;
-        throbberImage = throbberLoadingImage;
     }
     
     if (oldState != newState)

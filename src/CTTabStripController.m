@@ -155,7 +155,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     id ob3;
     id ob4;
     id ob5;
-    id ob6;
 }
 
 @synthesize indentForControls = indentForControls_;
@@ -357,19 +356,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             [updatedController tabDidChange:contents];
         }];
         
-        ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabChangedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
-            NSDictionary* userInfo = notification.userInfo;
-            CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
-            NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
-            NSInteger index = [self indexFromModelIndex:modelIndex];
-            
-            CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
-            assert([tabController isKindOfClass:[CTTabViewController class]]);
-            [self updateFavIconForContents:contents atIndex:modelIndex];
-            [self layoutTabs];
-        }];
-        
-        ob6 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
+        ob5 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabDetachedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             NSDictionary* userInfo = notification.userInfo;
             NSInteger modelIndex = [[userInfo valueForKey:kCTTabIndexUserInfoKey] intValue];
             NSInteger index = [self indexFromModelIndex:modelIndex];
@@ -403,7 +390,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     [[NSNotificationCenter defaultCenter] removeObserver:ob3];
     [[NSNotificationCenter defaultCenter] removeObserver:ob4];
     [[NSNotificationCenter defaultCenter] removeObserver:ob5];
-    [[NSNotificationCenter defaultCenter] removeObserver:ob6];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

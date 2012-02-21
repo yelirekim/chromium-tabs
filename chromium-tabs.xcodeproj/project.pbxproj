@@ -35,7 +35,6 @@
 		A21ED5FD14F41931000C72EB /* <HoverCloseButton> TabClose.png in Resources */ = {isa = PBXBuildFile; fileRef = A21ED5FA14F41931000C72EB /* <HoverCloseButton> TabClose.png */; };
 		A21ED5FE14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A21ED5FB14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png */; };
 		A21ED5FF14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = A21ED5FC14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png */; };
-		A250E2AF14F440A4009465E8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A250E2AE14F440A4009465E8 /* Info.plist */; };
 		A250E2B314F440D2009465E8 /* CTTabView+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A250E2B214F440D2009465E8 /* CTTabView+Private.h */; };
 		A250E2B514F440E5009465E8 /* ChromiumTabs.pch in Headers */ = {isa = PBXBuildFile; fileRef = A250E2B414F440E5009465E8 /* ChromiumTabs.pch */; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
@@ -436,7 +435,6 @@
 				A21ED5FD14F41931000C72EB /* <HoverCloseButton> TabClose.png in Resources */,
 				A21ED5FE14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png in Resources */,
 				A21ED5FF14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png in Resources */,
-				A250E2AF14F440A4009465E8 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

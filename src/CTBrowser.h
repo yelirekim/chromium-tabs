@@ -1,4 +1,4 @@
-#import "CTTabStripModelDelegate.h"
+#import <ChromiumTabs/CTTabStripModelDelegate.h>
 
 typedef enum {
   CTWindowOpenDispositionCurrentTab,

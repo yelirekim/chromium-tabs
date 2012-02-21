@@ -41,14 +41,14 @@ typedef enum {
 -(void)selectPreviousTab;
 -(void)moveTabNext;
 -(void)moveTabPrevious;
--(void)selectTabAtIndex:(int)index;
+-(void)selectTabAtIndex:(NSInteger)index;
 -(void)selectLastTab;
 -(void)duplicateTab;
 
--(void)executeCommand:(int)cmd withDisposition:(CTWindowOpenDisposition)disposition;
--(void)executeCommand:(int)cmd;
+-(void)executeCommand:(NSInteger)cmd withDisposition:(CTWindowOpenDisposition)disposition;
+-(void)executeCommand:(NSInteger)cmd;
 
-+(void)executeCommand:(int)cmd;
++(void)executeCommand:(NSInteger)cmd;
 
 -(void)loadingStateDidChange:(CTTabContents*)contents;
 -(void)windowDidBeginToClose;

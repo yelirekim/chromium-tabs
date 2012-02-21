@@ -30,7 +30,7 @@
 - (IBAction)newDocument:(id)sender;
 
 - (CTTabContents*)selectedTabContents;
-- (int)selectedTabIndex;
+- (NSInteger)selectedTabIndex;
 - (void)activate;
 - (void)focusTabContents;
 - (void)layoutTabContentArea:(NSRect)frame;
@@ -39,8 +39,6 @@
 
 @property(strong, readonly, nonatomic) CTTabStripView* tabStripView;
 @property(strong, readonly, nonatomic) FastResizeView* tabContentArea;
-@property(assign, nonatomic) BOOL didShowNewTabButtonBeforeTemporalAction;
-@property(nonatomic, assign) BOOL showsNewTabButton;
 
 - (void)showOverlay;
 - (void)removeOverlay;

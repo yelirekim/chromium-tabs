@@ -10,7 +10,6 @@
 @interface CTTabStripController : NSObject
 
 @property(nonatomic) CGFloat indentForControls;
-@property(nonatomic, assign) BOOL showsNewTabButton;
 
 - (id)initWithView:(CTTabStripView*)view switchView:(NSView*)switchView browser:(CTBrowser*)browser;
 

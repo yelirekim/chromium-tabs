@@ -16,19 +16,11 @@
 		3A3ED9E81225E3C2009E2908 /* BrowserWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286F9E1222CDBE00F1BB78 /* BrowserWindow.xib */; };
 		3A3ED9E91225E3C2009E2908 /* TabContents.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286F9F1222CDBE00F1BB78 /* TabContents.xib */; };
 		3A3ED9EA1225E3C2009E2908 /* TabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FA01222CDBE00F1BB78 /* TabView.xib */; };
-		3A3ED9EB1225E3C2009E2908 /* newtab_h.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FEA1222D61900F1BB78 /* newtab_h.pdf */; };
-		3A3ED9EC1225E3C2009E2908 /* newtab_p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FEB1222D61900F1BB78 /* newtab_p.pdf */; };
-		3A3ED9ED1225E3C2009E2908 /* newtab.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FEC1222D61900F1BB78 /* newtab.pdf */; };
-		3A3ED9EE1225E3C2009E2908 /* default-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FF71222D85300F1BB78 /* default-icon.pdf */; };
-		3A3ED9EF1225E3C2009E2908 /* throbber_waiting.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FFA1222D94600F1BB78 /* throbber_waiting.png */; };
-		3A3ED9F01225E3C2009E2908 /* sadfavicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A286FFD1222D99B00F1BB78 /* sadfavicon.png */; };
-		3A3ED9F11225E3C2009E2908 /* throbber.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3ED35012256F06009E2908 /* throbber.png */; };
 		3A3EDA501225EAE7009E2908 /* ChromiumTabs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */; };
 		3A3EDA521225EAEA009E2908 /* ChromiumTabs.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */; };
 		3A3EDA7B1225EBFF009E2908 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3EDA711225EBBB009E2908 /* AppDelegate.m */; };
 		3A3EDA7C1225EBFF009E2908 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3EDA771225EBBB009E2908 /* main.m */; };
 		3A3EDA7E1225EC13009E2908 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A3EDA741225EBBB009E2908 /* MainMenu.xib */; };
-		3A3EDAA91225F192009E2908 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A3EDAA71225F192009E2908 /* Localizable.strings */; };
 		3A3EDACF1225FACA009E2908 /* ChromiumTabs.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A3ED97D1225E116009E2908 /* ChromiumTabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A3EDAD01225FACA009E2908 /* CTTabStripModelDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A1CF94912235277008A3B8C /* CTTabStripModelDelegate.h */; settings = {ATTRIBUTES = (); }; };
 		3A3EDAD21225FACA009E2908 /* CTBrowserCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A1168D6122543A900757641 /* CTBrowserCommand.h */; settings = {ATTRIBUTES = (); }; };
@@ -38,9 +30,14 @@
 		3A928D0C12282DE500DA7E43 /* MyTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A928D0B12282DE500DA7E43 /* MyTabContents.m */; };
 		3A92902312294CDC00DA7E43 /* NSWindow+CTThemed.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */; settings = {ATTRIBUTES = (); }; };
 		3A92902412294CDC00DA7E43 /* NSWindow+CTThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */; };
-		3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A92907512295BC400DA7E43 /* Toolbar.xib */; };
 		3ABF4A1912A4592A0020233C /* CTBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */; settings = {ATTRIBUTES = (); }; };
 		3ABF4A1A12A4592A0020233C /* CTBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */; };
+		A21ED5FD14F41931000C72EB /* <HoverCloseButton> TabClose.png in Resources */ = {isa = PBXBuildFile; fileRef = A21ED5FA14F41931000C72EB /* <HoverCloseButton> TabClose.png */; };
+		A21ED5FE14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A21ED5FB14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png */; };
+		A21ED5FF14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = A21ED5FC14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png */; };
+		A250E2AF14F440A4009465E8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A250E2AE14F440A4009465E8 /* Info.plist */; };
+		A250E2B314F440D2009465E8 /* CTTabView+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A250E2B214F440D2009465E8 /* CTTabView+Private.h */; };
+		A250E2B514F440E5009465E8 /* ChromiumTabs.pch in Headers */ = {isa = PBXBuildFile; fileRef = A250E2B414F440E5009465E8 /* ChromiumTabs.pch */; };
 		A25493C013F4117E0027474A /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A25493BF13F4117D0027474A /* CTBrowser+Private.h */; };
 		A29C7643142A3B7200077B30 /* CTTabContents.h in Headers */ = {isa = PBXBuildFile; fileRef = A29C763B142A3B7200077B30 /* CTTabContents.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A29C7644142A3B7200077B30 /* CTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C763C142A3B7200077B30 /* CTTabContents.m */; };
@@ -62,8 +59,6 @@
 		A29C7664142A3B8B00077B30 /* FastResizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C7658142A3B8B00077B30 /* FastResizeView.m */; };
 		A29C7665142A3B8B00077B30 /* HoverCloseButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A29C7659142A3B8B00077B30 /* HoverCloseButton.h */; };
 		A29C7666142A3B8B00077B30 /* HoverCloseButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C765A142A3B8B00077B30 /* HoverCloseButton.m */; };
-		A29C7667142A3B8B00077B30 /* NewTabButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A29C765B142A3B8B00077B30 /* NewTabButton.h */; };
-		A29C7668142A3B8B00077B30 /* NewTabButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C765C142A3B8B00077B30 /* NewTabButton.m */; };
 		A29C7669142A3B8B00077B30 /* TruncatingTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A29C765D142A3B8B00077B30 /* TruncatingTextFieldCell.h */; };
 		A29C766A142A3B8B00077B30 /* TruncatingTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C765E142A3B8B00077B30 /* TruncatingTextFieldCell.m */; };
 /* End PBXBuildFile section */
@@ -94,7 +89,6 @@
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		256AC3F00F4B6AF500CF3369 /* prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		3A1168D6122543A900757641 /* CTBrowserCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserCommand.h; sourceTree = "<group>"; };
@@ -105,24 +99,15 @@
 		3A286F9E1222CDBE00F1BB78 /* BrowserWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BrowserWindow.xib; sourceTree = "<group>"; };
 		3A286F9F1222CDBE00F1BB78 /* TabContents.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabContents.xib; sourceTree = "<group>"; };
 		3A286FA01222CDBE00F1BB78 /* TabView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabView.xib; sourceTree = "<group>"; };
-		3A286FEA1222D61900F1BB78 /* newtab_h.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = newtab_h.pdf; path = gfx/newtab_h.pdf; sourceTree = "<group>"; };
-		3A286FEB1222D61900F1BB78 /* newtab_p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = newtab_p.pdf; path = gfx/newtab_p.pdf; sourceTree = "<group>"; };
-		3A286FEC1222D61900F1BB78 /* newtab.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = newtab.pdf; path = gfx/newtab.pdf; sourceTree = "<group>"; };
-		3A286FF71222D85300F1BB78 /* default-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "default-icon.pdf"; path = "gfx/default-icon.pdf"; sourceTree = "<group>"; };
-		3A286FFA1222D94600F1BB78 /* throbber_waiting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = throbber_waiting.png; path = gfx/throbber_waiting.png; sourceTree = "<group>"; };
-		3A286FFD1222D99B00F1BB78 /* sadfavicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sadfavicon.png; path = gfx/sadfavicon.png; sourceTree = "<group>"; };
-		3A3ED35012256F06009E2908 /* throbber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = throbber.png; path = gfx/throbber.png; sourceTree = "<group>"; };
 		3A3ED9751225E0A7009E2908 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3A3ED97D1225E116009E2908 /* ChromiumTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.h; sourceTree = "<group>"; };
 		3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChromiumTabs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A3ED9841225E27E009E2908 /* ChromiumTabs-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChromiumTabs-Info.plist"; sourceTree = "<group>"; };
 		3A3EDA701225EBBB009E2908 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3A3EDA711225EBBB009E2908 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3A3EDA731225EBBB009E2908 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3A3EDA751225EBBB009E2908 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3A3EDA761225EBBB009E2908 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A3EDA771225EBBB009E2908 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3A3EDAA81225F192009E2908 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A928A771226E01900DA7E43 /* prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
 		3A928BBA1226F0AA00DA7E43 /* MyBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBrowser.h; sourceTree = "<group>"; };
 		3A928BBB1226F0AA00DA7E43 /* MyBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBrowser.m; sourceTree = "<group>"; };
@@ -130,12 +115,17 @@
 		3A928D0B12282DE500DA7E43 /* MyTabContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTabContents.m; sourceTree = "<group>"; };
 		3A92902112294CDC00DA7E43 /* NSWindow+CTThemed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+CTThemed.h"; sourceTree = "<group>"; };
 		3A92902212294CDC00DA7E43 /* NSWindow+CTThemed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+CTThemed.m"; sourceTree = "<group>"; };
-		3A92907512295BC400DA7E43 /* Toolbar.xib */ = {isa = PBXFileReference; explicitFileType = file.xib; path = Toolbar.xib; sourceTree = "<group>"; };
 		3AA71889122479CE005022BE /* CTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowser.h; sourceTree = "<group>"; };
 		3AA7188A122479CE005022BE /* CTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowser.m; sourceTree = "<group>"; };
 		3ABF4A1712A4592A0020233C /* CTBrowserWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBrowserWindow.h; sourceTree = "<group>"; };
 		3ABF4A1812A4592A0020233C /* CTBrowserWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBrowserWindow.m; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A21ED5FA14F41931000C72EB /* <HoverCloseButton> TabClose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "<HoverCloseButton> TabClose.png"; sourceTree = "<group>"; };
+		A21ED5FB14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "<HoverCloseButton> TabClosePressed.png"; sourceTree = "<group>"; };
+		A21ED5FC14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "<HoverCloseButton> TabCloseRollover.png"; sourceTree = "<group>"; };
+		A250E2AE14F440A4009465E8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A250E2B214F440D2009465E8 /* CTTabView+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CTTabView+Private.h"; path = "src/CTTabView+Private.h"; sourceTree = SOURCE_ROOT; };
+		A250E2B414F440E5009465E8 /* ChromiumTabs.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.pch; sourceTree = "<group>"; };
 		A25493BF13F4117D0027474A /* CTBrowser+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CTBrowser+Private.h"; sourceTree = "<group>"; };
 		A29C763B142A3B7200077B30 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTTabContents.h; path = src/CTTabContents.h; sourceTree = SOURCE_ROOT; };
 		A29C763C142A3B7200077B30 /* CTTabContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTTabContents.m; path = src/CTTabContents.m; sourceTree = SOURCE_ROOT; };
@@ -157,8 +147,6 @@
 		A29C7658142A3B8B00077B30 /* FastResizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FastResizeView.m; path = src/FastResizeView.m; sourceTree = SOURCE_ROOT; };
 		A29C7659142A3B8B00077B30 /* HoverCloseButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HoverCloseButton.h; path = src/HoverCloseButton.h; sourceTree = SOURCE_ROOT; };
 		A29C765A142A3B8B00077B30 /* HoverCloseButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HoverCloseButton.m; path = src/HoverCloseButton.m; sourceTree = SOURCE_ROOT; };
-		A29C765B142A3B8B00077B30 /* NewTabButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewTabButton.h; path = src/NewTabButton.h; sourceTree = SOURCE_ROOT; };
-		A29C765C142A3B8B00077B30 /* NewTabButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewTabButton.m; path = src/NewTabButton.m; sourceTree = SOURCE_ROOT; };
 		A29C765D142A3B8B00077B30 /* TruncatingTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TruncatingTextFieldCell.h; path = src/TruncatingTextFieldCell.h; sourceTree = SOURCE_ROOT; };
 		A29C765E142A3B8B00077B30 /* TruncatingTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TruncatingTextFieldCell.m; path = src/TruncatingTextFieldCell.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -190,8 +178,8 @@
 			isa = PBXGroup;
 			children = (
 				A22080C8142A353A00002C78 /* Categories */,
+				A250E2B414F440E5009465E8 /* ChromiumTabs.pch */,
 				3A3ED97D1225E116009E2908 /* ChromiumTabs.h */,
-				256AC3F00F4B6AF500CF3369 /* prefix.pch */,
 				3A1CF94912235277008A3B8C /* CTTabStripModelDelegate.h */,
 				3A1168D6122543A900757641 /* CTBrowserCommand.h */,
 				3AA71889122479CE005022BE /* CTBrowser.h */,
@@ -236,12 +224,10 @@
 			isa = PBXGroup;
 			children = (
 				3A286FF01222D61D00F1BB78 /* gfx */,
-				3A3ED9841225E27E009E2908 /* ChromiumTabs-Info.plist */,
 				3A286F9E1222CDBE00F1BB78 /* BrowserWindow.xib */,
 				3A286F9F1222CDBE00F1BB78 /* TabContents.xib */,
 				3A286FA01222CDBE00F1BB78 /* TabView.xib */,
-				3A92907512295BC400DA7E43 /* Toolbar.xib */,
-				3A3EDAA71225F192009E2908 /* Localizable.strings */,
+				A250E2AE14F440A4009465E8 /* Info.plist */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -261,13 +247,9 @@
 		3A286FF01222D61D00F1BB78 /* gfx */ = {
 			isa = PBXGroup;
 			children = (
-				3A3ED35012256F06009E2908 /* throbber.png */,
-				3A286FFD1222D99B00F1BB78 /* sadfavicon.png */,
-				3A286FFA1222D94600F1BB78 /* throbber_waiting.png */,
-				3A286FF71222D85300F1BB78 /* default-icon.pdf */,
-				3A286FEA1222D61900F1BB78 /* newtab_h.pdf */,
-				3A286FEB1222D61900F1BB78 /* newtab_p.pdf */,
-				3A286FEC1222D61900F1BB78 /* newtab.pdf */,
+				A21ED5FA14F41931000C72EB /* <HoverCloseButton> TabClose.png */,
+				A21ED5FB14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png */,
+				A21ED5FC14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png */,
 			);
 			name = gfx;
 			sourceTree = "<group>";
@@ -315,6 +297,7 @@
 				A29C763D142A3B7200077B30 /* CTTabContentsViewController.h */,
 				A29C763E142A3B7200077B30 /* CTTabContentsViewController.m */,
 				A29C763F142A3B7200077B30 /* CTTabView.h */,
+				A250E2B214F440D2009465E8 /* CTTabView+Private.h */,
 				A29C7640142A3B7200077B30 /* CTTabView.m */,
 				A29C7641142A3B7200077B30 /* CTTabViewController.h */,
 				A29C7642142A3B7200077B30 /* CTTabViewController.m */,
@@ -334,8 +317,6 @@
 				A29C7658142A3B8B00077B30 /* FastResizeView.m */,
 				A29C7659142A3B8B00077B30 /* HoverCloseButton.h */,
 				A29C765A142A3B8B00077B30 /* HoverCloseButton.m */,
-				A29C765B142A3B8B00077B30 /* NewTabButton.h */,
-				A29C765C142A3B8B00077B30 /* NewTabButton.m */,
 				A29C765D142A3B8B00077B30 /* TruncatingTextFieldCell.h */,
 				A29C765E142A3B8B00077B30 /* TruncatingTextFieldCell.m */,
 			);
@@ -368,8 +349,9 @@
 				A29C7661142A3B8B00077B30 /* CTTabStripView.h in Headers */,
 				A29C7663142A3B8B00077B30 /* FastResizeView.h in Headers */,
 				A29C7665142A3B8B00077B30 /* HoverCloseButton.h in Headers */,
-				A29C7667142A3B8B00077B30 /* NewTabButton.h in Headers */,
 				A29C7669142A3B8B00077B30 /* TruncatingTextFieldCell.h in Headers */,
+				A250E2B314F440D2009465E8 /* CTTabView+Private.h in Headers */,
+				A250E2B514F440E5009465E8 /* ChromiumTabs.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,7 +403,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "chromium-tabs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -451,15 +433,10 @@
 				3A3ED9E81225E3C2009E2908 /* BrowserWindow.xib in Resources */,
 				3A3ED9E91225E3C2009E2908 /* TabContents.xib in Resources */,
 				3A3ED9EA1225E3C2009E2908 /* TabView.xib in Resources */,
-				3A3ED9EB1225E3C2009E2908 /* newtab_h.pdf in Resources */,
-				3A3ED9EC1225E3C2009E2908 /* newtab_p.pdf in Resources */,
-				3A3ED9ED1225E3C2009E2908 /* newtab.pdf in Resources */,
-				3A3ED9EE1225E3C2009E2908 /* default-icon.pdf in Resources */,
-				3A3ED9EF1225E3C2009E2908 /* throbber_waiting.png in Resources */,
-				3A3ED9F01225E3C2009E2908 /* sadfavicon.png in Resources */,
-				3A3ED9F11225E3C2009E2908 /* throbber.png in Resources */,
-				3A3EDAA91225F192009E2908 /* Localizable.strings in Resources */,
-				3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */,
+				A21ED5FD14F41931000C72EB /* <HoverCloseButton> TabClose.png in Resources */,
+				A21ED5FE14F41931000C72EB /* <HoverCloseButton> TabClosePressed.png in Resources */,
+				A21ED5FF14F41931000C72EB /* <HoverCloseButton> TabCloseRollover.png in Resources */,
+				A250E2AF14F440A4009465E8 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,7 +469,6 @@
 				A29C7662142A3B8B00077B30 /* CTTabStripView.m in Sources */,
 				A29C7664142A3B8B00077B30 /* FastResizeView.m in Sources */,
 				A29C7666142A3B8B00077B30 /* HoverCloseButton.m in Sources */,
-				A29C7668142A3B8B00077B30 /* NewTabButton.m in Sources */,
 				A29C766A142A3B8B00077B30 /* TruncatingTextFieldCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -535,14 +511,6 @@
 			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		3A3EDAA71225F192009E2908 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A3EDAA81225F192009E2908 /* English */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -562,7 +530,7 @@
 				GCC_ENABLE_PASCAL_STRINGS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = src/prefix.pch;
+				GCC_PREFIX_HEADER = "src/$(PRODUCT_NAME).pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
@@ -572,7 +540,7 @@
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = src;
-				INFOPLIST_FILE = "resources/ChromiumTabs-Info.plist";
+				INFOPLIST_FILE = resources/Info.plist;
 				INSTALL_PATH = "@rpath";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = ChromiumTabs;
@@ -598,7 +566,7 @@
 				GCC_ENABLE_SSE42_EXTENSIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = src/prefix.pch;
+				GCC_PREFIX_HEADER = "src/$(PRODUCT_NAME).pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -609,7 +577,7 @@
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = src;
-				INFOPLIST_FILE = "resources/ChromiumTabs-Info.plist";
+				INFOPLIST_FILE = resources/Info.plist;
 				INSTALL_PATH = "@rpath";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (

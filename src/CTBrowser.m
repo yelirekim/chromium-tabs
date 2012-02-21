@@ -124,7 +124,7 @@
     [tabStripModel2_ moveTabPrevious];
 }
 
--(void)selectTabAtIndex:(int)index {
+-(void)selectTabAtIndex:(NSInteger)index {
     if (index < [tabStripModel2_ count]) {
         [tabStripModel2_ selectTabContentsAtIndex:index userGesture:YES];
     }
@@ -138,7 +138,7 @@
 }
 
 
--(void)executeCommand:(int)cmd withDisposition:(CTWindowOpenDisposition)disposition {
+-(void)executeCommand:(NSInteger)cmd withDisposition:(CTWindowOpenDisposition)disposition {
     if (![tabStripModel2_ selectedTabContents]) {
         return;
     }
@@ -170,11 +170,11 @@
     }
 }
 
--(void)executeCommand:(int)cmd {
+-(void)executeCommand:(NSInteger)cmd {
     [self executeCommand:cmd withDisposition:CTWindowOpenDispositionCurrentTab];
 }
 
-+(void)executeCommand:(int)cmd {
++(void)executeCommand:(NSInteger)cmd {
     switch (cmd) {
         case CTBrowserCommandExit:      [NSApp terminate:self]; break;
     }

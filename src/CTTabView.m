@@ -5,9 +5,9 @@
 #import "NSWindow+CTThemed.h"
 #import "HoverCloseButton.h"
 
-const CGFloat kInsetMultiplier = 2.0/3.0;
-const CGFloat kControlPoint1Multiplier = 1.0/3.0;
-const CGFloat kControlPoint2Multiplier = 3.0/8.0;
+const CGFloat kTabRadius = 5.0;
+const CGFloat kBezierPointOffset = 5.0;
+const CGFloat kBezierLineOffset = 10.0;
 const NSTimeInterval kHoverShowDuration = 0.2;
 const NSTimeInterval kHoverHoldDuration = 0.02;
 const NSTimeInterval kHoverHideDuration = 0.4;
@@ -73,6 +73,9 @@ const CGFloat kRapidCloseDist = 2.5;
 @synthesize hoverAlpha = hoverAlpha_;
 @synthesize alertAlpha = alertAlpha_;
 @synthesize closing = closing_;
+@synthesize tabStyle = tabStyle_;
+@synthesize delayedTabStyle = delayedTabStyle_;
+@synthesize tag = tag_;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -107,6 +110,7 @@ const CGFloat kRapidCloseDist = 2.5;
 
 - (void)mouseEntered:(NSEvent*)theEvent {
     isMouseInside_ = YES;
+    [closeButton_ setHidden:NO];
     [self resetLastGlowUpdateTime];
     [self adjustGlowValue];
 }
@@ -118,6 +122,7 @@ const CGFloat kRapidCloseDist = 2.5;
 
 - (void)mouseExited:(NSEvent*)theEvent {
     isMouseInside_ = NO;
+    [closeButton_ setHidden:YES];
     hoverHoldEndTime_ = [NSDate timeIntervalSinceReferenceDate] + kHoverHoldDuration;
     [self resetLastGlowUpdateTime];
     [self adjustGlowValue];
@@ -203,6 +208,40 @@ const CGFloat kRapidCloseDist = 2.5;
     chromeIsVisible_ = shouldBeVisible;
 }
 
+- (void) initializeMouseDownAtPoint:(NSPoint)downPoint
+{
+    if ([[tabController_ target] respondsToSelector:@selector(selectTab:)]) {
+        [[tabController_ target] performSelector:@selector(selectTab:) withObject:self];
+    }
+    
+    [self resetDragControllers];
+    
+    sourceWindow_ = [self window];
+    if ([sourceWindow_ isKindOfClass:[NSPanel class]]) {
+        sourceWindow_ = [sourceWindow_ parentWindow];
+    }
+    
+    sourceWindowFrame_ = [sourceWindow_ frame];
+    sourceTabFrame_ = [self frame];
+    sourceController_ = [sourceWindow_ windowController];
+    tabWasDragged_ = NO;
+    tearTime_ = 0.0;
+    draggingWithinTabStrip_ = YES;
+    chromeIsVisible_ = NO;
+    
+    NSArray* targets = [self dropTargetsForController:sourceController_];
+    moveWindowOnDrag_ = ([sourceController_ numberOfTabs] < 2 && ![targets count]) || ![self canBeDragged] || ![sourceController_ tabDraggingAllowed];
+    if (!moveWindowOnDrag_) {
+        draggingWithinTabStrip_ = [sourceController_ numberOfTabs] > 1;
+    }
+    
+    if (!draggingWithinTabStrip_) {
+        [sourceController_ willStartTearingTab];
+    }
+    
+    dragOrigin_ = downPoint;
+}
+
 - (void)mouseDown:(NSEvent*)theEvent {
     if ([self isClosing]) {
         return;
@@ -219,37 +258,7 @@ const CGFloat kRapidCloseDist = 2.5;
         }
     }
     
-    if ([[tabController_ target] respondsToSelector:[tabController_ action]]) {
-        [[tabController_ target] performSelector:[tabController_ action] withObject:self];
-    }
-    
-    [self resetDragControllers];
-    
-    sourceWindow_ = [self window];
-    if ([sourceWindow_ isKindOfClass:[NSPanel class]]) {
-        sourceWindow_ = [sourceWindow_ parentWindow];
-    }
-    
-    sourceWindowFrame_ = [sourceWindow_ frame];
-    sourceTabFrame_ = [self frame];
-    sourceController_ = [sourceWindow_ windowController];
-    sourceController_.didShowNewTabButtonBeforeTemporalAction = sourceController_.showsNewTabButton;
-    tabWasDragged_ = NO;
-    tearTime_ = 0.0;
-    draggingWithinTabStrip_ = YES;
-    chromeIsVisible_ = NO;
-    
-    NSArray* targets = [self dropTargetsForController:sourceController_];
-    moveWindowOnDrag_ = ([sourceController_ numberOfTabs] < 2 && ![targets count]) || ![self canBeDragged] || ![sourceController_ tabDraggingAllowed];
-    if (!moveWindowOnDrag_) {
-        draggingWithinTabStrip_ = [sourceController_ numberOfTabs] > 1;
-    }
-    
-    if (!draggingWithinTabStrip_) {
-        [sourceController_ willStartTearingTab];
-    }
-    
-    dragOrigin_ = [NSEvent mouseLocation];
+    [self initializeMouseDownAtPoint:[NSEvent mouseLocation]];
     
     CTTabViewController* controller = tabController_;
     while (1) {
@@ -275,10 +284,11 @@ const CGFloat kRapidCloseDist = 2.5;
     }
 }
 
-- (void)mouseDragged:(NSEvent*)theEvent {
+- (void) mouseDraggedAtPoint:(NSPoint)dragPoint
+{
     if (moveWindowOnDrag_) {
         if ([sourceController_ windowMovementAllowed]) {
-            NSPoint thisPoint = [NSEvent mouseLocation];
+            NSPoint thisPoint = dragPoint;
             NSPoint origin = sourceWindowFrame_.origin;
             origin.x += (thisPoint.x - dragOrigin_.x);
             origin.y += (thisPoint.y - dragOrigin_.y);
@@ -290,7 +300,7 @@ const CGFloat kRapidCloseDist = 2.5;
     tabWasDragged_ = YES;
     
     if (draggingWithinTabStrip_) {
-        NSPoint thisPoint = [NSEvent mouseLocation];
+        NSPoint thisPoint = dragPoint;
         CGFloat stretchiness = thisPoint.y - dragOrigin_.y;
         stretchiness = copysign(sqrtf(fabs(stretchiness))/sqrtf(kTearDistance), stretchiness) / 2.0;
         CGFloat offset = thisPoint.x - dragOrigin_.x;
@@ -311,7 +321,7 @@ const CGFloat kRapidCloseDist = 2.5;
     
     NSDate* targetDwellDate = nil;
     
-    NSPoint thisPoint = [NSEvent mouseLocation];
+    NSPoint thisPoint = dragPoint;
     NSArray* targets = [self dropTargetsForController:draggedController_];
     CTBrowserWindowController* newTarget = nil;
     for (CTBrowserWindowController* target in targets) {
@@ -354,9 +364,6 @@ const CGFloat kRapidCloseDist = 2.5;
         [dragWindow_ makeMainWindow];
         [draggedController_ showOverlay];
         dragOverlay_ = [draggedController_ overlayWindow];
-        draggedController_.didShowNewTabButtonBeforeTemporalAction =
-        draggedController_.showsNewTabButton;
-        draggedController_.showsNewTabButton = NO;
         tearTime_ = [NSDate timeIntervalSinceReferenceDate];
         tearOrigin_ = sourceWindowFrame_.origin;
     }
@@ -365,21 +372,9 @@ const CGFloat kRapidCloseDist = 2.5;
         return;
     }
     
-    NSTimeInterval tearProgress = [NSDate timeIntervalSinceReferenceDate] - tearTime_;
-    tearProgress /= kTearDuration;
-    tearProgress = sqrtf(MAX(MIN(tearProgress, 1.0), 0.0));
-    
     NSPoint origin = sourceWindowFrame_.origin;
     origin.x += (thisPoint.x - dragOrigin_.x);
     origin.y += (thisPoint.y - dragOrigin_.y);
-    
-    if (tearProgress < 1) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        [self performSelector:@selector(mouseDragged:) withObject:theEvent afterDelay:1.0f/30.0f];
-        
-        origin.x = (1 - tearProgress) * tearOrigin_.x + tearProgress * origin.x;
-        origin.y = (1 - tearProgress) * tearOrigin_.y + tearProgress * origin.y;
-    }
     
     if (targetController_) {
         NSRect targetFrame = [[targetController_ window] frame];
@@ -410,6 +405,10 @@ const CGFloat kRapidCloseDist = 2.5;
     [self setWindowBackgroundVisibility:chromeShouldBeVisible];
 }
 
+- (void)mouseDragged:(NSEvent*)theEvent {
+    [self mouseDraggedAtPoint:[NSEvent mouseLocation]];
+}
+
 - (void)mouseUp:(NSEvent*)theEvent {
     if (moveWindowOnDrag_) {
         return;
@@ -420,8 +419,6 @@ const CGFloat kRapidCloseDist = 2.5;
     if (!sourceController_) {
         return;
     }
-    
-    draggedController_.showsNewTabButton = draggedController_.didShowNewTabButtonBeforeTemporalAction;
     
     if (draggingWithinTabStrip_) {
         if (tabWasDragged_) {
@@ -599,6 +596,11 @@ const CGFloat kRapidCloseDist = 2.5;
     }
 }
 
+- (void)setTag:(NSInteger)tag
+{
+    tag_ = tag;
+}
+
 - (BOOL)accessibilityIsIgnored {
     return NO;
 }
@@ -744,33 +746,52 @@ const CGFloat kRapidCloseDist = 2.5;
     
     NSPoint bottomLeft = NSMakePoint(NSMinX(rect), NSMinY(rect) + 2);
     NSPoint bottomRight = NSMakePoint(NSMaxX(rect), NSMinY(rect) + 2);
-    NSPoint topRight =
-    NSMakePoint(NSMaxX(rect) - kInsetMultiplier * NSHeight(rect),
-                NSMaxY(rect));
-    NSPoint topLeft =
-    NSMakePoint(NSMinX(rect)  + kInsetMultiplier * NSHeight(rect),
-                NSMaxY(rect));
+    NSPoint topRight = NSMakePoint(NSMaxX(rect), NSMaxY(rect));
+    NSPoint topLeft = NSMakePoint(NSMinX(rect), NSMaxY(rect));
     
-    CGFloat baseControlPointOutset = NSHeight(rect) * kControlPoint1Multiplier;
-    CGFloat bottomControlPointInset = NSHeight(rect) * kControlPoint2Multiplier;
+    CGPoint A = NSMakePoint(bottomLeft.x + kBezierPointOffset, bottomLeft.y);
+    CGPoint B = NSMakePoint(bottomLeft.x + kBezierPointOffset, bottomLeft.y + kBezierPointOffset);
     
-    NSBezierPath* path = [NSBezierPath bezierPath];
-    [path moveToPoint:NSMakePoint(bottomLeft.x - 1, bottomLeft.y - 2)];
-    [path lineToPoint:NSMakePoint(bottomLeft.x - 1, bottomLeft.y)];
-    [path lineToPoint:bottomLeft];
-    [path curveToPoint:topLeft
-         controlPoint1:NSMakePoint(bottomLeft.x + baseControlPointOutset,
-                                   bottomLeft.y)
-         controlPoint2:NSMakePoint(topLeft.x - bottomControlPointInset,
-                                   topLeft.y)];
-    [path lineToPoint:topRight];
-    [path curveToPoint:bottomRight
-         controlPoint1:NSMakePoint(topRight.x + bottomControlPointInset,
-                                   topRight.y)
-         controlPoint2:NSMakePoint(bottomRight.x - baseControlPointOutset,
-                                   bottomRight.y)];
-    [path lineToPoint:NSMakePoint(bottomRight.x + 1, bottomRight.y)];
-    [path lineToPoint:NSMakePoint(bottomRight.x + 1, bottomRight.y - 2)];
+    CGPoint leftLine = NSMakePoint(topLeft.x + kBezierPointOffset, topLeft.y - kBezierPointOffset);
+    CGPoint C = NSMakePoint(topLeft.x + kBezierPointOffset, topLeft.y);
+    CGPoint D = NSMakePoint(topLeft.x + kBezierLineOffset, topLeft.y);
+    
+    CGPoint topLine = NSMakePoint(topRight.x - kBezierLineOffset, topRight.y);
+    CGPoint E = NSMakePoint(topRight.x - kBezierPointOffset, topRight.y);
+    CGPoint F = NSMakePoint(topRight.x - kBezierPointOffset, topRight.y - kBezierLineOffset);
+    
+    CGPoint rightLine = NSMakePoint(bottomRight.x - kBezierPointOffset, bottomRight.y + kBezierLineOffset);
+    CGPoint G = NSMakePoint(bottomRight.x - kBezierPointOffset, bottomRight.y);
+    CGPoint H = NSMakePoint(bottomRight.x, bottomRight.y);
+    
+    NSBezierPath* path = [NSBezierPath bezierPath]; 
+    
+    if (0 != (tabStyle_ & kTabStyleShowLeft)) {
+        [path moveToPoint:NSMakePoint(bottomLeft.x - 1, bottomLeft.y - 2)];
+        [path lineToPoint:NSMakePoint(bottomLeft.x - 1, bottomLeft.y)];
+        [path lineToPoint:bottomLeft];
+        [path appendBezierPathWithArcFromPoint:A toPoint:B radius:kTabRadius];
+        
+        [path lineToPoint:leftLine];
+        [path appendBezierPathWithArcFromPoint:C toPoint:D radius:kTabRadius];
+    } else {
+        [path moveToPoint:bottomLeft];
+        [path lineToPoint:topLeft];
+    }
+    
+    if (0 != (tabStyle_ & kTabStyleShowRight)) {
+        [path lineToPoint:topLine];
+        [path appendBezierPathWithArcFromPoint:E toPoint:F radius:kTabRadius];
+        
+        [path lineToPoint:rightLine];
+        [path appendBezierPathWithArcFromPoint:G toPoint:H radius:kTabRadius];
+        [path lineToPoint:NSMakePoint(bottomRight.x + 1, bottomRight.y)];
+        [path lineToPoint:NSMakePoint(bottomRight.x + 1, bottomRight.y - 2)];
+    } else {
+        [path lineToPoint:topRight];
+        [path lineToPoint:bottomRight];
+    }
+    
     return path;
 }
 

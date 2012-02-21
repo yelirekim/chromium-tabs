@@ -1,5 +1,5 @@
 
-const NSInteger CTWindowButtonsWithTabStripOffsetFromTop = 4;
+const NSInteger CTWindowButtonsWithTabStripOffsetFromTop = 10;
 const NSInteger CTWindowButtonsWithoutTabStripOffsetFromTop = 4;
 const NSInteger CTWindowButtonsOffsetFromLeft = 8;
 const NSInteger CTWindowButtonsInterButtonSpacing = 7;

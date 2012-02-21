@@ -159,7 +159,7 @@ NSString* const CTTabContentsDidCloseNotification =
 
 -(void)tabWillResignTeared {}
 -(void)tabDidResignTeared {
-    [[view_ window] makeFirstResponder:view_];
+    [self becomeFirstResponder];
 }
 
 -(void)viewFrameDidChange:(NSRect)newFrame {

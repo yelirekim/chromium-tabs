@@ -40,7 +40,7 @@ const int kNoTab = -1;
 - (void) changeSelectedContentsFrom:(CTTabContents*)old_contents toIndex:(NSInteger)toIndex userGesture:(BOOL)userGesture;
 - (NSInteger) constrainInsertionIndex:(NSInteger)index;
 - (void) _moveTabContentsFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex selectAfterMove:(BOOL)selectedAfterMove;
-- (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options;
+- (BOOL) _closeTabsatIndices:(NSArray*)indices options:(NSInteger)options;
 - (void) _closeTabAtIndex:(NSInteger)index contents:(CTTabContents*)contents history:(BOOL)createHistory;
 - (CTTabContents*) _contentsAtIndex:(NSInteger)index;
 
@@ -120,7 +120,7 @@ const int kNoTab = -1;
 - (BOOL) closeTabContentsAtIndex:(NSInteger)index options:(NSInteger)options
 {
     NSMutableArray* closing_tabs = [NSMutableArray array];
-    [closing_tabs addObject:[NSNumber numberWithInt:index]];
+    [closing_tabs addObject:[NSNumber numberWithInteger:index]];
     return [self _closeTabsatIndices:closing_tabs options:options];
 }
 
@@ -153,7 +153,7 @@ const int kNoTab = -1;
     
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               contents, kCTTabContentsUserInfoKey,
-                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:index], kCTTabIndexUserInfoKey,
                               [NSNumber numberWithBool:foreground], kCTTabForegroundUserInfoKey, 
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabInsertedNotification object:self userInfo:userInfo];
@@ -168,7 +168,7 @@ const int kNoTab = -1;
     assert([self containsIndex:index]);
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               [self tabContentsAtIndex:index], kCTTabContentsUserInfoKey,
-                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:index], kCTTabIndexUserInfoKey,
                               [NSNumber numberWithInt:changeType], kCTTabOptionsUserInfoKey, 
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabChangedNotification object:self userInfo:userInfo];
@@ -184,7 +184,7 @@ const int kNoTab = -1;
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               old_contents, kCTTabContentsUserInfoKey,
                               contents, kCTTabNewContentsUserInfoKey,
-                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:index], kCTTabIndexUserInfoKey,
                               [NSNumber numberWithInt:replaceType], kCTTabOptionsUserInfoKey, 
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabReplacedNotification object:self userInfo:userInfo];
@@ -194,8 +194,8 @@ const int kNoTab = -1;
 - (void) closeAllTabs
 {
     NSMutableArray* closing_tabs = [NSMutableArray array];
-    for (int i = self.count - 1; i >= 0; --i) {
-        [closing_tabs addObject:[NSNumber numberWithInt:i]];
+    for (NSInteger i = self.count - 1; i >= 0; --i) {
+        [closing_tabs addObject:[NSNumber numberWithInteger:i]];
     }
     [self _closeTabsatIndices:closing_tabs options:CLOSE_CREATE_HISTORICAL_TAB];
 }
@@ -227,13 +227,13 @@ const int kNoTab = -1;
 
 - (void) moveTabNext
 {
-    int new_index = MIN(self.selectedIndex + 1, self.count - 1);
+    NSInteger new_index = MIN(self.selectedIndex + 1, self.count - 1);
     [self moveTabContentsFromIndex:self.selectedIndex toIndex:new_index selectAfterMove:YES];
 }
 
 - (void) moveTabPrevious
 {
-    int new_index = MAX(self.selectedIndex - 1, 0);
+    NSInteger new_index = MAX(self.selectedIndex - 1, 0);
     [self moveTabContentsFromIndex:self.selectedIndex toIndex:new_index selectAfterMove:YES];
 }
 
@@ -244,7 +244,7 @@ const int kNoTab = -1;
 
 - (void) appendTabContents:(CTTabContents*)contents foreground:(BOOL)foreground
 {
-    int index = [self determineInsertionIndexForAppending];
+    NSInteger index = [self determineInsertionIndexForAppending];
     [self insertTabContents:contents atIndex:index options:foreground ? (ADD_INHERIT_GROUP | ADD_SELECTED) : ADD_NONE];
 }
 
@@ -256,7 +256,7 @@ const int kNoTab = -1;
     assert([self containsIndex:index]);
     
     CTTabContents* removed_contents = [self tabContentsAtIndex:index];
-    int next_selected_index = [self determineNewSelectedIndexByRemovingIndex:index isRemove:YES];
+    NSInteger next_selected_index = [self determineNewSelectedIndexByRemovingIndex:index isRemove:YES];
     [contents_data_ removeObjectAtIndex:index];
     next_selected_index = [self indexOfNextNonPhantomTabFromIndex:next_selected_index ignoreIndex:-1];
     if (![self count]) {
@@ -264,7 +264,7 @@ const int kNoTab = -1;
     }
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               removed_contents, kCTTabContentsUserInfoKey,
-                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:index], kCTTabIndexUserInfoKey,
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabDetachedNotification object:self userInfo:userInfo];
     if (![self count]) {
@@ -299,7 +299,7 @@ const int kNoTab = -1;
     }
     
     index = MIN(self.count - 1, MAX(0, index));
-    int start = index;
+    NSInteger start = index;
     do {
         if (index != ignoreIndex) {
             return index;
@@ -322,7 +322,7 @@ const int kNoTab = -1;
     self.selectedIndex = toIndex;
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               new_contents, kCTTabNewContentsUserInfoKey,
-                              [NSNumber numberWithInt:self.selectedIndex], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:self.selectedIndex], kCTTabIndexUserInfoKey,
                               [NSNumber numberWithBool:userGesture], kCTTabUserGestureUserInfoKey,
                               old_contents, kCTTabContentsUserInfoKey,
                               nil];
@@ -340,7 +340,7 @@ const int kNoTab = -1;
     [contents_data_ removeObjectAtIndex:fromIndex];
     [contents_data_ insertObject:moved_data atIndex:toIndex];
 
-    int selectedIndex = self.selectedIndex;
+    NSInteger selectedIndex = self.selectedIndex;
     if (selectedAfterMove || fromIndex == selectedIndex) {
         self.selectedIndex = toIndex;
     } else if (fromIndex < selectedIndex && toIndex >= selectedIndex) {
@@ -351,8 +351,8 @@ const int kNoTab = -1;
 
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               moved_data->contents, kCTTabNewContentsUserInfoKey,
-                              [NSNumber numberWithInt:fromIndex], kCTTabIndexUserInfoKey,
-                              [NSNumber numberWithInt:toIndex], kCTTabToIndexUserInfoKey,
+                              [NSNumber numberWithInteger:fromIndex], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:toIndex], kCTTabToIndexUserInfoKey,
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabMovedNotification object:self userInfo:userInfo];
 }
@@ -362,7 +362,7 @@ const int kNoTab = -1;
     if (contents_data_.count == 0)
         return;
     
-    int index = self.selectedIndex;
+    NSInteger index = self.selectedIndex;
     int delta = next ? 1 : -1;
     do {
         index = (index + self.count + delta) % self.count;
@@ -370,7 +370,7 @@ const int kNoTab = -1;
     [self selectTabContentsAtIndex:index userGesture:YES];
 }
 
-- (BOOL) _closeTabsatIndices:(NSArray*)indices options:(uint32)options
+- (BOOL) _closeTabsatIndices:(NSArray*)indices options:(NSInteger)options
 {
     bool retval = true;
     
@@ -403,7 +403,7 @@ const int kNoTab = -1;
 {
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               contents, kCTTabContentsUserInfoKey,
-                              [NSNumber numberWithInt:index], kCTTabIndexUserInfoKey,
+                              [NSNumber numberWithInteger:index], kCTTabIndexUserInfoKey,
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kCTTabClosingNotification object:self userInfo:userInfo];
     
@@ -425,7 +425,7 @@ const int kNoTab = -1;
 
 - (NSInteger) determineInsertionIndexForContents:(CTTabContents*)contents foreground:(BOOL)foreground
 {
-    int tab_count = [self count];
+    NSInteger tab_count = [self count];
     if (!tab_count) {
         return 0;
     }
@@ -440,17 +440,17 @@ const int kNoTab = -1;
 
 - (NSInteger) determineNewSelectedIndexByRemovingIndex:(NSInteger)removing_index isRemove:(BOOL)is_remove
 {
-    int tab_count = [self count];
+    NSInteger tab_count = [self count];
     assert(removing_index >= 0 && removing_index < tab_count);
     
     CTTabContents* parentOpener = [[self tabContentsAtIndex:removing_index] parentOpener];
     if (parentOpener) {
-        int index = [self indexOfTabContents:parentOpener];
+        NSInteger index = [self indexOfTabContents:parentOpener];
         if (index != kNoTab)
             return [self validIndexForIndex:index removingIndex:removing_index isRemove:is_remove];
     }
     
-    int selected_index = [self selectedIndex];
+    NSInteger selected_index = [self selectedIndex];
     if (is_remove && selected_index >= (tab_count - 1))
         return selected_index - 1;
     return selected_index;

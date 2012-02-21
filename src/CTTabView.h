@@ -9,6 +9,12 @@ typedef enum {
   kAlertFalling
 } AlertState;
 
+typedef enum {
+    kTabStyleShowLeft       = 0x01,
+    kTabStyleShowRight      = 0x02,
+    kTabStyleShowBoth       = 0x03,
+} TabStyle;
+
 @class CTTabViewController;
 @class CTTabWindowController;
 
@@ -18,6 +24,9 @@ typedef enum {
 @property(assign, nonatomic) CGFloat hoverAlpha;
 @property(assign, nonatomic) CGFloat alertAlpha;
 @property(assign, nonatomic, getter=isClosing) BOOL closing;
+@property(assign, nonatomic) TabStyle tabStyle;
+@property(assign, nonatomic) TabStyle delayedTabStyle;
+@property(assign, nonatomic) NSInteger tag;
 
 - (void)setTrackingEnabled:(BOOL)enabled;
 - (void)startAlert;

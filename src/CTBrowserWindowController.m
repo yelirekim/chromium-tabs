@@ -52,7 +52,6 @@
 }
 
 @synthesize tabContentArea = tabContentArea_;
-@synthesize didShowNewTabButtonBeforeTemporalAction = didShowNewTabButtonBeforeTemporalAction_;
 @synthesize tabStripController = tabStripController_;
 @synthesize browser = browser_;
 
@@ -373,7 +372,7 @@
         assert(isBrowser);
         if (!isBrowser) return;
         CTBrowserWindowController* dragBWC = (CTBrowserWindowController*)dragController;
-        int index = [dragBWC->tabStripController_ modelIndexForTabView:view];
+        NSInteger index = [dragBWC->tabStripController_ modelIndexForTabView:view];
         CTTabContents* contents =
         [dragBWC->browser_.tabStripModel2 tabContentsAtIndex:index];
         if (!contents) {
@@ -391,7 +390,7 @@
         [dragController detachTabView:view];
         [tabStripController_ dropTabContents:contents withFrame:destinationFrame];
     } else {
-        int index = [tabStripController_ modelIndexForTabView:view];
+        NSInteger index = [tabStripController_ modelIndexForTabView:view];
         [tabStripController_ moveTabFromIndex:index];
     }
     
@@ -411,7 +410,7 @@
     @try {
         CTTabStripModel *tabStripModel2 = [browser_ tabStripModel2];
         
-        int index = [tabStripController_ modelIndexForTabView:tabView];
+        NSInteger index = [tabStripController_ modelIndexForTabView:tabView];
         CTTabContents* contents = [tabStripModel2 tabContentsAtIndex:index];
         
         NSWindow* sourceWindow = [tabView window];
@@ -439,14 +438,10 @@
 }
 
 - (void)insertPlaceholderForTab:(CTTabView*)tab frame:(NSRect)frame yStretchiness:(CGFloat)yStretchiness {
-    self.showsNewTabButton = NO;
     [tabStripController_ insertPlaceholderForTab:tab frame:frame yStretchiness:yStretchiness];
 }
 
 - (void)removePlaceholder {
-    if (didShowNewTabButtonBeforeTemporalAction_) {
-        self.showsNewTabButton = YES;
-    }
     [tabStripController_ insertPlaceholderForTab:nil frame:NSZeroRect yStretchiness:0];
 }
 
@@ -458,16 +453,8 @@
 	return [tabStripController_ isTabFullyVisible:tab];
 }
 
-- (void)setShowsNewTabButton:(BOOL)show {
-    tabStripController_.showsNewTabButton = show;
-}
-
-- (BOOL)showsNewTabButton {
-    return tabStripController_.showsNewTabButton;
-}
-
 - (void)detachTabView:(NSView*)view {
-    int index = [tabStripController_ modelIndexForTabView:view];
+    NSInteger index = [tabStripController_ modelIndexForTabView:view];
     [browser_.tabStripModel2 detachTabContentsAtIndex:index];
 }
 
@@ -479,7 +466,7 @@
     return [browser_.tabStripModel2 count];
 }
 
-- (int)selectedTabIndex {
+- (NSInteger)selectedTabIndex {
     return [browser_.tabStripModel2 selectedIndex];
 }
 

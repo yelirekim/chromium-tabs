@@ -1,7 +1,6 @@
 #import "CTTabStripController.h"
 #import "CTTabContents.h"
 #import "CTBrowser.h"
-#import "NewTabButton.h"
 #import "CTTabStripView.h"
 #import "CTTabContentsViewController.h"
 #import "CTTabViewController.h"
@@ -13,12 +12,8 @@
 
 NSString* const kTabStripNumberOfTabsChanged = @"kTabStripNumberOfTabsChanged";
 
-static NSImage* kNewTabHoverImage = nil;
-static NSImage* kNewTabImage = nil;
-static NSImage* kNewTabPressedImage = nil;
-static NSImage* kDefaultIconImage = nil;
 const CGFloat kUseFullAvailableWidth = -1.0;
-const CGFloat kTabOverlap = 20.0;
+const CGFloat kTabOverlap = 10.0;
 const CGFloat kIconWidthAndHeight = 16.0;
 const CGFloat kNewTabButtonOffset = 8.0;
 const CGFloat kIncognitoBadgeTabStripShrink = 18;
@@ -26,7 +21,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 @interface CTTabStripController (Private)
 - (void)addSubviewToPermanentList:(NSView*)aView;
-- (void)regenerateSubviewList;
+- (void)regenerateSubviewListWithOrderedArray:(NSArray*)orderedSubviews delayed:(NSArray*)delayedIndices;
 - (NSInteger)indexForContentsView:(NSView*)view;
 - (void)updateFavIconForContents:(CTTabContents*)contents atIndex:(NSInteger)modelIndex;
 - (void)layoutTabsWithAnimation:(BOOL)animate regenerateSubviews:(BOOL)doUpdate;
@@ -125,7 +120,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     CTTabStripView* tabStripView_;
     NSView* switchView_;
     NSView* dragBlockingView_;
-    NewTabButton* newTabButton_;
     NSTrackingArea* newTabTrackingArea_;
     CTBrowser *browser_;
     CTTabStripModel* tabStripModel2_;
@@ -148,6 +142,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     NSImage* defaultFavIcon_;
     CGFloat indentForControls_;
     BOOL mouseInside_;
+    BOOL isDetachingTab_;
     
     id ob1;
     id ob2;
@@ -157,14 +152,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
 }
 
 @synthesize indentForControls = indentForControls_;
-
-+ (void)initialize {
-    NSBundle* bundle = [NSBundle bundleForClass:self];
-    kNewTabHoverImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"newtab_h" ofType:@"pdf"]];
-    kNewTabImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"newtab" ofType:@"pdf"]];
-    kNewTabPressedImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"newtab_p" ofType:@"pdf"]];
-    kDefaultIconImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"default-icon" ofType:@"pdf"]];
-}
 
 - (id)initWithView:(CTTabStripView*)view switchView:(NSView*)switchView browser:(CTBrowser*)browser {
     assert(view && switchView && browser);
@@ -179,25 +166,10 @@ const NSTimeInterval kAnimationDuration = 0.125;
         
         permanentSubviews_ = [[NSMutableArray alloc] init];
         
-        defaultFavIcon_ = kDefaultIconImage;
+        defaultFavIcon_ = nil;
         
         [self setIndentForControls:[[self class] defaultIndentForControls]];
         
-        newTabButton_ = [view addTabButton];
-        [self addSubviewToPermanentList:newTabButton_];
-        [newTabButton_ setTarget:nil];
-        [newTabButton_ setAction:@selector(commandDispatch:)];
-        [newTabButton_ setTag:CTBrowserCommandNewTab];
-        [newTabButton_ setImage:kNewTabImage];
-        [newTabButton_ setAlternateImage:kNewTabPressedImage];
-        newTabButtonShowingHoverImage_ = NO;
-        newTabTrackingArea_ = 
-        [[NSTrackingArea alloc] initWithRect:[newTabButton_ bounds]
-                                     options:(NSTrackingMouseEnteredAndExited |
-                                              NSTrackingActiveAlways)
-                                       owner:self
-                                    userInfo:nil];
-        [newTabButton_ addTrackingArea:newTabTrackingArea_];
         targetFrames_ = [[NSMutableDictionary alloc] init];
         
         dragBlockingView_ = 
@@ -209,8 +181,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
         availableResizeWidth_ = kUseFullAvailableWidth;
         
         closingControllers_ = [[NSMutableSet alloc] init];
-        
-        [self regenerateSubviewList];
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -235,10 +205,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
             mouseInside_ = YES;
         }
         
-        [[newTabButton_ cell]
-         accessibilitySetOverrideValue:@"New tab"
-         forAttribute:NSAccessibilityDescriptionAttribute];
-        
         ob1 = [[NSNotificationCenter defaultCenter] addObserverForName:kCTTabInsertedNotification object:tabStripModel2_ queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification* notification) {
             NSDictionary* userInfo = notification.userInfo;
             CTTabContents* contents = [userInfo objectForKey:kCTTabContentsUserInfoKey];
@@ -255,7 +221,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
             
             CTTabViewController* newController = [self newTab];
             [tabArray_ insertObject:newController atIndex:index];
-            NSView* newView = [newController view];
+            CTTabView* newView = (CTTabView*)[newController view];
+            newView.tabStyle = kTabStyleShowBoth;
             
             [newView setFrame:NSOffsetRect([newView frame],
                                            0, -[[self class] defaultTabHeight])];
@@ -284,7 +251,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             NSInteger index = [self indexFromModelIndex:modelIndex];
             
             if (oldContents) {
-                int oldModelIndex = [tabStripModel2_ indexOfTabContents:oldContents];
+                NSInteger oldModelIndex = [tabStripModel2_ indexOfTabContents:oldContents];
                 if (oldModelIndex != -1) {  // When closing a tab, the old tab may be gone.
                     NSInteger oldIndex = [self indexFromModelIndex:oldModelIndex];
                     CTTabContentsViewController* oldController = [tabContentsArray_ objectAtIndex:oldIndex];
@@ -363,7 +330,9 @@ const NSTimeInterval kAnimationDuration = 0.125;
             CTTabViewController* tab = [tabArray_ objectAtIndex:index];
             if ([tabStripModel2_ count] > 0) {
                 [self startClosingTabWithAnimation:tab];
+                isDetachingTab_ = YES;
                 [self layoutTabs];
+                isDetachingTab_ = NO;
             } else {
                 [self removeTab:tab];
             }
@@ -378,7 +347,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     if (trackingArea_)
         [tabStripView_ removeTrackingArea:trackingArea_];
     
-    [newTabButton_ removeTrackingArea:newTabTrackingArea_];
     for (CTTabViewController* controller in closingControllers_) {
         NSView* view = [controller view];
         [[[view animationForKey:@"frameOrigin"] delegate] invalidate];
@@ -397,7 +365,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 }
 
 + (CGFloat)defaultIndentForControls {
-    return 64.0;
+    return 68.0;
 }
 
 - (void)swapInTabAtIndex:(NSInteger)modelIndex {
@@ -439,7 +407,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     
     NSInteger i = 0;
     for (CTTabViewController* controller in tabArray_) {
-        if ([closingControllers_ containsObject:controller]) {
+        if ([closingControllers_ containsObject:controller] && i == index) {
             assert([(CTTabView*)[controller view] isClosing]);
             ++index;
         }
@@ -488,7 +456,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 - (void)selectTab:(id)sender {
     assert([sender isKindOfClass:[NSView class]]);
-    int index = [self modelIndexForTabView:sender];
+    NSInteger index = [self modelIndexForTabView:sender];
     if ([tabStripModel2_ containsIndex:index]) {
         [tabStripModel2_ selectTabContentsAtIndex:index userGesture:YES];
     }
@@ -526,26 +494,13 @@ const NSTimeInterval kAnimationDuration = 0.125;
     placeholderTab_ = tab;
     placeholderFrame_ = frame;
     placeholderStretchiness_ = yStretchiness;
-    [self layoutTabsWithAnimation:initialLayoutComplete_ regenerateSubviews:NO];
+    [self layoutTabsWithAnimation:initialLayoutComplete_ regenerateSubviews:YES];
 }
 
 - (BOOL)isTabFullyVisible:(CTTabView*)tab {
     NSRect frame = [tab frame];
     return NSMinX(frame) >= [self indentForControls] &&
     NSMaxX(frame) <= NSMaxX([tabStripView_ frame]);
-}
-
-
-- (void)setShowsNewTabButton:(BOOL)show {
-    if (!!forceNewTabButtonHidden_ == !!show) {
-        forceNewTabButtonHidden_ = !show;
-        [newTabButton_ setHidden:forceNewTabButtonHidden_];
-    }
-}
-
-
-- (BOOL)showsNewTabButton {
-    return !forceNewTabButtonHidden_ && newTabButton_;
 }
 
 - (void)layoutTabsWithAnimation:(BOOL)animate
@@ -564,9 +519,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
         [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     }
     
-    if (doUpdate)
-        [self regenerateSubviewList];
-    
     CGFloat availableSpace = 0;
     if (verticalLayout_) {
         availableSpace = NSHeight([tabStripView_ bounds]);
@@ -574,12 +526,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
         if ([self inRapidClosureMode]) {
             availableSpace = availableResizeWidth_;
         } else {
-            availableSpace = NSWidth([tabStripView_ frame]);
-            if (forceNewTabButtonHidden_) {
-                availableSpace -= 5.0; // margin
-            } else {
-                availableSpace -= NSWidth([newTabButton_ frame]) + kNewTabButtonOffset;
-            }
+            availableSpace = NSWidth([tabStripView_ frame]) - 5.0;
         }
         availableSpace -= [self indentForControls];
     }
@@ -597,14 +544,19 @@ const NSTimeInterval kAnimationDuration = 0.125;
     BOOL visible = [[tabStripView_ window] isVisible];
     
     CGFloat offset = [self indentForControls];
-    NSUInteger i = 0;
+    NSInteger i = 0;
     bool hasPlaceholderGap = false;
+    NSInteger placeHolderIndex = -1;
+    BOOL hasPlaceHolder = NO;
+    NSMutableArray* viewsInOrder = [NSMutableArray arrayWithCapacity:tabArray_.count];
+    NSMutableArray* delayedStyleUpdated = [NSMutableArray array];
     for (CTTabViewController* tab in tabArray_) {
         if ([closingControllers_ containsObject:tab])
             continue;
         
-        BOOL isPlaceholder = [[tab view] isEqual:placeholderTab_];
-        NSRect tabFrame = [[tab view] frame];
+        CTTabView* tabView = (CTTabView*) tab.view;
+        BOOL isPlaceholder = [tabView isEqual:placeholderTab_];
+        NSRect tabFrame = [tabView frame];
         tabFrame.size.height = [[self class] defaultTabHeight] + 1;
         if (verticalLayout_) {
             tabFrame.origin.y = availableSpace - tabFrame.size.height - offset;
@@ -613,12 +565,17 @@ const NSTimeInterval kAnimationDuration = 0.125;
             tabFrame.origin.y = 0;
             tabFrame.origin.x = offset;
         }
-        BOOL newTab = [[tab view] isHidden];
+        BOOL newTab = [tabView isHidden];
         if (newTab) {
-            [[tab view] setHidden:NO];
+            [tabView setHidden:NO];
         }
         
+        CAAnimation* frameAnimation = [tabView animationForKey:@"frameOrigin"];
+        frameAnimation.delegate = self;
+        [tabView setAnimations:[NSDictionary dictionaryWithObject:frameAnimation forKey:@"frameOrigin"]];
+        
         if (isPlaceholder) {
+            hasPlaceHolder = YES;
             if (animate) {
                 [NSAnimationContext beginGrouping];
                 [[NSAnimationContext currentContext] setDuration:0];
@@ -627,10 +584,10 @@ const NSTimeInterval kAnimationDuration = 0.125;
                 tabFrame.origin.y = availableSpace - tabFrame.size.height - offset;
             else
                 tabFrame.origin.x = placeholderFrame_.origin.x;
-            id target = animate ? [[tab view] animator] : [tab view];
+            id target = animate ? [tabView animator] : tabView;
             [target setFrame:tabFrame];
             
-            NSValue* identifier = [NSValue valueWithPointer:(__bridge const void*)[tab view]];
+            NSValue* identifier = [NSValue valueWithPointer:(__bridge const void*)tabView];
             [targetFrames_ setObject:[NSValue valueWithRect:tabFrame]
                               forKey:identifier];
             [NSAnimationContext endGrouping];
@@ -653,9 +610,15 @@ const NSTimeInterval kAnimationDuration = 0.125;
                     offset += NSWidth(placeholderFrame_);
                     offset -= kTabOverlap;
                     tabFrame.origin.x = offset;
+                    placeHolderIndex = i;
+                    [viewsInOrder insertObject:[NSNull null] atIndex:placeHolderIndex];
+                    i++;
                 }
             }
         }
+        
+        tabView.tag = i;
+        [viewsInOrder insertObject:tabView atIndex:i];
         
         tabFrame.size.width = nonMiniTabWidth;
         if ([tab selected])
@@ -663,18 +626,24 @@ const NSTimeInterval kAnimationDuration = 0.125;
         
         if (newTab && visible && animate) {
             if (NSEqualRects(droppedTabFrame_, NSZeroRect)) {
-                [[tab view] setFrame:NSOffsetRect(tabFrame, 0, -NSHeight(tabFrame))];
+                [tabView setFrame:NSOffsetRect(tabFrame, 0, -NSHeight(tabFrame))];
             } else {
-                [[tab view] setFrame:droppedTabFrame_];
+                [tabView setFrame:droppedTabFrame_];
                 droppedTabFrame_ = NSZeroRect;
             }
         }
         
-        id frameTarget = visible && animate ? [[tab view] animator] : [tab view];
-        NSValue* identifier = [NSValue valueWithPointer:(__bridge const void*)[tab view]];
+        id frameTarget = visible && animate ? [tabView animator] : tabView;
+        NSValue* identifier = [NSValue valueWithPointer:(__bridge const void*)tabView];
         NSValue* oldTargetValue = [targetFrames_ objectForKey:identifier];
+        NSRect oldRect = [oldTargetValue rectValue];
         if (!oldTargetValue ||
-            !NSEqualRects([oldTargetValue rectValue], tabFrame)) {
+            !NSEqualRects(oldRect, tabFrame)) {
+            if ((oldRect.origin.x + kTabOverlap < tabFrame.origin.x) && (i + 1 < tabArray_.count)) {
+                [delayedStyleUpdated addObject:[NSNumber numberWithInteger:i + 1]];
+            } else if ((oldRect.origin.x - kTabOverlap > tabFrame.origin.x) && (i - 1 >= 0)) {
+                [delayedStyleUpdated addObject:[NSNumber numberWithInteger:i - 1]];
+            }
             [frameTarget setFrame:tabFrame];
             [targetFrames_ setObject:[NSValue valueWithRect:tabFrame]
                               forKey:identifier];
@@ -689,47 +658,20 @@ const NSTimeInterval kAnimationDuration = 0.125;
             offset -= kTabOverlap;
         }
         i++;
-        
-        [NSAnimationContext endGrouping];
     }
-    
-    if (forceNewTabButtonHidden_) {
-        [newTabButton_ setHidden:YES];
-    } else {
-        NSRect newTabNewFrame = [newTabButton_ frame];
-        newTabNewFrame.origin = NSMakePoint(offset, 0);
-        newTabNewFrame.origin.x = MAX(newTabNewFrame.origin.x,
-                                      NSMaxX(placeholderFrame_)) +
-        kNewTabButtonOffset;
-        if ([tabContentsArray_ count])
-            [newTabButton_ setHidden:NO];
-        
-        if (!NSEqualRects(newTabTargetFrame_, newTabNewFrame)) {
-            // Set the new tab button image correctly based on where the cursor is.
-            NSWindow* window = [tabStripView_ window];
-            NSPoint currentMouse = [window mouseLocationOutsideOfEventStream];
-            currentMouse = [tabStripView_ convertPoint:currentMouse fromView:nil];
-            
-            BOOL shouldShowHover = [newTabButton_ pointIsOverButton:currentMouse];
-            [self setNewTabButtonHoverState:shouldShowHover];
-            
-            if (visible && animate) {
-                [NSAnimationContext beginGrouping];
-                BOOL movingLeft = NSMinX(newTabNewFrame) < NSMinX(newTabTargetFrame_);
-                if (!movingLeft) {
-                    [[NSAnimationContext currentContext] setDuration:0];
-                }
-                [[newTabButton_ animator] setFrame:newTabNewFrame];
-                newTabTargetFrame_ = newTabNewFrame;
-            } else {
-                [newTabButton_ setFrame:newTabNewFrame];
-                newTabTargetFrame_ = newTabNewFrame;
-            }
+    if (placeholderTab_ && hasPlaceHolder) {
+        if (-1 == placeHolderIndex) {
+            [viewsInOrder addObject:placeholderTab_];
+        } else if (placeHolderIndex >= 0 && placeHolderIndex < viewsInOrder.count) {
+            [viewsInOrder replaceObjectAtIndex:placeHolderIndex withObject:placeholderTab_];
         }
     }
     
+    [self regenerateSubviewListWithOrderedArray:viewsInOrder delayed:delayedStyleUpdated];
     [dragBlockingView_ setFrame:enclosingRect];
-    [NSAnimationContext endGrouping];
+    if (animate) {
+        [NSAnimationContext endGrouping];
+    }
     initialLayoutComplete_ = YES;
 }
 
@@ -813,19 +755,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
     if (!contents)
         return;
     
-    static NSImage* throbberWaitingImage = nil;
-    static NSImage* throbberLoadingImage = nil;
-    static NSImage* sadFaviconImage = nil;
-    if (throbberWaitingImage == nil) {
-        NSBundle* bundle = [NSBundle bundleForClass:[self class]];
-        throbberWaitingImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"throbber_waiting" ofType:@"png"]];
-        assert(throbberWaitingImage);
-        throbberLoadingImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"throbber" ofType:@"png"]];
-        assert(throbberLoadingImage);
-        sadFaviconImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"sadfavicon" ofType:@"png"]];
-        assert(sadFaviconImage);
-    }
-    
     NSInteger index = [self indexFromModelIndex:modelIndex];
     
     CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
@@ -873,7 +802,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 }
 
 - (NSView*)selectedTabView {
-    int selectedIndex = [tabStripModel2_ selectedIndex];
+    NSInteger selectedIndex = [tabStripModel2_ selectedIndex];
     selectedIndex = [self indexFromModelIndex:selectedIndex];
     return [self viewAtIndex:selectedIndex];
 }
@@ -882,7 +811,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     double placeholderX = placeholderFrame_.origin.x;
     int index = 0;
     int location = 0;
-    const int count = [tabArray_ count];
+    const NSInteger count = [tabArray_ count];
     while (index < count) {
         if ([closingControllers_ containsObject:[tabArray_ objectAtIndex:index]]) {
             index++;
@@ -948,10 +877,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 - (void)mouseMoved:(NSEvent*)event {
     NSView* targetView = [tabStripView_ hitTest:[event locationInWindow]];
-    
-    BOOL shouldShowHoverImage = [targetView isKindOfClass:[NewTabButton class]];
-    [self setNewTabButtonHoverState:shouldShowHoverImage];
-    
+   
     CTTabView* tabView = (CTTabView*)targetView;
     if (![tabView isKindOfClass:[CTTabView class]]) {
         if ([[tabView superview] isKindOfClass:[CTTabView class]]) {
@@ -1011,41 +937,74 @@ const NSTimeInterval kAnimationDuration = 0.125;
     }
 }
 
-- (void)setNewTabButtonHoverState:(BOOL)shouldShowHover {
-    if (shouldShowHover && !newTabButtonShowingHoverImage_) {
-        newTabButtonShowingHoverImage_ = YES;
-        [newTabButton_ setImage:kNewTabHoverImage];
-    } else if (!shouldShowHover && newTabButtonShowingHoverImage_) {
-        newTabButtonShowingHoverImage_ = NO;
-        [newTabButton_ setImage:kNewTabImage];
-    }
-}
-
 - (void)addSubviewToPermanentList:(NSView*)aView {
     if (aView)
         [permanentSubviews_ addObject:aView];
 }
 
-- (void)regenerateSubviewList {
+- (void)regenerateSubviewListWithOrderedArray:(NSArray*)orderedTabs delayed:(NSArray*)delayedIndices {
     [self setTabTrackingAreasEnabled:NO];
-    
     NSMutableArray* subviews = [NSMutableArray arrayWithArray:permanentSubviews_];
     
-    NSView* selectedTabView = nil;
-    for (CTTabViewController* tab in [tabArray_ reverseObjectEnumerator]) {
-        NSView* tabView = [tab view];
-        if ([tab selected]) {
-            assert(!selectedTabView);
-            selectedTabView = tabView;
-        } else {
-            [subviews addObject:tabView];
+    NSUInteger minTabViewIndex = subviews.count;
+    BOOL passedPlaceHolder = NO;
+    CTTabView* selectedTabView = (CTTabView*) self.selectedTabView;
+    CTTabView* prevTabView = nil;
+    for (id object in orderedTabs) {
+        TabStyle tabStyle = 0;
+        if ([object isKindOfClass:[CTTabView class]]) {
+            CTTabView* tabView = (CTTabView*) object;
+            if (tabView == selectedTabView) {
+                tabStyle = kTabStyleShowBoth;
+                [subviews addObject:tabView];
+                passedPlaceHolder = YES;
+            } else if (!passedPlaceHolder) {
+                tabStyle = kTabStyleShowLeft;
+                [subviews addObject:tabView];
+            } else {
+                tabStyle = kTabStyleShowRight;
+                [subviews insertObject:tabView atIndex:minTabViewIndex];
+            }
+            
+            if (tabView == placeholderTab_) {
+                prevTabView.tabStyle |= kTabStyleShowRight;
+            } else if (prevTabView && (prevTabView == placeholderTab_ || [prevTabView isEqualTo:[NSNull null]])) {
+                tabStyle |= kTabStyleShowLeft;
+            }
+            prevTabView = tabView;
+            
+            if (!isDetachingTab_ && tabView.delayedTabStyle) {
+                tabView.tabStyle = kTabStyleShowBoth;
+                continue;
+            } else if (isDetachingTab_) {
+                tabView.delayedTabStyle = 0;
+            }
+            
+            NSInteger index = tabView.tag;
+            if ([delayedIndices containsObject:[NSNumber numberWithInteger:index]]) {
+                tabView.delayedTabStyle = tabStyle;
+            } else {
+                tabView.tabStyle = tabStyle;
+            }
+        } else if (object == [NSNull null]) {
+            prevTabView.tabStyle |= kTabStyleShowRight;
+            prevTabView = object;
         }
-    }
-    if (selectedTabView) {
-        [subviews addObject:selectedTabView];
     }
     [tabStripView_ setSubviews:subviews];
     [self setTabTrackingAreasEnabled:mouseInside_];
+}
+
+- (void)animationDidStop:(CAAnimation*)animation finished:(BOOL)flag
+{
+    for (CTTabViewController* tab in tabArray_) {
+        CTTabView* tabView = (CTTabView*) tab.view;
+        if (tabView.delayedTabStyle) {
+            tabView.tabStyle = tabView.delayedTabStyle;
+            tabView.delayedTabStyle = 0;
+        }
+    }
+    [tabStripView_ setNeedsDisplay:YES];
 }
 
 @end

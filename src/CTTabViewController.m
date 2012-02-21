@@ -74,6 +74,8 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
     titleCloseWidthOffset_ = NSMaxX([closeButton_ frame]) - NSMaxX(titleFrame);
     
     [self internalSetSelected:selected_];
+    
+    [closeButton_ setHidden:YES];
 }
 
 - (NSMenu*)menu {
@@ -150,11 +152,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
     [iconView_ setHidden:newShowIcon ? NO : YES];
     isIconShowing_ = newShowIcon;
     
-    BOOL oldShowCloseButton = [closeButton_ isHidden] ? NO : YES;
-    BOOL newShowCloseButton = [self shouldShowCloseButton] ? YES : NO;
-    
-    [closeButton_ setHidden:newShowCloseButton ? NO : YES];
-    
     NSRect titleFrame = [titleView_ frame];
     
     if (oldShowIcon != newShowIcon) {
@@ -164,14 +161,6 @@ static NSString* const kBrowserThemeDidChangeNotification = @"BrowserThemeDidCha
         } else {
             titleFrame.origin.x -= iconTitleXOffset_;
             titleFrame.size.width += iconTitleXOffset_;
-        }
-    }
-    
-    if (oldShowCloseButton != newShowCloseButton) {
-        if (newShowCloseButton) {
-            titleFrame.size.width -= titleCloseWidthOffset_;
-        } else {
-            titleFrame.size.width += titleCloseWidthOffset_;
         }
     }
     

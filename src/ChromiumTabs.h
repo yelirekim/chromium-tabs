@@ -1,3 +1,3 @@
-#import <Chromium/CTBrowser.h>
-#import <Chromium/CTBrowserWindowController.h>
-#import <Chromium/CTTabContents.h>
+#import <ChromiumTabs/CTBrowser.h>
+#import <ChromiumTabs/CTBrowserWindowController.h>
+#import <ChromiumTabs/CTTabContents.h>

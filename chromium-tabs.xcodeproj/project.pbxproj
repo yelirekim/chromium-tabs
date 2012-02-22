@@ -30,7 +30,7 @@
 		A2120ABD14F5ACA9004B9F32 /* CTTabStripController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9914F5ACA9004B9F32 /* CTTabStripController.m */; };
 		A2120ABE14F5ACA9004B9F32 /* CTTabStripModel.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9A14F5ACA9004B9F32 /* CTTabStripModel.h */; };
 		A2120ABF14F5ACA9004B9F32 /* CTTabStripModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9B14F5ACA9004B9F32 /* CTTabStripModel.m */; };
-		A2120AC014F5ACA9004B9F32 /* CTTabStripModelDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9C14F5ACA9004B9F32 /* CTTabStripModelDelegate.h */; };
+		A2120AC014F5ACA9004B9F32 /* CTTabStripModelDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9C14F5ACA9004B9F32 /* CTTabStripModelDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2120AC114F5ACA9004B9F32 /* CTTabStripView.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9D14F5ACA9004B9F32 /* CTTabStripView.h */; };
 		A2120AC214F5ACA9004B9F32 /* CTTabStripView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9E14F5ACA9004B9F32 /* CTTabStripView.m */; };
 		A2120AC314F5ACA9004B9F32 /* CTTabView+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9F14F5ACA9004B9F32 /* CTTabView+Private.h */; };
@@ -260,6 +260,7 @@
 				A2120AB114F5ACA9004B9F32 /* CTBrowser.h in Headers */,
 				A2120AB614F5ACA9004B9F32 /* CTBrowserWindowController.h in Headers */,
 				A2120AB814F5ACA9004B9F32 /* CTTabContents.h in Headers */,
+				A2120AC014F5ACA9004B9F32 /* CTTabStripModelDelegate.h in Headers */,
 				A2120AAC14F5ACA9004B9F32 /* BackgroundGradientView.h in Headers */,
 				A2120AAF14F5ACA9004B9F32 /* ChromiumTabs.pch in Headers */,
 				A2120AB014F5ACA9004B9F32 /* CTBrowser+Private.h in Headers */,
@@ -268,7 +269,6 @@
 				A2120ABA14F5ACA9004B9F32 /* CTTabContentsViewController.h in Headers */,
 				A2120ABC14F5ACA9004B9F32 /* CTTabStripController.h in Headers */,
 				A2120ABE14F5ACA9004B9F32 /* CTTabStripModel.h in Headers */,
-				A2120AC014F5ACA9004B9F32 /* CTTabStripModelDelegate.h in Headers */,
 				A2120AC114F5ACA9004B9F32 /* CTTabStripView.h in Headers */,
 				A2120AC314F5ACA9004B9F32 /* CTTabView+Private.h in Headers */,
 				A2120AC414F5ACA9004B9F32 /* CTTabView.h in Headers */,

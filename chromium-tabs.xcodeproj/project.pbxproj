@@ -50,7 +50,6 @@
 		A2120ADD14F5AD30004B9F32 /* <HoverCloseButton> TabClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A2120AD614F5AD30004B9F32 /* <HoverCloseButton> TabClosePressed.png */; };
 		A2120ADE14F5AD30004B9F32 /* <HoverCloseButton> TabCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = A2120AD714F5AD30004B9F32 /* <HoverCloseButton> TabCloseRollover.png */; };
 		A2120ADF14F5AD30004B9F32 /* BrowserWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2120AD814F5AD30004B9F32 /* BrowserWindow.xib */; };
-		A2120AE014F5AD30004B9F32 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2120AD914F5AD30004B9F32 /* Info.plist */; };
 		A2120AE114F5AD30004B9F32 /* TabContents.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2120ADA14F5AD30004B9F32 /* TabContents.xib */; };
 		A2120AE214F5AD30004B9F32 /* TabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2120ADB14F5AD30004B9F32 /* TabView.xib */; };
 /* End PBXBuildFile section */
@@ -338,7 +337,6 @@
 				A2120ADD14F5AD30004B9F32 /* <HoverCloseButton> TabClosePressed.png in Resources */,
 				A2120ADE14F5AD30004B9F32 /* <HoverCloseButton> TabCloseRollover.png in Resources */,
 				A2120ADF14F5AD30004B9F32 /* BrowserWindow.xib in Resources */,
-				A2120AE014F5AD30004B9F32 /* Info.plist in Resources */,
 				A2120AE114F5AD30004B9F32 /* TabContents.xib in Resources */,
 				A2120AE214F5AD30004B9F32 /* TabView.xib in Resources */,
 			);

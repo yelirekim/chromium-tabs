@@ -939,6 +939,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
     BOOL passedPlaceHolder = NO;
     CTTabView* selectedTabView = (CTTabView*) self.selectedTabView;
     CTTabView* prevTabView = nil;
+    NSUInteger i = 0;
     for (id object in orderedTabs) {
         TabStyle tabStyle = 0;
         if ([object isKindOfClass:[CTTabView class]]) {
@@ -953,6 +954,12 @@ const NSTimeInterval kAnimationDuration = 0.125;
             } else {
                 tabStyle = kTabStyleShowRight;
                 [subviews insertObject:tabView atIndex:minTabViewIndex];
+            }
+            
+            if (i == 0) {
+                tabStyle |= kTabStyleShowLeft;
+            } else if (i == orderedTabs.count - 1) {
+                tabStyle |= kTabStyleShowRight;
             }
             
             if (tabView == placeholderTab_) {
@@ -979,6 +986,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             prevTabView.tabStyle |= kTabStyleShowRight;
             prevTabView = object;
         }
+        i++;
     }
     [tabStripView_ setSubviews:subviews];
     [self setTabTrackingAreasEnabled:mouseInside_];

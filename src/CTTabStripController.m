@@ -32,7 +32,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
 - (void)setTabTrackingAreasEnabled:(BOOL)enabled;
 - (void)setNewTabButtonHoverState:(BOOL)showHover;
 - (CTTabViewController*)newTab;
-- (void)setTabTitle:(NSViewController*)tab withContents:(CTTabContents*)contents;
 - (void)swapInTabAtIndex:(NSInteger)modelIndex;
 - (void)startClosingTabWithAnimation:(CTTabViewController*)closingTab;
 - (void)removeTab:(CTTabViewController*)controller;
@@ -227,7 +226,7 @@ const NSTimeInterval kAnimationDuration = 0.125;
             [newView setFrame:NSOffsetRect([newView frame],
                                            0, -[[self class] defaultTabHeight])];
             
-            [self setTabTitle:newController withContents:contents];
+            [newController bind:@"title" toObject:contents withKeyPath:@"title" options:nil];
             
             availableResizeWidth_ = kUseFullAvailableWidth;
             
@@ -310,12 +309,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
                 return;
             }
             
-            CTTabViewController* tabController = [tabArray_ objectAtIndex:index];
-            
-            if (change != CTTabChangeTypeLoadingOnly) {
-                [self setTabTitle:tabController withContents:contents];
-            }
-            
             [self updateFavIconForContents:contents atIndex:modelIndex];
             
             CTTabContentsViewController* updatedController = [tabContentsArray_ objectAtIndex:index];
@@ -328,6 +321,9 @@ const NSTimeInterval kAnimationDuration = 0.125;
             NSInteger index = [self indexFromModelIndex:modelIndex];
             
             CTTabViewController* tab = [tabArray_ objectAtIndex:index];
+            
+            [tab unbind:@"title"];
+            
             if ([tabStripModel2_ count] > 0) {
                 [self startClosingTabWithAnimation:tab];
                 isDetachingTab_ = YES;
@@ -484,6 +480,8 @@ const NSTimeInterval kAnimationDuration = 0.125;
         }
         [tabStripModel2_ closeTabContentsAtIndex:index options: CLOSE_USER_GESTURE | CLOSE_CREATE_HISTORICAL_TAB];
     } else {
+        CTTabViewController* tab = [tabArray_ objectAtIndex:index];
+        [tab unbind:@"title"];
         [[tabStripView_ window] performClose:nil];
     }
 }
@@ -677,15 +675,6 @@ const NSTimeInterval kAnimationDuration = 0.125;
 
 - (void)layoutTabs {
     [self layoutTabsWithAnimation:initialLayoutComplete_ regenerateSubviews:YES];
-}
-
-- (void)setTabTitle:(NSViewController*)tab withContents:(CTTabContents*)contents {
-    NSString* titleString = nil;
-    if (contents)
-        titleString = contents.title;
-    if (!titleString || ![titleString length])
-        titleString = @"New Tab";
-    [tab setTitle:titleString];
 }
 
 - (void)removeTab:(CTTabViewController*)controller {

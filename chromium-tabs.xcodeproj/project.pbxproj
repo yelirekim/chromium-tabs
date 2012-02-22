@@ -12,17 +12,17 @@
 		3A3ED9C01225E320009E2908 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3ED9751225E0A7009E2908 /* QuartzCore.framework */; };
 		A2120AAC14F5ACA9004B9F32 /* BackgroundGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8814F5ACA9004B9F32 /* BackgroundGradientView.h */; };
 		A2120AAD14F5ACA9004B9F32 /* BackgroundGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A8914F5ACA9004B9F32 /* BackgroundGradientView.m */; };
-		A2120AAE14F5ACA9004B9F32 /* ChromiumTabs.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8A14F5ACA9004B9F32 /* ChromiumTabs.h */; };
+		A2120AAE14F5ACA9004B9F32 /* ChromiumTabs.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8A14F5ACA9004B9F32 /* ChromiumTabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2120AAF14F5ACA9004B9F32 /* ChromiumTabs.pch in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8B14F5ACA9004B9F32 /* ChromiumTabs.pch */; };
 		A2120AB014F5ACA9004B9F32 /* CTBrowser+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8C14F5ACA9004B9F32 /* CTBrowser+Private.h */; };
-		A2120AB114F5ACA9004B9F32 /* CTBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8D14F5ACA9004B9F32 /* CTBrowser.h */; };
+		A2120AB114F5ACA9004B9F32 /* CTBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8D14F5ACA9004B9F32 /* CTBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2120AB214F5ACA9004B9F32 /* CTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A8E14F5ACA9004B9F32 /* CTBrowser.m */; };
 		A2120AB314F5ACA9004B9F32 /* CTBrowserCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A8F14F5ACA9004B9F32 /* CTBrowserCommand.h */; };
 		A2120AB414F5ACA9004B9F32 /* CTBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9014F5ACA9004B9F32 /* CTBrowserWindow.h */; };
 		A2120AB514F5ACA9004B9F32 /* CTBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9114F5ACA9004B9F32 /* CTBrowserWindow.m */; };
-		A2120AB614F5ACA9004B9F32 /* CTBrowserWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9214F5ACA9004B9F32 /* CTBrowserWindowController.h */; };
+		A2120AB614F5ACA9004B9F32 /* CTBrowserWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9214F5ACA9004B9F32 /* CTBrowserWindowController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2120AB714F5ACA9004B9F32 /* CTBrowserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9314F5ACA9004B9F32 /* CTBrowserWindowController.m */; };
-		A2120AB814F5ACA9004B9F32 /* CTTabContents.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9414F5ACA9004B9F32 /* CTTabContents.h */; };
+		A2120AB814F5ACA9004B9F32 /* CTTabContents.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9414F5ACA9004B9F32 /* CTTabContents.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2120AB914F5ACA9004B9F32 /* CTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9514F5ACA9004B9F32 /* CTTabContents.m */; };
 		A2120ABA14F5ACA9004B9F32 /* CTTabContentsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A2120A9614F5ACA9004B9F32 /* CTTabContentsViewController.h */; };
 		A2120ABB14F5ACA9004B9F32 /* CTTabContentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2120A9714F5ACA9004B9F32 /* CTTabContentsViewController.m */; };
@@ -256,15 +256,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2120AAC14F5ACA9004B9F32 /* BackgroundGradientView.h in Headers */,
 				A2120AAE14F5ACA9004B9F32 /* ChromiumTabs.h in Headers */,
-				A2120AAF14F5ACA9004B9F32 /* ChromiumTabs.pch in Headers */,
-				A2120AB014F5ACA9004B9F32 /* CTBrowser+Private.h in Headers */,
 				A2120AB114F5ACA9004B9F32 /* CTBrowser.h in Headers */,
-				A2120AB314F5ACA9004B9F32 /* CTBrowserCommand.h in Headers */,
-				A2120AB414F5ACA9004B9F32 /* CTBrowserWindow.h in Headers */,
 				A2120AB614F5ACA9004B9F32 /* CTBrowserWindowController.h in Headers */,
 				A2120AB814F5ACA9004B9F32 /* CTTabContents.h in Headers */,
+				A2120AAC14F5ACA9004B9F32 /* BackgroundGradientView.h in Headers */,
+				A2120AAF14F5ACA9004B9F32 /* ChromiumTabs.pch in Headers */,
+				A2120AB014F5ACA9004B9F32 /* CTBrowser+Private.h in Headers */,
+				A2120AB314F5ACA9004B9F32 /* CTBrowserCommand.h in Headers */,
+				A2120AB414F5ACA9004B9F32 /* CTBrowserWindow.h in Headers */,
 				A2120ABA14F5ACA9004B9F32 /* CTTabContentsViewController.h in Headers */,
 				A2120ABC14F5ACA9004B9F32 /* CTTabStripController.h in Headers */,
 				A2120ABE14F5ACA9004B9F32 /* CTTabStripModel.h in Headers */,

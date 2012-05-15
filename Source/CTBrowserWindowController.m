@@ -99,7 +99,7 @@
 
 - (id)initWithBrowser:(CTBrowser *)browser {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *windowNibPath = [bundle pathForResource:@"BrowserWindow" ofType:@"nib"];
+    NSString *windowNibPath = [bundle pathForResource:[self windowNibName] ofType:@"nib"];
     return [self initWithWindowNibPath:windowNibPath browser:browser];
 }
 
